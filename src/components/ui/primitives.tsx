@@ -134,12 +134,18 @@ export interface HeadingProps extends SpaceProps, TypographyProps, ColorProps {
 
 export const Heading = styled.h2<HeadingProps>`
   margin: 0;
+  font-family: ${({ theme }) => theme.fonts.sans};
   color: ${({ theme }) => theme.colors.text};
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   ${space}
   ${typography}
   ${color}
+`;
+
+export const NumberText = styled(Text)`
+  font-family: ${({ theme }) => theme.fonts.numbers};
+  font-feature-settings: 'tnum' on, 'lnum' on;
 `;
 
 export interface ButtonProps extends SpaceProps, LayoutProps, BorderProps {

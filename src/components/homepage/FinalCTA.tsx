@@ -32,7 +32,7 @@ export function FinalCTA() {
           <h2
             style={{
               fontSize: '24px',
-              fontWeight: 800,
+              fontWeight: 600,
               letterSpacing: '-0.025em',
               color: '#FFFFFF',
               marginBottom: '10px',

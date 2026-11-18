@@ -75,6 +75,8 @@ export const theme = {
   fonts: {
     sans: "'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
     mono: 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    numbers: "'Cabinet Grotesk', 'Clash Display', 'Space Grotesk', 'Satoshi', sans-serif",
+    display: "'Cabinet Grotesk', 'Clash Display', 'Space Grotesk', 'Satoshi', sans-serif",
   },
   radii: {
     none: '0px',

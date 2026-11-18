@@ -3,8 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { Box, Flex, Container, Button, Badge } from '@/components/ui/primitives';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { Box, Flex, Container, Button } from '@/components/ui/primitives';
+import { ArrowRight } from 'lucide-react';
 
 const HeroWrapper = styled.section`
   padding: 56px 0 36px;
@@ -20,10 +20,11 @@ const HeroWrapper = styled.section`
 `;
 
 const HeroTitle = styled.h1`
+  font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 28px;
-  font-weight: 850;
-  letter-spacing: -0.035em;
-  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.14;
   color: #000000;
   margin-bottom: 12px;
 
@@ -37,7 +38,9 @@ const HeroTitle = styled.h1`
 `;
 
 const HeroSubtitle = styled.p`
+  font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 13.5px;
+  font-weight: 450;
   line-height: 1.6;
   color: #555555;
   max-width: 600px;
@@ -49,15 +52,17 @@ const HeroSubtitle = styled.p`
 `;
 
 const MetricsStrip = styled(Flex)`
-  margin-top: 36px;
-  padding-top: 20px;
-  border-top: 1px solid #eaeaea;
+  margin-top: 44px;
   justify-content: center;
-  gap: 20px;
+  gap: 28px;
   flex-wrap: wrap;
 
-  @media (min-width: 768px) {
-    gap: 40px;
+  @media (min-width: 640px) {
+    gap: 48px;
+  }
+
+  @media (min-width: 1024px) {
+    gap: 60px;
   }
 `;
 
@@ -66,17 +71,25 @@ const MetricBox = styled(Box)`
 `;
 
 const MetricValue = styled.div`
-  font-size: 18px;
-  font-weight: 800;
+  font-family: ${({ theme }) => theme.fonts.numbers};
+  font-size: 32px;
+  font-weight: 700;
   color: #000000;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  font-feature-settings: 'tnum' on, 'lnum' on;
+
+  @media (min-width: 640px) {
+    font-size: 36px;
+  }
 `;
 
 const MetricLabel = styled.div`
-  font-size: 10.5px;
+  font-size: 12px;
   color: #666666;
-  font-weight: 500;
-  margin-top: 2px;
+  font-weight: 450;
+  margin-top: 4px;
+  letter-spacing: -0.01em;
 `;
 
 export function HeroSection() {
@@ -84,25 +97,6 @@ export function HeroSection() {
     <HeroWrapper>
       <Container>
         <Box textAlign="center" maxWidth="720px" mx="auto">
-          {/* Top Pill */}
-          <Flex justifyContent="center" mb="16px">
-            <Badge
-              variant="neutral"
-              style={{
-                padding: '4px 10px',
-                fontSize: '11px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                backgroundColor: '#FFFFFF',
-                boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
-              }}
-            >
-              <Sparkles size={12} color="#000000" />
-              <span>Structured Technical & Marketing Education</span>
-            </Badge>
-          </Flex>
-
           {/* Title */}
           <HeroTitle>Learn. Build. Grow.</HeroTitle>
 

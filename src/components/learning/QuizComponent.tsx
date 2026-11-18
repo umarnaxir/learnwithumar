@@ -137,7 +137,7 @@ export function QuizComponent({
     return (
       <QuizCard textAlign="center">
         <CheckCircle2 size={36} color="#10B981" style={{ margin: '0 auto 12px' }} />
-        <Text fontSize="18px" fontWeight="700" mb="6px">
+        <Text fontSize="18px" fontWeight="600" mb="6px">
           Quiz Completed!
         </Text>
         <Text fontSize="14px" color="#555555" mb="16px">
@@ -155,7 +155,7 @@ export function QuizComponent({
       <Flex alignItems="center" justifyContent="space-between" mb="14px">
         <Flex alignItems="center" gap="8px">
           <HelpCircle size={16} color="#000000" />
-          <Text fontSize="14px" fontWeight="700">
+          <Text fontSize="14px" fontWeight="600">
             {title}
           </Text>
         </Flex>

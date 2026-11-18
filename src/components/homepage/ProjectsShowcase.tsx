@@ -46,7 +46,7 @@ export function ProjectsShowcase() {
             <h2
               style={{
                 fontSize: '23px',
-                fontWeight: 800,
+                fontWeight: 600,
                 letterSpacing: '-0.025em',
                 color: '#000000',
                 marginBottom: '8px',
@@ -85,11 +85,13 @@ export function ProjectsShowcase() {
                   </Badge>
                   <Flex alignItems="center" gap="4px" fontSize="11px" color="#888888">
                     <Clock size={12} />
-                    <span>{proj.estimatedHours}h</span>
+                    <span style={{ fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif", fontWeight: 600 }}>
+                      {proj.estimatedHours}h
+                    </span>
                   </Flex>
                 </Flex>
 
-                <Text fontSize="15px" fontWeight="700" color="#111111" mb="6px">
+                <Text fontSize="15px" fontWeight="600" color="#111111" mb="6px">
                   {proj.title}
                 </Text>
 

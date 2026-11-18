@@ -3,7 +3,8 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
-  @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,600,500,400&display=swap');
+  @import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,600,550,500,400&f[]=cabinet-grotesk@800,700,600,500&f[]=clash-display@700,600,500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
 
   *, *::before, *::after {
     box-sizing: border-box;

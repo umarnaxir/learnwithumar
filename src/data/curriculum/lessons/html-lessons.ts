@@ -225,14 +225,14 @@ export const HTML_DETAILED_LESSONS: Record<string, LessonContent> = {
     <!-- SEO Essentials -->
     <title>Full Stack Web Development Curriculum — Learn with Umar</title>
     <meta name="description" content="Master modern software engineering with hands-on documentation, code samples, and real-world architectures." />
-    <link rel="canonical" href="https://learnwithumar.com/full-stack" />
+    <link rel="canonical" href="https://learnwithumar.vercel.app/full-stack" />
     
     <!-- Open Graph (Facebook / LinkedIn) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Learn with Umar — Technical Education" />
     <meta property="og:description" content="From fundamentals to enterprise architecture." />
-    <meta property="og:url" content="https://learnwithumar.com" />
-    <meta property="og:image" content="https://learnwithumar.com/og-image.jpg" />
+    <meta property="og:url" content="https://learnwithumar.vercel.app" />
+    <meta property="og:image" content="https://learnwithumar.vercel.app/og-image.png" />
   </head>
   <body>
     <main>

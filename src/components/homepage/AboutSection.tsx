@@ -54,7 +54,7 @@ export function AboutSection() {
             <h2
               style={{
                 fontSize: '23px',
-                fontWeight: 800,
+                fontWeight: 600,
                 letterSpacing: '-0.025em',
                 color: '#000000',
                 marginBottom: '12px',
@@ -80,7 +80,12 @@ export function AboutSection() {
 
             <Flex gap="12px" flexWrap="wrap">
               <Box p="10px 14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="6px">
-                <Text fontSize="17px" fontWeight="800" color="#000000">
+                <Text
+                  fontSize="20px"
+                  fontWeight="700"
+                  color="#000000"
+                  style={{ fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif" }}
+                >
                   40
                 </Text>
                 <Text fontSize="11px" color="#666666">
@@ -88,7 +93,12 @@ export function AboutSection() {
                 </Text>
               </Box>
               <Box p="10px 14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="6px">
-                <Text fontSize="17px" fontWeight="800" color="#000000">
+                <Text
+                  fontSize="20px"
+                  fontWeight="700"
+                  color="#000000"
+                  style={{ fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif" }}
+                >
                   24
                 </Text>
                 <Text fontSize="11px" color="#666666">
@@ -96,7 +106,12 @@ export function AboutSection() {
                 </Text>
               </Box>
               <Box p="10px 14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="6px">
-                <Text fontSize="17px" fontWeight="800" color="#000000">
+                <Text
+                  fontSize="20px"
+                  fontWeight="700"
+                  color="#000000"
+                  style={{ fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif" }}
+                >
                   Zero
                 </Text>
                 <Text fontSize="11px" color="#666666">
@@ -121,7 +136,7 @@ export function AboutSection() {
                     <Check size={14} color="#000000" />
                   </Box>
                   <Box>
-                    <Text fontSize="14px" fontWeight="700" color="#111111" mb="4px">
+                    <Text fontSize="14px" fontWeight="600" color="#111111" mb="4px">
                       {item.title}
                     </Text>
                     <Text fontSize="12.5px" color="#555555" lineHeight="relaxed">

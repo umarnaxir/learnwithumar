@@ -28,8 +28,9 @@ const FooterGrid = styled.div`
 `;
 
 const FooterHeading = styled.h4`
+  font-family: ${({ theme }) => theme.fonts.sans};
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: ${({ theme }) => theme.colors.text};
@@ -73,7 +74,7 @@ export function Footer() {
           {/* Brand Info */}
           <Box>
             <Flex alignItems="center" gap="6px" mb="10px">
-              <Text fontSize="15px" fontWeight="700" letterSpacing="-0.02em">
+              <Text fontSize="15px" fontWeight="600" letterSpacing="-0.02em">
                 Learn with Umar
               </Text>
             </Flex>

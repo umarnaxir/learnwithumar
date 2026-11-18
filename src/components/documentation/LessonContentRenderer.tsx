@@ -28,8 +28,9 @@ const ContentSection = styled.section`
 `;
 
 const SectionHeading = styled.h2`
-  font-size: 16px;
-  font-weight: 700;
+  font-family: ${({ theme }) => theme.fonts.sans};
+  font-size: 15.5px;
+  font-weight: 600;
   letter-spacing: -0.015em;
   color: #000000;
   margin-bottom: 12px;
@@ -76,12 +77,14 @@ const StepBadge = styled.div`
   background-color: #000000;
   color: #ffffff;
   font-size: 11px;
+  font-family: ${({ theme }) => theme.fonts.numbers};
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   margin-top: 1px;
+  font-feature-settings: 'tnum' on, 'lnum' on;
 `;
 
 const AccordionItemBox = styled.div`

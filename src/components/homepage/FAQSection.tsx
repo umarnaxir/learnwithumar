@@ -95,7 +95,7 @@ export function FAQSection() {
           <h2
             style={{
               fontSize: '23px',
-              fontWeight: 800,
+              fontWeight: 600,
               letterSpacing: '-0.025em',
               color: '#000000',
               marginBottom: '8px',

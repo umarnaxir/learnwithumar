@@ -16,6 +16,7 @@ import {
   Home,
   Code2,
   TrendingUp,
+  FolderGit2,
 } from 'lucide-react';
 
 const NavWrapper = styled.div<{ $isScrolled: boolean }>`
@@ -47,7 +48,7 @@ const NavHeader = styled.header<{ $isScrolled: boolean }>`
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid
     ${({ $isScrolled, theme }) =>
-      $isScrolled ? theme.colors.border : 'rgba(234, 234, 234, 0.85)'};
+    $isScrolled ? theme.colors.border : 'rgba(234, 234, 234, 0.85)'};
   border-radius: 10px;
   box-shadow: ${({ $isScrolled }) =>
     $isScrolled
@@ -91,20 +92,21 @@ const NavList = styled.nav`
   align-items: center;
   gap: 2px;
 
-  @media (min-width: 960px) {
+  @media (min-width: 900px) {
     display: flex;
   }
 `;
 
-const NavItemLink = styled(Link)<{ $isActive: boolean }>`
-  font-size: 12.5px;
+const NavItemLink = styled(Link) <{ $isActive: boolean }>`
+  font-size: 12px;
   font-weight: ${({ $isActive }) => ($isActive ? '600' : '450')};
   color: ${({ $isActive, theme }) =>
     $isActive ? theme.colors.text : theme.colors.textSecondary};
-  padding: 5px 10px;
+  padding: 5px 8px;
   border-radius: 6px;
   transition: all 0.15s ease;
   position: relative;
+  white-space: nowrap;
 
   &:hover {
     color: ${({ theme }) => theme.colors.text};
@@ -149,7 +151,7 @@ const KbdShortcut = styled.kbd`
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
-const MobileMenuDrawer = styled(Box)<{ $isOpen: boolean }>`
+const MobileMenuDrawer = styled(Box) <{ $isOpen: boolean }>`
   position: fixed;
   top: 66px;
   left: 12px;
@@ -177,7 +179,7 @@ const MobileMenuDrawer = styled(Box)<{ $isOpen: boolean }>`
   }
 `;
 
-const MobileNavLink = styled(Link)<{ $isActive: boolean }>`
+const MobileNavLink = styled(Link) <{ $isActive: boolean }>`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -229,14 +231,19 @@ export function Navbar() {
   const navLinks = [
     { label: 'Home', href: '/', icon: Home },
     { label: 'Learning Paths', href: '/learning-paths', icon: Compass },
-    { label: 'Documentation', href: '/docs', icon: BookOpen },
     { label: 'Full Stack', href: '/full-stack', icon: Code2 },
     { label: 'Digital Marketing', href: '/digital-marketing', icon: TrendingUp },
+    { label: 'Documentation', href: '/docs', icon: BookOpen },
+    { label: 'Projects', href: '/projects', icon: FolderGit2 },
+
   ];
 
   const isLinkActive = (href: string) => {
     if (href === '/') {
       return pathname === '/';
+    }
+    if (href === '/projects') {
+      return pathname === '/projects' || pathname.startsWith('/projects/');
     }
     if (href === '/full-stack') {
       return pathname === '/full-stack' || pathname.startsWith('/full-stack/');

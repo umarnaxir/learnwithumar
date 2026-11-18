@@ -337,7 +337,7 @@ export function DocumentationLayout({
                 {currentTrack === 'full-stack' ? <Code2 size={13} /> : <TrendingUp size={13} />}
               </Box>
               <Box>
-                <Text fontSize="12px" fontWeight="700" color="#000000">
+                <Text fontSize="12px" fontWeight="600" color="#000000">
                   {currentTrack === 'full-stack' ? 'Full Stack Development' : 'Digital Marketing'}
                 </Text>
                 <Text fontSize="10.5px" color="#666666">
@@ -349,7 +349,7 @@ export function DocumentationLayout({
 
           <Text
             fontSize="10.5px"
-            fontWeight="700"
+            fontWeight="600"
             color="#888888"
             textTransform="uppercase"
             letterSpacing="0.06em"
@@ -372,10 +372,18 @@ export function DocumentationLayout({
                 <ModuleGroup key={mod.id}>
                   <ModuleHeaderBtn onClick={() => toggleModule(mod.id)}>
                     <Flex alignItems="center" gap="6px" style={{ minWidth: 0 }}>
-                      <span style={{ fontSize: '10.5px', color: '#888888', fontWeight: 700 }}>
+                      <span
+                        style={{
+                          fontSize: '10.5px',
+                          color: '#888888',
+                          fontWeight: 700,
+                          fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif",
+                          letterSpacing: '0.02em',
+                        }}
+                      >
                         M{mod.moduleNumber}
                       </span>
-                      <Text fontSize="12px" fontWeight="600" truncate color="#111111">
+                      <Text fontSize="12px" fontWeight="550" truncate color="#111111">
                         {mod.title}
                       </Text>
                     </Flex>
@@ -456,7 +464,7 @@ export function DocumentationLayout({
               <h1
                 style={{
                   fontSize: '22px',
-                  fontWeight: 800,
+                  fontWeight: 600,
                   letterSpacing: '-0.025em',
                   color: '#000000',
                   marginBottom: '6px',
@@ -550,7 +558,7 @@ export function DocumentationLayout({
         <RightSidebar>
           <Text
             fontSize="10.5px"
-            fontWeight="700"
+            fontWeight="600"
             textTransform="uppercase"
             letterSpacing="0.06em"
             color="#888888"

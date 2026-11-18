@@ -28,12 +28,14 @@ const StepsTimeline = styled.div`
 `;
 
 const StepNum = styled.div`
+  font-family: ${({ theme }) => theme.fonts.numbers};
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   color: #888888;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 10px;
+  font-feature-settings: 'tnum' on, 'lnum' on;
 `;
 
 export function HowLearningWorks() {
@@ -78,7 +80,7 @@ export function HowLearningWorks() {
           <h2
             style={{
               fontSize: '23px',
-              fontWeight: 800,
+              fontWeight: 600,
               letterSpacing: '-0.025em',
               color: '#000000',
               marginBottom: '8px',
@@ -107,7 +109,7 @@ export function HowLearningWorks() {
                 >
                   <Icon size={16} color="#000000" />
                 </Box>
-                <Text fontSize="14.5px" fontWeight="700" color="#111111" mb="6px">
+                <Text fontSize="14.5px" fontWeight="600" color="#111111" mb="6px">
                   {st.title}
                 </Text>
                 <Text fontSize="12.5px" color="#555555" lineHeight="relaxed">

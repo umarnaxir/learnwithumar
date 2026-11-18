@@ -82,7 +82,7 @@ export function WhyLearnWithUs() {
           <h2
             style={{
               fontSize: '23px',
-              fontWeight: 800,
+              fontWeight: 600,
               letterSpacing: '-0.025em',
               color: '#000000',
               marginBottom: '8px',
@@ -110,7 +110,7 @@ export function WhyLearnWithUs() {
                 >
                   <Icon size={16} color="#000000" />
                 </Box>
-                <Text fontSize="14.5px" fontWeight="700" color="#111111" mb="6px">
+                <Text fontSize="14.5px" fontWeight="600" color="#111111" mb="6px">
                   {r.title}
                 </Text>
                 <Text fontSize="12.5px" color="#555555" lineHeight="relaxed">

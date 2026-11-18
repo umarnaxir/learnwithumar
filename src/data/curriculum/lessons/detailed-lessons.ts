@@ -42,7 +42,7 @@ export const DETAILED_LESSONS: Record<string, LessonContent> = {
     ],
     syntaxDefinition: `// Conceptual Request-Response Flow
 [Client: Web Browser] 
-       │ ── 1. DNS Resolution (learnwithumar.com -> 76.76.21.21)
+       │ ── 1. DNS Resolution (learnwithumar.vercel.app -> 76.76.21.21)
        │ ── 2. TCP Handshake + TLS 1.3 Key Exchange
        │ ── 3. HTTP GET /api/v1/courses (Headers: Authorization, Accept)
        ▼
@@ -130,7 +130,7 @@ app.listen(4000, () => {
       {
         step: 1,
         title: 'User Input & URI Entry',
-        details: 'The user enters a URL into the browser navigation bar. The browser parses the protocol (https://), hostname (learnwithumar.com), port (443), and resource path (/courses).',
+        details: 'The user enters a URL into the browser navigation bar. The browser parses the protocol (https://), hostname (learnwithumar.vercel.app), port (443), and resource path (/courses).',
       },
       {
         step: 2,
