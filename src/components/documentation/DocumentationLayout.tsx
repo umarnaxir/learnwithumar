@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { Box, Flex, Text, Button, Badge } from '@/components/ui/primitives';
@@ -23,9 +23,18 @@ import {
 } from 'lucide-react';
 
 const LayoutWrapper = styled.div`
-  max-width: 1040px;
+  max-width: 1440px;
   margin: 0 auto;
   width: 100%;
+  padding: 0 16px;
+
+  @media (min-width: 768px) {
+    padding: 0 20px;
+  }
+
+  @media (min-width: 1280px) {
+    padding: 0 28px;
+  }
 `;
 
 const LayoutGrid = styled.div`
@@ -34,22 +43,33 @@ const LayoutGrid = styled.div`
   min-height: calc(100vh - 64px);
 
   @media (min-width: 1024px) {
-    grid-template-columns: 250px minmax(0, 1fr);
+    grid-template-columns: 280px minmax(0, 1fr);
   }
 
-  @media (min-width: 1180px) {
-    grid-template-columns: 250px minmax(0, 1fr) 220px;
+  @media (min-width: 1280px) {
+    grid-template-columns: 290px minmax(0, 1fr) 250px;
   }
 `;
 
 const LeftSidebar = styled.aside<{ $isOpenOnMobile: boolean }>`
   background-color: #ffffff;
   border-right: 1px solid #eaeaea;
-  padding: 16px 12px;
+  padding: 16px 14px;
   overflow-y: auto;
   height: calc(100vh - 64px);
   position: sticky;
   top: 64px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #eaeaea;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #cccccc;
+  }
 
   @media (max-width: 1023px) {
     position: fixed;
@@ -72,7 +92,15 @@ const RightSidebar = styled.aside`
   position: sticky;
   top: 64px;
 
-  @media (min-width: 1180px) {
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #eaeaea;
+    border-radius: 4px;
+  }
+
+  @media (min-width: 1280px) {
     display: block;
   }
 `;
@@ -86,26 +114,23 @@ const MainContentArea = styled.main`
   @media (min-width: 768px) {
     padding: 32px 28px 80px;
   }
+
+  @media (min-width: 1280px) {
+    padding: 36px 36px 96px;
+  }
 `;
 
-const TrackSwitcherButton = styled.button<{ $isActive: boolean }>`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 6px 8px;
-  font-size: 11.5px;
-  font-weight: ${({ $isActive }) => ($isActive ? '600' : '450')};
-  border-radius: 5px;
-  background-color: ${({ $isActive }) => ($isActive ? '#000000' : '#F4F4F5')};
-  color: ${({ $isActive }) => ($isActive ? '#FFFFFF' : '#555555')};
+const TrackHeaderBox = styled.div`
+  padding: 10px 12px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  border: 1px solid #eaeaea;
   transition: all 0.15s ease;
-  cursor: pointer;
 
   &:hover {
-    background-color: ${({ $isActive }) => ($isActive ? '#222222' : '#EAEAEA')};
-    color: ${({ $isActive }) => ($isActive ? '#FFFFFF' : '#000000')};
+    background-color: #f2f2f2;
+    border-color: #000000;
   }
 `;
 
@@ -136,15 +161,16 @@ const TopicLink = styled(Link)<{ $isActive: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  padding: 5px 8px 5px 20px;
-  border-radius: 5px;
+  gap: 8px;
+  padding: 6px 10px 6px 18px;
+  border-radius: 6px;
   font-size: 11.5px;
-  color: ${({ $isActive }) => ($isActive ? '#000000' : '#666666')};
+  color: ${({ $isActive }) => ($isActive ? '#000000' : '#555555')};
   font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
   background-color: ${({ $isActive }) => ($isActive ? '#F4F4F5' : 'transparent')};
   text-decoration: none;
   transition: all 0.15s ease;
+  border-left: 2px solid ${({ $isActive }) => ($isActive ? '#000000' : 'transparent')};
 
   &:hover {
     background-color: #f5f5f5;
@@ -220,24 +246,53 @@ export function DocumentationLayout({
     currentTrack === 'full-stack' ? FULL_STACK_MODULES : DIGITAL_MARKETING_MODULES;
 
   const currentModule = modules.find((m) => m.id === currentModuleId);
-  const currentTopicIndex =
-    currentModule?.topics.findIndex((t) => t.id === currentTopicId) ?? -1;
 
-  const prevTopic =
-    currentModule && currentTopicIndex > 0
-      ? currentModule.topics[currentTopicIndex - 1]
+  // Normalize slug helper for robust matching
+  const normalize = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  const isTopicActive = (modId: string, tId: string) => {
+    if (modId !== currentModuleId) return false;
+    return tId === currentTopicId || normalize(tId) === normalize(currentTopicId);
+  };
+
+  // Flatten all lessons across all modules for seamless continuous sequential next/prev navigation
+  const allTrackLessons = modules.flatMap((m) =>
+    m.topics.map((t) => ({
+      moduleId: m.id,
+      moduleTitle: m.title,
+      topicId: t.id,
+      topicTitle: t.title,
+    }))
+  );
+
+  const currentGlobalIndex = allTrackLessons.findIndex(
+    (item) =>
+      item.moduleId === currentModuleId &&
+      (item.topicId === currentTopicId || normalize(item.topicId) === normalize(currentTopicId))
+  );
+
+  const prevLesson = currentGlobalIndex > 0 ? allTrackLessons[currentGlobalIndex - 1] : null;
+  const nextLesson =
+    currentGlobalIndex >= 0 && currentGlobalIndex < allTrackLessons.length - 1
+      ? allTrackLessons[currentGlobalIndex + 1]
       : null;
 
-  const nextTopic =
-    currentModule && currentTopicIndex < currentModule.topics.length - 1
-      ? currentModule.topics[currentTopicIndex + 1]
-      : null;
+  // Auto-scroll active item into view inside the left sidebar on initial load or route transition
+  useEffect(() => {
+    const activeEl = document.querySelector('[data-active-topic="true"]');
+    if (activeEl) {
+      activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }, [currentTopicId, currentModuleId]);
 
   const toggleModule = (modId: string) => {
-    setExpandedModules((prev) => ({
-      ...prev,
-      [modId]: !prev[modId],
-    }));
+    setExpandedModules((prev) => {
+      const isCurrentlyOpen = prev[modId] !== undefined ? prev[modId] : modId === currentModuleId;
+      return {
+        ...prev,
+        [modId]: !isCurrentlyOpen,
+      };
+    });
   };
 
   const handleSaveNote = () => {
@@ -271,26 +326,26 @@ export function DocumentationLayout({
 
         {/* LEFT SIDEBAR: Curriculum Browser */}
         <LeftSidebar $isOpenOnMobile={mobileNavOpen}>
-          {/* Track Switcher */}
-          <Flex gap="4px" mb="14px" bg="#F4F4F5" p="2px" borderRadius="6px">
-            <TrackSwitcherButton
-              as={Link}
-              href="/full-stack"
-              $isActive={currentTrack === 'full-stack'}
+          {/* Active Learning Path Context Header (Context-Aware, No Track Switcher) */}
+          <TrackHeaderBox>
+            <Link
+              href={`/${currentTrack}`}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
+              title={`View ${currentTrack === 'full-stack' ? 'Full Stack' : 'Digital Marketing'} Curriculum Hub`}
             >
-              <Code2 size={12} />
-              <span>Full Stack</span>
-            </TrackSwitcherButton>
-
-            <TrackSwitcherButton
-              as={Link}
-              href="/digital-marketing"
-              $isActive={currentTrack === 'digital-marketing'}
-            >
-              <TrendingUp size={12} />
-              <span>Marketing</span>
-            </TrackSwitcherButton>
-          </Flex>
+              <Box p="6px" bg="#000000" color="#FFFFFF" borderRadius="6px" display="inline-flex">
+                {currentTrack === 'full-stack' ? <Code2 size={13} /> : <TrendingUp size={13} />}
+              </Box>
+              <Box>
+                <Text fontSize="12px" fontWeight="700" color="#000000">
+                  {currentTrack === 'full-stack' ? 'Full Stack Development' : 'Digital Marketing'}
+                </Text>
+                <Text fontSize="10.5px" color="#666666">
+                  {currentTrack === 'full-stack' ? '20 Modules • 200+ Topics' : '20 Modules • 180+ Topics'}
+                </Text>
+              </Box>
+            </Link>
+          </TrackHeaderBox>
 
           <Text
             fontSize="10.5px"
@@ -302,14 +357,17 @@ export function DocumentationLayout({
             px="4px"
           >
             {currentTrack === 'full-stack'
-              ? 'Full Stack (20 Modules)'
-              : 'Marketing (20 Modules)'}
+              ? 'Full Stack Curriculum'
+              : 'Digital Marketing Curriculum'}
           </Text>
 
           {/* Modules Accordion List */}
           <Box>
             {modules.map((mod) => {
-              const isExpanded = expandedModules[mod.id] || mod.id === currentModuleId;
+              const isExpanded =
+                expandedModules[mod.id] !== undefined
+                  ? expandedModules[mod.id]
+                  : mod.id === currentModuleId;
               return (
                 <ModuleGroup key={mod.id}>
                   <ModuleHeaderBtn onClick={() => toggleModule(mod.id)}>
@@ -331,14 +389,14 @@ export function DocumentationLayout({
                   {isExpanded && (
                     <Box mt="1px">
                       {mod.topics.map((t) => {
-                        const isActive =
-                          t.id === currentTopicId && mod.id === currentModuleId;
+                        const isActive = isTopicActive(mod.id, t.id);
                         const topicCompleted = profile.completedLessons.includes(t.id);
                         return (
                           <TopicLink
                             key={t.id}
                             href={`/${currentTrack}/${mod.id}/${t.id}`}
                             $isActive={isActive}
+                            data-active-topic={isActive ? 'true' : undefined}
                             onClick={() => setMobileNavOpen(false)}
                           >
                             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -363,21 +421,25 @@ export function DocumentationLayout({
           {/* Breadcrumb Header */}
           <Flex
             alignItems="center"
-            gap="5px"
+            gap="6px"
             fontSize="11.5px"
             color="#666666"
-            mb="12px"
+            mb="14px"
             flexWrap="wrap"
           >
-            <Link href={`/${currentTrack}`} style={{ color: '#666666' }}>
+            <Link href="/" style={{ color: '#666666', textDecoration: 'none' }}>
+              Home
+            </Link>
+            <span>/</span>
+            <Link href={`/${currentTrack}`} style={{ color: '#666666', textDecoration: 'none' }}>
               {currentTrack === 'full-stack' ? 'Full Stack Track' : 'Digital Marketing'}
             </Link>
             <span>/</span>
-            <Link href={`/${currentTrack}/${currentModuleId}`} style={{ color: '#666666' }}>
-              {currentModule?.title}
+            <Link href={`/${currentTrack}/${currentModuleId}`} style={{ color: '#666666', textDecoration: 'none' }}>
+              {currentModule?.title || 'Module'}
             </Link>
             <span>/</span>
-            <span style={{ color: '#000000', fontWeight: 500 }}>{lesson.title}</span>
+            <span style={{ color: '#000000', fontWeight: 600 }}>{lesson.title}</span>
           </Flex>
 
           {/* Lesson Title & Quick Actions */}
@@ -445,31 +507,40 @@ export function DocumentationLayout({
             flexWrap="wrap"
             gap="12px"
           >
-            {prevTopic ? (
+            {prevLesson ? (
               <Button
                 as={Link}
-                href={`/${currentTrack}/${currentModuleId}/${prevTopic.id}`}
+                href={`/${currentTrack}/${prevLesson.moduleId}/${prevLesson.topicId}`}
+                variant="outline"
+                size="sm"
+                title={`Previous Lesson: ${prevLesson.topicTitle}`}
+              >
+                ← Previous: {prevLesson.topicTitle}
+              </Button>
+            ) : (
+              <Button
+                as={Link}
+                href={`/${currentTrack}`}
                 variant="outline"
                 size="sm"
               >
-                ← Previous: {prevTopic.title}
+                ← Back to Track Overview
               </Button>
-            ) : (
-              <div />
             )}
 
-            {nextTopic ? (
+            {nextLesson ? (
               <Button
                 as={Link}
-                href={`/${currentTrack}/${currentModuleId}/${nextTopic.id}`}
+                href={`/${currentTrack}/${nextLesson.moduleId}/${nextLesson.topicId}`}
                 variant="primary"
                 size="sm"
+                title={`Next Lesson: ${nextLesson.topicTitle}`}
               >
-                Next: {nextTopic.title} →
+                Next: {nextLesson.topicTitle} →
               </Button>
             ) : (
               <Button as={Link} href={`/${currentTrack}`} variant="primary" size="sm">
-                Track Overview →
+                Track Completed! Overview →
               </Button>
             )}
           </Flex>
@@ -488,17 +559,26 @@ export function DocumentationLayout({
             On This Page
           </Text>
           <Box mb="22px">
-            <TOCItemLink href="#overview">Overview & Summary</TOCItemLink>
-            <TOCItemLink href="#objectives">Learning Objectives</TOCItemLink>
-            <TOCItemLink href="#key-concepts">Key Concepts</TOCItemLink>
-            <TOCItemLink href="#implementation">
-              {currentTrack === 'full-stack' ? 'Code Implementation' : 'Strategy Workflow'}
-            </TOCItemLink>
-            <TOCItemLink href="#step-by-step">Step-by-Step Guide</TOCItemLink>
-            <TOCItemLink href="#real-world">Real-World Application</TOCItemLink>
-            <TOCItemLink href="#mistakes-practices">Mistakes & Best Practices</TOCItemLink>
-            <TOCItemLink href="#exercises-questions">Exercises & Interview Prep</TOCItemLink>
-            <TOCItemLink href="#assignment">Mini Assignment</TOCItemLink>
+            <TOCItemLink href="#introduction">1. Introduction</TOCItemLink>
+            <TOCItemLink href="#definition">2. Definition</TOCItemLink>
+            <TOCItemLink href="#explanation">3. Explanation</TOCItemLink>
+            <TOCItemLink href="#why-used">4. Why It Is Used</TOCItemLink>
+            <TOCItemLink href="#use-cases">5. Real-World Use Cases</TOCItemLink>
+            {lesson.keyConcepts && lesson.keyConcepts.length > 0 && (
+              <TOCItemLink href="#key-concepts">6. Key Concepts</TOCItemLink>
+            )}
+            {lesson.syntaxDefinition && (
+              <TOCItemLink href="#syntax">7. Syntax Pattern</TOCItemLink>
+            )}
+            <TOCItemLink href="#code-examples">8. Code & Expected Output</TOCItemLink>
+            <TOCItemLink href="#step-by-step">9. Step-by-Step Guide</TOCItemLink>
+            <TOCItemLink href="#best-practices-mistakes">10. Best Practices</TOCItemLink>
+            <TOCItemLink href="#exercises">11. Practical Exercises</TOCItemLink>
+            <TOCItemLink href="#interview-questions">12. Interview Questions</TOCItemLink>
+            {lesson.relatedTopics && lesson.relatedTopics.length > 0 && (
+              <TOCItemLink href="#related-topics">13. Related Topics</TOCItemLink>
+            )}
+            <TOCItemLink href="#official-docs">14. Official Docs</TOCItemLink>
           </Box>
 
           {/* Notes Widget */}
@@ -549,15 +629,19 @@ export function DocumentationLayout({
                   style={{
                     fontSize: '11.5px',
                     fontWeight: 600,
-                    color: '#000000',
+                    color: '#111111',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px',
-                    marginBottom: '2px',
+                    justifyContent: 'space-between',
+                    gap: '6px',
+                    marginBottom: '3px',
+                    textDecoration: 'none',
                   }}
                 >
-                  <span>{doc.title}</span>
-                  <ExternalLink size={10} color="#888888" />
+                  <span style={{ textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+                    {doc.title}
+                  </span>
+                  <ExternalLink size={11} color="#666666" style={{ flexShrink: 0 }} />
                 </a>
                 <Text fontSize="10.5px" color="#666666" lineHeight="normal">
                   {doc.description}

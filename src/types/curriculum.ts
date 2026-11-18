@@ -48,6 +48,10 @@ export interface LessonContent {
   duration: string;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   summary: string;
+  definition?: string;
+  explanation?: string;
+  whyItIsUsed?: string[];
+  realWorldUseCases?: string[];
   objectives: string[];
   keyConcepts: {
     title: string;
@@ -76,7 +80,12 @@ export interface LessonContent {
     question: string;
     answer: string;
   }[];
-  miniAssignment: {
+  relatedTopics?: {
+    id: string;
+    title: string;
+    href: string;
+  }[];
+  miniAssignment?: {
     title: string;
     prompt: string;
     deliverables: string[];

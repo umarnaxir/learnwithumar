@@ -76,7 +76,7 @@ export function FinalCTA() {
 
             <Button
               as={Link}
-              href="/dashboard"
+              href="/docs"
               size="md"
               variant="outline"
               style={{
@@ -84,7 +84,7 @@ export function FinalCTA() {
                 color: '#FFFFFF',
               }}
             >
-              <span>Student Dashboard</span>
+              <span>Explore Documentation</span>
             </Button>
           </Flex>
         </Box>

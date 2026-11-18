@@ -99,7 +99,20 @@ export interface TextProps extends SpaceProps, TypographyProps, ColorProps {
   letterSpacing?: string | number;
 }
 
-export const Text = styled.p<TextProps>`
+const customProps = new Set([
+  'interactive',
+  'glass',
+  'fullWidth',
+  'variant',
+  'size',
+  'truncate',
+  'letterSpacing',
+  'textTransform',
+]);
+
+const shouldForwardProp = (prop: string) => !customProps.has(prop);
+
+export const Text = styled.p.withConfig({ shouldForwardProp })<TextProps>`
   margin: 0;
   ${space}
   ${typography}
@@ -135,7 +148,7 @@ export interface ButtonProps extends SpaceProps, LayoutProps, BorderProps {
   fullWidth?: boolean;
 }
 
-export const Button = styled.button<ButtonProps>`
+export const Button = styled.button.withConfig({ shouldForwardProp })<ButtonProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -248,7 +261,7 @@ export interface CardProps extends BoxProps {
   glass?: boolean;
 }
 
-export const Card = styled(Box)<CardProps>`
+export const Card = styled(Box).withConfig({ shouldForwardProp })<CardProps>`
   background-color: ${({ theme, glass }) =>
     glass ? theme.colors.surfaceGlass : theme.colors.cardBg};
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -280,7 +293,7 @@ export interface BadgeProps extends SpaceProps {
   variant?: 'neutral' | 'success' | 'warning' | 'info' | 'dark';
 }
 
-export const Badge = styled.span<BadgeProps>`
+export const Badge = styled.span.withConfig({ shouldForwardProp })<BadgeProps>`
   display: inline-flex;
   align-items: center;
   gap: 4px;

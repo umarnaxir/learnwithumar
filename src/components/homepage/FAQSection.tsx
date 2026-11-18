@@ -77,7 +77,7 @@ export function FAQSection() {
     },
     {
       q: 'How do project evaluations work?',
-      a: 'Every project includes detailed learning objectives, explicit acceptance criteria, submission guidelines, and weighted evaluation rubrics. Students can track progress directly in their student dashboard.',
+      a: 'Every project includes detailed learning objectives, explicit acceptance criteria, submission guidelines, and weighted evaluation rubrics. Students follow clear step-by-step documentation, production requirements, and technical rubrics.',
     },
   ];
 

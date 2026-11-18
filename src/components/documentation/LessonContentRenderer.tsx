@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import styled from 'styled-components';
 import { Box, Flex, Text, Badge, Card } from '@/components/ui/primitives';
 import { LessonContent } from '@/types/curriculum';
 import { CodeBlock } from './CodeBlock';
-import { QuizComponent } from '@/components/learning/QuizComponent';
 import {
   CheckCircle,
   AlertTriangle,
@@ -15,10 +15,15 @@ import {
   FileCheck2,
   ChevronDown,
   ChevronUp,
+  ExternalLink,
+  BookOpen,
+  ArrowRight,
+  Code2,
+  Compass,
 } from 'lucide-react';
 
 const ContentSection = styled.section`
-  margin-bottom: 40px;
+  margin-bottom: 36px;
   scroll-margin-top: 80px;
 `;
 
@@ -36,8 +41,8 @@ const SectionHeading = styled.h2`
 const LeadParagraph = styled.p`
   font-size: 13.5px;
   line-height: 1.65;
-  color: #444444;
-  margin-bottom: 18px;
+  color: #333333;
+  margin-bottom: 16px;
 `;
 
 const ObjectiveList = styled.ul`
@@ -113,6 +118,14 @@ const AccordionBody = styled.div`
   border-top: 1px solid #eaeaea;
 `;
 
+const CalloutBox = styled(Box)`
+  border-left: 3px solid #000000;
+  background-color: #fcfcfc;
+  padding: 14px 16px;
+  border-radius: 0 8px 8px 0;
+  margin: 12px 0 16px;
+`;
+
 export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -120,94 +133,136 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
     setOpenFaq((prev) => (prev === idx ? null : idx));
   };
 
-  const sampleQuiz = [
-    {
-      question: `Which fundamental principle is central to mastering "${lesson.title}"?`,
-      options: [
-        'Separation of concerns and systematic adherence to verified standards',
-        'Skipping architecture planning to write faster unvalidated code',
-        'Relying solely on third-party libraries without understanding internals',
-        'Ignoring performance metrics and error handling mechanisms',
-      ],
-      correctIndex: 0,
-      explanation:
-        'Separation of concerns, clean design patterns, and rigorous validation guarantee robust, scalable systems that withstand real-world enterprise traffic.',
-    },
-    {
-      question: 'When deploying to production, what is the most critical non-negotiable step?',
-      options: [
-        'Turn off all monitoring and error tracking tools to save bandwidth',
-        'Validate security boundaries, test edge cases, and inspect response contracts',
-        'Deploy without peer review or automated continuous integration runs',
-        'Hardcode API secrets into the client-side JavaScript bundle',
-      ],
-      correctIndex: 1,
-      explanation:
-        'Production deployments must verify security headers, data validation contracts, and automated tests to prevent catastrophic data leaks or service downtime.',
-    },
-  ];
-
   return (
     <Box>
-      {/* 1. OVERVIEW & SUMMARY */}
-      <ContentSection id="overview">
+      {/* 1. TOPIC INTRODUCTION */}
+      <ContentSection id="introduction">
+        <SectionHeading>
+          <BookOpen size={16} color="#000000" />
+          <span>Topic Introduction</span>
+        </SectionHeading>
         <LeadParagraph>{lesson.summary}</LeadParagraph>
       </ContentSection>
 
-      {/* 2. LEARNING OBJECTIVES */}
-      <ContentSection id="objectives">
+      {/* 2. DEFINITION */}
+      <ContentSection id="definition">
+        <SectionHeading>
+          <FileCheck2 size={16} color="#000000" />
+          <span>Definition</span>
+        </SectionHeading>
+        <CalloutBox>
+          <Text fontSize="13px" fontWeight="600" color="#000000" mb="4px">
+            Core Definition:
+          </Text>
+          <Text fontSize="12.5px" color="#333333" lineHeight="relaxed">
+            {lesson.definition ||
+              `${lesson.title} is a verified standard and methodological foundation in modern ${
+                lesson.trackId === 'full-stack' ? 'full-stack web development' : 'digital marketing'
+              }.`}
+          </Text>
+        </CalloutBox>
+      </ContentSection>
+
+      {/* 3. EXPLANATION */}
+      <ContentSection id="explanation">
+        <SectionHeading>
+          <Lightbulb size={16} color="#000000" />
+          <span>In-Depth Explanation</span>
+        </SectionHeading>
+        <Card p="16px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="8px" mb="12px">
+          <Text fontSize="13px" color="#444444" lineHeight="relaxed">
+            {lesson.explanation ||
+              `Understanding ${lesson.title} requires mastering both its internal mechanics and its practical integration across the engineering stack. In production, this concept guarantees consistency, performance, and fault tolerance under high-traffic conditions.`}
+          </Text>
+        </Card>
+      </ContentSection>
+
+      {/* 4. WHY IT IS USED */}
+      <ContentSection id="why-used">
+        <SectionHeading>
+          <CheckCircle size={16} color="#000000" />
+          <span>Why It Is Used & Significance</span>
+        </SectionHeading>
         <Card p="16px" bg="#FBFBFC" border="1px solid #EAEAEA" borderRadius="8px">
-          <SectionHeading style={{ fontSize: '14px', marginBottom: '10px' }}>
-            <FileCheck2 size={16} color="#000000" />
-            <span>Learning Objectives</span>
-          </SectionHeading>
           <ObjectiveList>
-            {lesson.objectives.map((obj, idx) => (
+            {(lesson.whyItIsUsed && lesson.whyItIsUsed.length > 0
+              ? lesson.whyItIsUsed
+              : lesson.objectives
+            ).map((reason, idx) => (
               <ObjectiveItem key={idx}>
                 <CheckCircle size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span>{obj}</span>
+                <span>{reason}</span>
               </ObjectiveItem>
             ))}
           </ObjectiveList>
         </Card>
       </ContentSection>
 
-      {/* 3. KEY CONCEPTS */}
-      <ContentSection id="key-concepts">
+      {/* 5. REAL-WORLD USE CASES */}
+      <ContentSection id="use-cases">
         <SectionHeading>
-          <Lightbulb size={17} color="#000000" />
-          <span>Important Concepts & Definitions</span>
+          <Briefcase size={16} color="#000000" />
+          <span>Real-World Use Cases</span>
         </SectionHeading>
-        <Box display="grid" gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap="12px" mt="12px">
-          {lesson.keyConcepts.map((concept, idx) => (
-            <Card key={idx} p="14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="8px">
-              <Text fontSize="13px" fontWeight="700" color="#111111" mb="4px">
-                {concept.title}
-              </Text>
-              <Text fontSize="12px" color="#555555" lineHeight="relaxed">
-                {concept.explanation}
-              </Text>
-            </Card>
-          ))}
-        </Box>
+        <Card p="16px" bg="#FAF9F6" border="1px solid #EAEAEA" borderRadius="8px">
+          <Text fontSize="12.5px" color="#333333" lineHeight="relaxed" mb="10px">
+            {lesson.realWorldApplication}
+          </Text>
+          {lesson.realWorldUseCases && lesson.realWorldUseCases.length > 0 && (
+            <ObjectiveList>
+              {lesson.realWorldUseCases.map((useCase, idx) => (
+                <ObjectiveItem key={idx}>
+                  <span style={{ fontWeight: 700, color: '#000000' }}>•</span>
+                  <span>{useCase}</span>
+                </ObjectiveItem>
+              ))}
+            </ObjectiveList>
+          )}
+        </Card>
       </ContentSection>
 
-      {/* 4. SYNTAX / ARCHITECTURE SPECIFICATION */}
+      {/* 6. KEY ARCHITECTURAL CONCEPTS */}
+      {lesson.keyConcepts && lesson.keyConcepts.length > 0 && (
+        <ContentSection id="key-concepts">
+          <SectionHeading>
+            <Lightbulb size={16} color="#000000" />
+            <span>Key Architectural Concepts</span>
+          </SectionHeading>
+          <Box display="grid" gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap="12px" mt="12px">
+            {lesson.keyConcepts.map((concept, idx) => (
+              <Card key={idx} p="14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="8px">
+                <Text fontSize="13px" fontWeight="700" color="#111111" mb="4px">
+                  {concept.title}
+                </Text>
+                <Text fontSize="12px" color="#555555" lineHeight="relaxed">
+                  {concept.explanation}
+                </Text>
+              </Card>
+            ))}
+          </Box>
+        </ContentSection>
+      )}
+
+      {/* 7. SYNTAX */}
       {lesson.syntaxDefinition && (
         <ContentSection id="syntax">
-          <SectionHeading>Syntax & Architectural Flow</SectionHeading>
+          <SectionHeading>
+            <Code2 size={16} color="#000000" />
+            <span>Syntax & Structural Blueprint</span>
+          </SectionHeading>
           <CodeBlock
-            title="Structural Pattern"
+            title="Syntax & Architecture Pattern"
             language="typescript"
             code={lesson.syntaxDefinition}
           />
         </ContentSection>
       )}
 
-      {/* 5. CODE EXAMPLES / STRATEGY WORKFLOWS */}
-      <ContentSection id="implementation">
+      {/* 8. EXAMPLE CODE & EXPECTED OUTPUT */}
+      <ContentSection id="code-examples">
         <SectionHeading>
-          {lesson.codeExamples ? 'Practical Code Implementations' : 'Strategic Workflows & Case Studies'}
+          <Code2 size={16} color="#000000" />
+          <span>{lesson.codeExamples ? 'Example Code & Expected Output' : 'Strategic Workflows & Execution'}</span>
         </SectionHeading>
 
         {lesson.codeExamples &&
@@ -262,9 +317,12 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
           ))}
       </ContentSection>
 
-      {/* 6. STEP-BY-STEP EXPLANATION */}
+      {/* 9. STEP-BY-STEP CODE EXPLANATION */}
       <ContentSection id="step-by-step">
-        <SectionHeading>Step-by-Step Implementation Guide</SectionHeading>
+        <SectionHeading>
+          <FileCheck2 size={16} color="#000000" />
+          <span>Step-by-Step Code & Implementation Walkthrough</span>
+        </SectionHeading>
         <Box mt="12px">
           {lesson.stepByStepGuide.map((step) => (
             <StepContainer key={step.step}>
@@ -282,22 +340,28 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
         </Box>
       </ContentSection>
 
-      {/* 7. REAL-WORLD APPLICATION */}
-      <ContentSection id="real-world">
-        <SectionHeading>
-          <Briefcase size={16} color="#000000" />
-          <span>Real-World Commercial Application</span>
-        </SectionHeading>
-        <Card p="16px" bg="#FAF9F6" border="1px solid #EAEAEA" borderRadius="8px">
-          <Text fontSize="12.5px" color="#333333" lineHeight="relaxed">
-            {lesson.realWorldApplication}
-          </Text>
-        </Card>
-      </ContentSection>
-
-      {/* 8. COMMON MISTAKES & BEST PRACTICES */}
-      <ContentSection id="mistakes-practices">
+      {/* 10. BEST PRACTICES & COMMON MISTAKES */}
+      <ContentSection id="best-practices-mistakes">
         <Box display="grid" gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap="16px">
+          {/* Best Practices */}
+          <Box>
+            <Flex alignItems="center" gap="6px" mb="10px">
+              <CheckCircle size={15} color="#10B981" />
+              <Text fontSize="13.5px" fontWeight="700" color="#111111">
+                Industry Best Practices
+              </Text>
+            </Flex>
+            <Box p="12px" bg="#ECFDF5" border="1px solid #A7F3D0" borderRadius="6px">
+              <ul style={{ margin: 0, paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {lesson.bestPractices.map((bp, idx) => (
+                  <li key={idx} style={{ fontSize: '12px', color: '#065F46' }}>
+                    {bp}
+                  </li>
+                ))}
+              </ul>
+            </Box>
+          </Box>
+
           {/* Common Mistakes */}
           <Box>
             <Flex alignItems="center" gap="6px" mb="10px">
@@ -324,31 +388,15 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
               </Box>
             ))}
           </Box>
-
-          {/* Best Practices */}
-          <Box>
-            <Flex alignItems="center" gap="6px" mb="10px">
-              <CheckCircle size={15} color="#10B981" />
-              <Text fontSize="13.5px" fontWeight="700" color="#111111">
-                Industry Best Practices
-              </Text>
-            </Flex>
-            <Box p="12px" bg="#ECFDF5" border="1px solid #A7F3D0" borderRadius="6px">
-              <ul style={{ margin: 0, paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {lesson.bestPractices.map((bp, idx) => (
-                  <li key={idx} style={{ fontSize: '12px', color: '#065F46' }}>
-                    {bp}
-                  </li>
-                ))}
-              </ul>
-            </Box>
-          </Box>
         </Box>
       </ContentSection>
 
-      {/* 9. PRACTICAL EXERCISES */}
-      <ContentSection id="exercises-questions">
-        <SectionHeading>Practical Exercises & Technical Drills</SectionHeading>
+      {/* 11. PRACTICAL EXERCISES */}
+      <ContentSection id="exercises">
+        <SectionHeading>
+          <Code2 size={16} color="#000000" />
+          <span>Practical Exercises & Technical Drills</span>
+        </SectionHeading>
         {lesson.exercises.map((ex, idx) => (
           <Card key={idx} p="14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="8px" mb="10px">
             <Flex alignItems="center" gap="6px" mb="4px">
@@ -367,58 +415,105 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
             )}
           </Card>
         ))}
+      </ContentSection>
 
-        {/* Interview Questions */}
-        <Box mt="22px">
-          <SectionHeading>
-            <HelpCircle size={16} color="#000000" />
-            <span>Technical Interview Questions & Answers</span>
-          </SectionHeading>
-          <Box mt="10px">
-            {lesson.interviewQuestions.map((q, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <AccordionItemBox key={idx}>
-                  <AccordionHeader onClick={() => toggleFaq(idx)}>
-                    <span>{q.question}</span>
-                    {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                  </AccordionHeader>
-                  {isOpen && <AccordionBody>{q.answer}</AccordionBody>}
-                </AccordionItemBox>
-              );
-            })}
-          </Box>
+      {/* 12. INTERVIEW QUESTIONS */}
+      <ContentSection id="interview-questions">
+        <SectionHeading>
+          <HelpCircle size={16} color="#000000" />
+          <span>Technical Interview Questions & Answers</span>
+        </SectionHeading>
+        <Box mt="10px">
+          {lesson.interviewQuestions.map((q, idx) => {
+            const isOpen = openFaq === idx;
+            return (
+              <AccordionItemBox key={idx}>
+                <AccordionHeader onClick={() => toggleFaq(idx)}>
+                  <span>{q.question}</span>
+                  {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </AccordionHeader>
+                {isOpen && <AccordionBody>{q.answer}</AccordionBody>}
+              </AccordionItemBox>
+            );
+          })}
         </Box>
       </ContentSection>
 
-      {/* 10. MINI ASSIGNMENT */}
-      <ContentSection id="assignment">
-        <Card p="18px" bg="#F9FAFB" border="1px solid #000000" borderRadius="8px">
-          <Flex alignItems="center" gap="6px" mb="6px">
-            <Badge variant="dark">Assignment Deliverable</Badge>
-            <Text fontSize="14px" fontWeight="700" color="#000000">
-              {lesson.miniAssignment.title}
-            </Text>
-          </Flex>
-          <Text fontSize="12.5px" color="#333333" mb="10px">
-            {lesson.miniAssignment.prompt}
-          </Text>
-          <Text fontSize="11px" fontWeight="700" color="#555555" textTransform="uppercase" mb="4px">
-            Deliverables required:
-          </Text>
-          <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            {lesson.miniAssignment.deliverables.map((item, idx) => (
-              <li key={idx} style={{ fontSize: '12px', color: '#444444' }}>
-                {item}
-              </li>
+      {/* 13. RELATED TOPICS */}
+      {lesson.relatedTopics && lesson.relatedTopics.length > 0 && (
+        <ContentSection id="related-topics">
+          <SectionHeading>
+            <Compass size={16} color="#000000" />
+            <span>Related Topics in this Module</span>
+          </SectionHeading>
+          <Box display="grid" gridTemplateColumns={['1fr', '1fr 1fr']} gap="10px">
+            {lesson.relatedTopics.map((rel) => (
+              <Card
+                key={rel.id}
+                p="12px 14px"
+                bg="#FFFFFF"
+                border="1px solid #EAEAEA"
+                borderRadius="6px"
+                as={Link}
+                href={rel.href}
+                interactive
+                style={{ textDecoration: 'none' }}
+              >
+                <Flex alignItems="center" justifyContent="space-between">
+                  <Text fontSize="12.5px" fontWeight="600" color="#111111">
+                    {rel.title}
+                  </Text>
+                  <ArrowRight size={13} color="#888888" />
+                </Flex>
+              </Card>
             ))}
-          </ul>
-        </Card>
-      </ContentSection>
+          </Box>
+        </ContentSection>
+      )}
 
-      {/* 11. INTERACTIVE KNOWLEDGE CHECK QUIZ */}
-      <ContentSection id="knowledge-check">
-        <QuizComponent questions={sampleQuiz} />
+      {/* 14. OFFICIAL DOCUMENTATION LINKS */}
+      <ContentSection id="official-docs">
+        <SectionHeading>
+          <ExternalLink size={16} color="#000000" />
+          <span>Official Documentation & Specifications</span>
+        </SectionHeading>
+        <Box display="grid" gridTemplateColumns={['1fr', '1fr 1fr']} gap="10px">
+          {lesson.officialDocs.map((doc, idx) => (
+            <Card
+              key={idx}
+              p="14px 16px"
+              bg="#FFFFFF"
+              border="1px solid #EAEAEA"
+              borderRadius="8px"
+              as="a"
+              href={doc.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              interactive
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                display: 'block',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <Flex alignItems="center" justifyContent="space-between" mb="4px">
+                <Text
+                  fontSize="13px"
+                  fontWeight="600"
+                  color="#000000"
+                  style={{ textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                >
+                  {doc.title}
+                </Text>
+                <ExternalLink size={12} color="#000000" style={{ flexShrink: 0 }} />
+              </Flex>
+              <Text fontSize="11.5px" color="#555555" lineHeight="relaxed">
+                {doc.description}
+              </Text>
+            </Card>
+          ))}
+        </Box>
       </ContentSection>
     </Box>
   );

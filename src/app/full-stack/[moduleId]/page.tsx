@@ -110,11 +110,14 @@ export default function FullStackModuleOverviewPage() {
             {mod.topics.map((topic, idx) => (
               <Card
                 key={topic.id}
+                as={Link}
+                href={`/full-stack/${mod.id}/${topic.id}`}
                 p="14px 18px"
                 bg="#FFFFFF"
                 border="1px solid #EAEAEA"
                 borderRadius="8px"
                 interactive
+                style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
               >
                 <Flex
                   alignItems="center"
@@ -155,10 +158,9 @@ export default function FullStackModuleOverviewPage() {
                       {topic.duration}
                     </span>
                     <Button
-                      as={Link}
-                      href={`/full-stack/${mod.id}/${topic.id}`}
                       variant="outline"
                       size="sm"
+                      style={{ pointerEvents: 'none' }}
                     >
                       <span>Read Documentation</span>
                       <ArrowRight size={12} />

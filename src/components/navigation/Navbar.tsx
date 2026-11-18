@@ -9,15 +9,13 @@ import { SearchModal } from '@/components/common/SearchModal';
 import {
   Search,
   BookOpen,
-  Code2,
   CodeXml,
-  TrendingUp,
-  LayoutDashboard,
-  FolderGit2,
   Menu,
   X,
   Compass,
-  Sparkles,
+  Home,
+  Code2,
+  TrendingUp,
 } from 'lucide-react';
 
 const NavWrapper = styled.div<{ $isScrolled: boolean }>`
@@ -93,7 +91,7 @@ const NavList = styled.nav`
   align-items: center;
   gap: 2px;
 
-  @media (min-width: 1024px) {
+  @media (min-width: 960px) {
     display: flex;
   }
 `;
@@ -229,14 +227,31 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
+    { label: 'Home', href: '/', icon: Home },
     { label: 'Learning Paths', href: '/learning-paths', icon: Compass },
+    { label: 'Documentation', href: '/docs', icon: BookOpen },
     { label: 'Full Stack', href: '/full-stack', icon: Code2 },
     { label: 'Digital Marketing', href: '/digital-marketing', icon: TrendingUp },
-    { label: 'Docs', href: '/docs', icon: BookOpen },
-    { label: 'Projects', href: '/projects', icon: FolderGit2 },
-    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'About', href: '/about', icon: Sparkles },
   ];
+
+  const isLinkActive = (href: string) => {
+    if (href === '/') {
+      return pathname === '/';
+    }
+    if (href === '/full-stack') {
+      return pathname === '/full-stack' || pathname.startsWith('/full-stack/');
+    }
+    if (href === '/digital-marketing') {
+      return pathname === '/digital-marketing' || pathname.startsWith('/digital-marketing/');
+    }
+    if (href === '/docs') {
+      return pathname === '/docs' || pathname.startsWith('/docs/');
+    }
+    if (href === '/learning-paths') {
+      return pathname === '/learning-paths' || pathname.startsWith('/learning-paths/');
+    }
+    return pathname === href || pathname.startsWith(href);
+  };
 
   return (
     <>
@@ -252,9 +267,7 @@ export function Navbar() {
           {/* Desktop Navigation Links */}
           <NavList>
             {navLinks.map((link) => {
-              const isActive =
-                pathname === link.href ||
-                (link.href !== '/' && pathname.startsWith(link.href));
+              const isActive = isLinkActive(link.href);
               return (
                 <NavItemLink
                   key={link.href}
@@ -312,9 +325,7 @@ export function Navbar() {
           </Text>
           {navLinks.map((link) => {
             const Icon = link.icon;
-            const isActive =
-              pathname === link.href ||
-              (link.href !== '/' && pathname.startsWith(link.href));
+            const isActive = isLinkActive(link.href);
             return (
               <MobileNavLink
                 key={link.href}
@@ -332,24 +343,24 @@ export function Navbar() {
         <Box mt="auto" pt="12px" borderTop="1px solid #EAEAEA">
           <Button
             as={Link}
-            href="/dashboard"
-            variant="secondary"
+            href="/learning-paths"
+            variant="primary"
             fullWidth
             size="sm"
             mb="8px"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Student Dashboard
+            Explore Learning Paths
           </Button>
           <Button
             as={Link}
-            href="/full-stack"
-            variant="primary"
+            href="/docs"
+            variant="outline"
             fullWidth
             size="sm"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Explore Curriculum
+            Documentation Hub
           </Button>
         </Box>
       </MobileMenuDrawer>

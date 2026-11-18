@@ -11,25 +11,30 @@ import { useStudentProgress } from '@/hooks/useStudentProgress';
 
 export default function DigitalMarketingTopicDocPage() {
   const params = useParams();
-  const moduleId = params?.moduleId as string;
-  const topicId = params?.topicId as string;
+  const rawModuleId = params?.moduleId;
+  const rawTopicId = params?.topicId;
+  const moduleId = (Array.isArray(rawModuleId) ? rawModuleId[0] : rawModuleId || '') as string;
+  const topicId = (Array.isArray(rawTopicId) ? rawTopicId[0] : rawTopicId || '') as string;
 
-  const lesson = getLessonContent('digital-marketing', moduleId, topicId);
+  const decodedModuleId = decodeURIComponent(moduleId);
+  const decodedTopicId = decodeURIComponent(topicId);
+
+  const lesson = getLessonContent('digital-marketing', decodedModuleId, decodedTopicId);
   const { recordVisit } = useStudentProgress();
 
   useEffect(() => {
-    if (lesson) {
-      recordVisit('digital-marketing', moduleId, topicId, lesson.title);
+    if (lesson && decodedModuleId && decodedTopicId) {
+      recordVisit('digital-marketing', decodedModuleId, decodedTopicId, lesson.title);
     }
-  }, [lesson, moduleId, topicId, recordVisit]);
+  }, [lesson, decodedModuleId, decodedTopicId, recordVisit]);
 
   return (
     <>
       <Navbar />
       <DocumentationLayout
         currentTrack="digital-marketing"
-        currentModuleId={moduleId}
-        currentTopicId={topicId}
+        currentModuleId={decodedModuleId}
+        currentTopicId={decodedTopicId}
         lesson={lesson}
       >
         <LessonContentRenderer lesson={lesson} />

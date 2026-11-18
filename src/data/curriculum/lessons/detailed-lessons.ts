@@ -1,8 +1,10 @@
 import { LessonContent, TrackId } from '@/types/curriculum';
 import { FULL_STACK_MODULES } from '../full-stack-curriculum';
 import { DIGITAL_MARKETING_MODULES } from '../digital-marketing-curriculum';
+import { HTML_DETAILED_LESSONS } from './html-lessons';
 
 export const DETAILED_LESSONS: Record<string, LessonContent> = {
+  ...HTML_DETAILED_LESSONS,
   // FULL STACK: Client-Server Architecture
   'full-stack_intro-web-dev_client-server-architecture': {
     id: 'client-server-architecture',
@@ -207,6 +209,12 @@ app.listen(4000, () => {
         'A 1-page summary explaining the purpose of each layer and the security measures applied at each step',
       ],
     },
+    relatedTopics: [
+      { id: 'what-is-web-development', title: 'What is Web Development?', href: '/full-stack/intro-web-dev/what-is-web-development' },
+      { id: 'how-the-internet-works', title: 'How the Internet Works', href: '/full-stack/intro-web-dev/how-the-internet-works' },
+      { id: 'frontend-vs-backend', title: 'Frontend vs Backend Architecture', href: '/full-stack/intro-web-dev/frontend-vs-backend' },
+      { id: 'http-and-https', title: 'HTTP and HTTPS Security Protocols', href: '/full-stack/intro-web-dev/http-and-https' },
+    ],
     officialDocs: [
       {
         title: 'MDN Web Docs: An Overview of HTTP',
@@ -374,6 +382,12 @@ app.listen(4000, () => {
         'A table mapping URL patterns to their required indexing status (Index/Noindex, Follow/Nofollow, Canonical target)',
       ],
     },
+    relatedTopics: [
+      { id: 'introduction-to-seo', title: 'Introduction to SEO', href: '/digital-marketing/seo-fundamentals/introduction-to-seo' },
+      { id: 'crawling-and-indexing', title: 'Crawling, Indexing, and Serving Mechanisms', href: '/digital-marketing/seo-fundamentals/crawling-and-indexing' },
+      { id: 'ranking-factors-overview', title: 'Core Ranking Factors & Algorithms', href: '/digital-marketing/seo-fundamentals/ranking-factors-overview' },
+      { id: 'serp-features-and-layout', title: 'SERP Anatomy & Rich Snippets', href: '/digital-marketing/seo-fundamentals/serp-features-and-layout' },
+    ],
     officialDocs: [
       {
         title: 'Google Search Central: How Google Search Works',
@@ -393,21 +407,150 @@ app.listen(4000, () => {
   },
 };
 
-// Generates fallback rich content for any topic in the curriculum so no lesson is ever an empty placeholder
+const TOPIC_ALIASES: Record<string, string> = {
+  'intro-to-html': 'introduction-to-html',
+  'html-lists': 'lists-and-hierarchies',
+  'html-tables': 'tables-and-tabular-data',
+  'forms-and-inputs': 'forms-and-input-fields',
+  'html5-features': 'html5-modern-features',
+  'web-accessibility': 'accessibility-in-html',
+  'accessibility': 'accessibility-in-html',
+};
+
+const normalize = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+// Generates rich content for any topic in the curriculum so no lesson is ever an empty placeholder
 export function getLessonContent(trackId: TrackId, moduleId: string, topicId: string): LessonContent {
-  const compositeKey = `${trackId}_${moduleId}_${topicId}`;
+  const canonicalTopicId = TOPIC_ALIASES[topicId] || topicId;
+
+  // 1. Direct composite key check
+  const compositeKey = `${trackId}_${moduleId}_${canonicalTopicId}`;
   if (DETAILED_LESSONS[compositeKey]) {
     return DETAILED_LESSONS[compositeKey];
   }
 
-  // Find module details
+  // 2. Check with raw topicId
+  const rawKey = `${trackId}_${moduleId}_${topicId}`;
+  if (DETAILED_LESSONS[rawKey]) {
+    return DETAILED_LESSONS[rawKey];
+  }
+
+  // 3. Find module details
   const modules = trackId === 'full-stack' ? FULL_STACK_MODULES : DIGITAL_MARKETING_MODULES;
-  const mod = modules.find((m) => m.id === moduleId);
-  const topic = mod?.topics.find((t) => t.id === topicId);
+  let mod = modules.find((m) => m.id === moduleId || normalize(m.id) === normalize(moduleId));
+  if (!mod) {
+    mod = modules.find((m) =>
+      m.topics.some(
+        (t) =>
+          t.id === canonicalTopicId ||
+          t.id === topicId ||
+          normalize(t.id) === normalize(canonicalTopicId) ||
+          normalize(t.id) === normalize(topicId)
+      )
+    );
+  }
+
+  const topic = mod?.topics.find(
+    (t) =>
+      t.id === canonicalTopicId ||
+      t.id === topicId ||
+      normalize(t.id) === normalize(canonicalTopicId) ||
+      normalize(t.id) === normalize(topicId) ||
+      normalize(t.title) === normalize(canonicalTopicId) ||
+      normalize(t.title) === normalize(topicId)
+  );
 
   const title = topic?.title || 'Comprehensive Lesson Overview';
   const summary = topic?.summary || 'Master this essential industry skill with complete documentation, practical patterns, real-world examples, and interview preparation.';
   const isDevelopment = trackId === 'full-stack';
+  const effectiveTopicId = topic?.id || canonicalTopicId;
+  const effectiveModuleId = mod?.id || moduleId;
+
+  // Sibling related topics for contextual navigation
+  const relatedTopics = (mod?.topics || [])
+    .filter((t) => t.id !== effectiveTopicId)
+    .slice(0, 4)
+    .map((t) => ({
+      id: t.id,
+      title: t.title,
+      href: `/${trackId}/${effectiveModuleId}/${t.id}`,
+    }));
+
+  // Context-specific verified official documentation links
+  let officialDocs = [
+    {
+      title: isDevelopment ? 'MDN Web Docs Official Reference' : 'Google Search Central Official Reference',
+      url: isDevelopment ? 'https://developer.mozilla.org' : 'https://developers.google.com/search/docs',
+      description: 'Verified official documentation and reference material for modern standards and technical protocols.',
+    },
+  ];
+
+  if (effectiveModuleId === 'html-complete-guide' || effectiveTopicId.includes('html')) {
+    officialDocs = [
+      {
+        title: 'MDN Web Docs: HTML Living Standard & Reference',
+        url: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
+        description: 'Comprehensive guides, element reference tables, and interactive code examples maintained by Mozilla.',
+      },
+      {
+        title: 'WHATWG HTML Living Standard Specification',
+        url: 'https://html.spec.whatwg.org/multipage/',
+        description: 'The canonical source specification for modern HTML syntax, parsing rules, and DOM interfaces.',
+      },
+      {
+        title: 'W3C Web Accessibility Initiative (WAI-ARIA)',
+        url: 'https://www.w3.org/WAI/standards-guidelines/aria/',
+        description: 'Official accessibility technical guidelines and landmark roles for accessible HTML structuring.',
+      },
+    ];
+  } else if (effectiveModuleId.includes('css') || effectiveTopicId.includes('css')) {
+    officialDocs = [
+      {
+        title: 'MDN Web Docs: CSS Reference & Flexbox/Grid Guides',
+        url: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
+        description: 'Standard reference for CSS properties, layout modes, cascade rules, and responsive design.',
+      },
+      {
+        title: 'W3C Cascading Style Sheets Specifications',
+        url: 'https://www.w3.org/Style/CSS/',
+        description: 'Official W3C working group specifications for modern CSS architecture.',
+      },
+    ];
+  } else if (effectiveModuleId.includes('react') || effectiveTopicId.includes('react')) {
+    officialDocs = [
+      {
+        title: 'React Official Documentation (react.dev)',
+        url: 'https://react.dev',
+        description: 'Official interactive documentation for React 19, hooks, component lifecycles, and architecture.',
+      },
+      {
+        title: 'React Router / Modern State Management Guide',
+        url: 'https://react.dev/learn',
+        description: 'Conceptual patterns for declarative UI composition and predictable unidirectional data flow.',
+      },
+    ];
+  } else if (effectiveModuleId.includes('next') || effectiveTopicId.includes('next')) {
+    officialDocs = [
+      {
+        title: 'Next.js App Router Documentation',
+        url: 'https://nextjs.org/docs',
+        description: 'Production architecture guides for Server Components, routing, layouts, and data fetching.',
+      },
+    ];
+  } else if (effectiveModuleId.includes('seo') || effectiveTopicId.includes('seo')) {
+    officialDocs = [
+      {
+        title: 'Google Search Central Official Documentation',
+        url: 'https://developers.google.com/search/docs',
+        description: 'Google’s official guidelines for crawling, indexing, ranking, and technical SEO compliance.',
+      },
+      {
+        title: 'Schema.org Structured Data Specifications',
+        url: 'https://schema.org',
+        description: 'Universal schemas for structured JSON-LD entities recognized by Google and Bing.',
+      },
+    ];
+  }
 
   return {
     id: topicId,
@@ -419,6 +562,36 @@ export function getLessonContent(trackId: TrackId, moduleId: string, topicId: st
     duration: topic?.duration || '45m',
     difficulty: 'Intermediate',
     summary: summary,
+    definition: isDevelopment
+      ? `${title} is a core technological standard and architecture specification in modern full-stack web engineering that defines how software components, network protocols, and data structures interact reliably across client, server, and database runtimes.`
+      : `${title} is an essential digital marketing discipline and quantitative framework that establishes repeatable operational processes to attract targeted audiences, drive high-intent user engagement, and optimize business conversion metrics.`,
+    explanation: isDevelopment
+      ? `At an architectural level, mastering ${title} requires an in-depth understanding of execution contexts, lifecycle events, and data flow contracts. Rather than writing unvalidated or brittle code, production engineers adhere to strict design patterns—guaranteeing separation of concerns, defensive error boundaries, type safety, and predictable execution under high concurrent user load.`
+      : `From a performance marketing perspective, ${title} integrates quantitative analytics with qualitative messaging psychology. Instead of relying on guesswork, modern digital strategists deploy rigorous tracking attribution, continuous A/B split-testing, and automated algorithmic bidding to sustainably maximize customer lifetime value while reducing acquisition cost.`,
+    whyItIsUsed: isDevelopment
+      ? [
+          `Enforces standardized, deterministic behavior across diverse operating systems, browsers, and edge environments.`,
+          `Minimizes technical debt, memory leaks, and cascading UI rendering bottlenecks.`,
+          `Facilitates modular codebase maintainability and seamless collaboration across engineering teams.`,
+          `Ensures enterprise-grade security compliance, accessibility (WCAG), and reliable API response contracts.`,
+        ]
+      : [
+          `Eliminates marketing budget wastage through algorithmic audience targeting and conversion optimization.`,
+          `Establishes predictable, scalable acquisition funnels for commercial products, agencies, and SaaS platforms.`,
+          `Builds sustainable organic search visibility and domain authority through technical SEO compliance.`,
+          `Provides transparent, multi-touch attribution reporting for executive leadership and stakeholders.`,
+        ],
+    realWorldUseCases: isDevelopment
+      ? [
+          `Building scalable SaaS applications, e-commerce storefronts, and authenticated enterprise web platforms.`,
+          `Engineering transactional backend APIs, microservices, and relational PostgreSQL/MongoDB databases.`,
+          `Optimizing Core Web Vitals (LCP, INP, CLS) and real-time WebSocket communication pipelines.`,
+        ]
+      : [
+          `Structuring multi-tiered customer acquisition campaigns across Google Search, Shopping, and Meta Ads.`,
+          `Executing technical SEO audits, crawl budget optimization, and semantic structured data (Schema.org).`,
+          `Designing high-converting landing pages, lead generation funnels, and automated CRM retention sequences.`,
+        ],
     objectives: [
       `Understand foundational principles and technical concepts of ${title}`,
       `Analyze practical implementation patterns and industry use cases`,
@@ -566,13 +739,8 @@ export class CoreService {
         'Step-by-step implementation plan with timeline and milestone deliverables',
       ],
     },
-    officialDocs: [
-      {
-        title: isDevelopment ? 'MDN Web Docs Official Reference' : 'Google Search Central Official Reference',
-        url: isDevelopment ? 'https://developer.mozilla.org' : 'https://developers.google.com/search/docs',
-        description: 'Verified official documentation and reference material for modern web standards and technical protocols.',
-      },
-    ],
+    relatedTopics: relatedTopics,
+    officialDocs: officialDocs,
     furtherReading: [
       { title: isDevelopment ? 'W3C Web Standards Specifications' : 'Google Analytics Official Help Documentation', url: isDevelopment ? 'https://www.w3.org/' : 'https://support.google.com/analytics' },
     ],

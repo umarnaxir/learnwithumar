@@ -11,25 +11,30 @@ import { useStudentProgress } from '@/hooks/useStudentProgress';
 
 export default function FullStackTopicDocPage() {
   const params = useParams();
-  const moduleId = params?.moduleId as string;
-  const topicId = params?.topicId as string;
+  const rawModuleId = params?.moduleId;
+  const rawTopicId = params?.topicId;
+  const moduleId = (Array.isArray(rawModuleId) ? rawModuleId[0] : rawModuleId || '') as string;
+  const topicId = (Array.isArray(rawTopicId) ? rawTopicId[0] : rawTopicId || '') as string;
 
-  const lesson = getLessonContent('full-stack', moduleId, topicId);
+  const decodedModuleId = decodeURIComponent(moduleId);
+  const decodedTopicId = decodeURIComponent(topicId);
+
+  const lesson = getLessonContent('full-stack', decodedModuleId, decodedTopicId);
   const { recordVisit } = useStudentProgress();
 
   useEffect(() => {
-    if (lesson) {
-      recordVisit('full-stack', moduleId, topicId, lesson.title);
+    if (lesson && decodedModuleId && decodedTopicId) {
+      recordVisit('full-stack', decodedModuleId, decodedTopicId, lesson.title);
     }
-  }, [lesson, moduleId, topicId, recordVisit]);
+  }, [lesson, decodedModuleId, decodedTopicId, recordVisit]);
 
   return (
     <>
       <Navbar />
       <DocumentationLayout
         currentTrack="full-stack"
-        currentModuleId={moduleId}
-        currentTopicId={topicId}
+        currentModuleId={decodedModuleId}
+        currentTopicId={decodedTopicId}
         lesson={lesson}
       >
         <LessonContentRenderer lesson={lesson} />

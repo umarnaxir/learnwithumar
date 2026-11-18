@@ -76,18 +76,6 @@ export function Footer() {
               <Text fontSize="15px" fontWeight="700" letterSpacing="-0.02em">
                 Learn with Umar
               </Text>
-              <span
-                style={{
-                  fontSize: '9px',
-                  fontWeight: 750,
-                  backgroundColor: '#000000',
-                  color: '#FFFFFF',
-                  padding: '1.5px 5px',
-                  borderRadius: '3px',
-                }}
-              >
-                PRO
-              </span>
             </Flex>
             <Text
               fontSize="12.5px"
@@ -201,19 +189,16 @@ export function Footer() {
             <FooterHeading>Platform & Resources</FooterHeading>
             <FooterLinkList>
               <li>
-                <FooterLink href="/learning-paths">Learning Paths Comparison</FooterLink>
+                <FooterLink href="/learning-paths">Learning Paths Overview</FooterLink>
               </li>
               <li>
                 <FooterLink href="/docs">Global Documentation Hub</FooterLink>
               </li>
               <li>
-                <FooterLink href="/projects">Practical Projects (12 Track)</FooterLink>
+                <FooterLink href="/about">About Learn with Umar</FooterLink>
               </li>
               <li>
-                <FooterLink href="/dashboard">Student Learning Dashboard</FooterLink>
-              </li>
-              <li>
-                <FooterLink href="/about">Mentorship & Pedagogy</FooterLink>
+                <FooterLink href="/projects">Practical Deliverables (24 Projects)</FooterLink>
               </li>
               <li>
                 <FooterLink href="https://react.dev" target="_blank" rel="noopener noreferrer">
@@ -242,16 +227,29 @@ export function Footer() {
           flexWrap="wrap"
           gap="12px"
         >
-          <Text fontSize="11.5px" color="#888888">
-            © {new Date().getFullYear()} Learn with Umar. Pure Black & White minimal architecture.
+          <Text fontSize="12px" color="#555555">
+            Developed and Designed by{' '}
+            <a
+              href="https://umarnazir.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#000000',
+                fontWeight: 600,
+                textDecoration: 'underline',
+                textUnderlineOffset: '3px',
+              }}
+            >
+              Umar Nazir
+            </a>
           </Text>
 
           <Flex alignItems="center" gap="16px">
             <FooterLink href="/about" style={{ fontSize: '11px' }}>
-              Pedagogy
+              About & Mentorship
             </FooterLink>
-            <FooterLink href="/projects" style={{ fontSize: '11px' }}>
-              Project Rubric
+            <FooterLink href="/learning-paths" style={{ fontSize: '11px' }}>
+              Learning Paths
             </FooterLink>
             <FooterLink href="/docs" style={{ fontSize: '11px' }}>
               Documentation Index

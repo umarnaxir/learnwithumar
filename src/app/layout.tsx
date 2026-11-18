@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import StyledComponentsRegistry from '@/styles/registry';
 
 export const metadata: Metadata = {
-  title: 'Learn with Umar — Premium Learning & Internship Training Platform',
+  title: 'Learn with Umar — Technical Education & Documentation Platform',
   description:
     'Master Full Stack Web Development and Digital Marketing through structured documentation, hands-on projects, real-world examples, and industry-oriented training.',
 };

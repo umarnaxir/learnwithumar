@@ -99,7 +99,7 @@ export function HeroSection() {
               }}
             >
               <Sparkles size={12} color="#000000" />
-              <span>Premium Internship & Student Training Platform</span>
+              <span>Structured Technical & Marketing Education</span>
             </Badge>
           </Flex>
 
