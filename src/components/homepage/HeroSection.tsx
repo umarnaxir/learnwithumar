@@ -72,23 +72,27 @@ const MetricBox = styled(Box)`
 
 const MetricValue = styled.div`
   font-family: ${({ theme }) => theme.fonts.numbers};
-  font-size: 32px;
+  font-size: 38px;
   font-weight: 700;
   color: #000000;
-  letter-spacing: -0.035em;
-  line-height: 1.1;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
   font-feature-settings: 'tnum' on, 'lnum' on;
 
   @media (min-width: 640px) {
-    font-size: 36px;
+    font-size: 46px;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 52px;
   }
 `;
 
 const MetricLabel = styled.div`
-  font-size: 12px;
-  color: #666666;
+  font-size: 12.5px;
+  color: #555555;
   font-weight: 450;
-  margin-top: 4px;
+  margin-top: 6px;
   letter-spacing: -0.01em;
 `;
 

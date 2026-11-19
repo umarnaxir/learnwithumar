@@ -7,6 +7,7 @@ import { Box, Flex, Text, Button, Badge } from '@/components/ui/primitives';
 import { TrackId, LessonContent } from '@/types/curriculum';
 import { FULL_STACK_MODULES } from '@/data/curriculum/full-stack-curriculum';
 import { DIGITAL_MARKETING_MODULES } from '@/data/curriculum/digital-marketing-curriculum';
+import { TOPIC_ALIASES } from '@/data/curriculum/lessons/detailed-lessons';
 import { useStudentProgress } from '@/hooks/useStudentProgress';
 import {
   CheckCircle2,
@@ -226,9 +227,7 @@ export function DocumentationLayout({
   children,
 }: DocumentationLayoutProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({
-    [currentModuleId]: true,
-  });
+  const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
 
   const {
     profile,
@@ -242,6 +241,13 @@ export function DocumentationLayout({
   const currentNote = profile.lessonNotes[currentTopicId] || '';
   const [localNote, setLocalNote] = useState(currentNote);
 
+  // Scroll to top whenever topic changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [currentTopicId]);
+
   const modules =
     currentTrack === 'full-stack' ? FULL_STACK_MODULES : DIGITAL_MARKETING_MODULES;
 
@@ -251,8 +257,15 @@ export function DocumentationLayout({
   const normalize = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
   const isTopicActive = (modId: string, tId: string) => {
-    if (modId !== currentModuleId) return false;
-    return tId === currentTopicId || normalize(tId) === normalize(currentTopicId);
+    if (modId !== currentModuleId && normalize(modId) !== normalize(currentModuleId)) return false;
+    const canonicalTId = TOPIC_ALIASES[tId] || tId;
+    const canonicalCurrent = TOPIC_ALIASES[currentTopicId] || currentTopicId;
+    return (
+      tId === currentTopicId ||
+      normalize(tId) === normalize(currentTopicId) ||
+      canonicalTId === canonicalCurrent ||
+      normalize(canonicalTId) === normalize(canonicalCurrent)
+    );
   };
 
   // Flatten all lessons across all modules for seamless continuous sequential next/prev navigation
@@ -405,6 +418,8 @@ export function DocumentationLayout({
                             href={`/${currentTrack}/${mod.id}/${t.id}`}
                             $isActive={isActive}
                             data-active-topic={isActive ? 'true' : undefined}
+                            scroll={true}
+                            prefetch={true}
                             onClick={() => setMobileNavOpen(false)}
                           >
                             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

@@ -8,6 +8,12 @@ type Props = {
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://learnwithumar.vercel.app';
 
+export async function generateStaticParams() {
+  return FULL_STACK_MODULES.map((mod) => ({
+    moduleId: mod.id,
+  }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { moduleId } = await params;
   const decodedModuleId = decodeURIComponent(moduleId || '');

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { FULL_STACK_MODULES } from '@/data/curriculum/full-stack-curriculum';
 import { getLessonContent } from '@/data/curriculum/lessons/detailed-lessons';
 import { FullStackTopicDocClientView } from './TopicDocClientView';
 
@@ -7,6 +8,19 @@ type Props = {
 };
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://learnwithumar.vercel.app';
+
+export async function generateStaticParams() {
+  const params: { moduleId: string; topicId: string }[] = [];
+  for (const mod of FULL_STACK_MODULES) {
+    for (const topic of mod.topics) {
+      params.push({
+        moduleId: mod.id,
+        topicId: topic.id,
+      });
+    }
+  }
+  return params;
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { moduleId, topicId } = await params;
@@ -86,7 +100,11 @@ export default async function FullStackTopicDocPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
-      <FullStackTopicDocClientView moduleId={decodedModuleId} topicId={decodedTopicId} />
+      <FullStackTopicDocClientView
+        key={`${decodedModuleId}___${decodedTopicId}`}
+        moduleId={decodedModuleId}
+        topicId={decodedTopicId}
+      />
     </>
   );
 }

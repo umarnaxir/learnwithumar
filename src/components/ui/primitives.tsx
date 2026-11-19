@@ -39,7 +39,24 @@ export interface BoxProps
   letterSpacing?: string | number;
 }
 
-export const Box = styled.div<BoxProps>`
+const STYLED_SYSTEM_PROPS = new Set([
+  'm', 'mt', 'mr', 'mb', 'ml', 'mx', 'my', 'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'marginX', 'marginY',
+  'p', 'pt', 'pr', 'pb', 'pl', 'px', 'py', 'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'paddingX', 'paddingY', 'space',
+  'color', 'bg', 'backgroundColor', 'opacity',
+  'width', 'height', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight', 'size', 'display', 'verticalAlign', 'overflow', 'overflowX', 'overflowY',
+  'fontSize', 'fontFamily', 'fontWeight', 'lineHeight', 'textAlign', 'fontStyle', 'letterSpacing', 'textTransform',
+  'alignItems', 'alignContent', 'justifyItems', 'justifyContent', 'flexWrap', 'flexDirection', 'flex', 'flexGrow', 'flexShrink', 'flexBasis', 'justifySelf', 'alignSelf', 'order',
+  'gridGap', 'gridColumnGap', 'gridRowGap', 'gridColumn', 'gridRow', 'gridAutoFlow', 'gridAutoRows', 'gridAutoColumns', 'gridTemplateRows', 'gridTemplateColumns', 'gridTemplateAreas', 'gridArea',
+  'border', 'borderWidth', 'borderStyle', 'borderColor', 'borderRadius', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft', 'borderX', 'borderY',
+  'borderTopWidth', 'borderBottomWidth', 'borderLeftWidth', 'borderRightWidth', 'borderTopColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopStyle', 'borderBottomStyle', 'borderLeftStyle', 'borderRightStyle',
+  'borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius',
+  'position', 'zIndex', 'top', 'right', 'bottom', 'left',
+  'boxShadow', 'textShadow', 'cursor', 'transition', 'gap', 'truncate', 'interactive', 'glass', 'fullWidth', 'variant'
+]);
+
+export const shouldForwardProp = (prop: string) => !STYLED_SYSTEM_PROPS.has(prop);
+
+export const Box = styled.div.withConfig({ shouldForwardProp })<BoxProps>`
   box-sizing: border-box;
   min-width: 0;
   ${space}
@@ -60,7 +77,7 @@ export const Box = styled.div<BoxProps>`
 
 export type FlexProps = BoxProps;
 
-export const Flex = styled(Box)<FlexProps>`
+export const Flex = styled(Box).withConfig({ shouldForwardProp })<FlexProps>`
   display: flex;
 `;
 
@@ -70,7 +87,7 @@ export interface GridContainerProps extends BoxProps {
   gridGap?: string | number;
 }
 
-export const Grid = styled(Box)<GridContainerProps>`
+export const Grid = styled(Box).withConfig({ shouldForwardProp })<GridContainerProps>`
   display: grid;
   ${({ gridTemplateColumns }) =>
     gridTemplateColumns && `grid-template-columns: ${gridTemplateColumns};`}
@@ -79,7 +96,7 @@ export const Grid = styled(Box)<GridContainerProps>`
   ${({ gridGap, gap }) => (gridGap || gap) && `gap: ${gridGap || gap};`}
 `;
 
-export const Container = styled(Box)`
+export const Container = styled(Box).withConfig({ shouldForwardProp })`
   width: 100%;
   max-width: 1040px;
   margin-left: auto;
@@ -98,19 +115,6 @@ export interface TextProps extends SpaceProps, TypographyProps, ColorProps {
   textTransform?: string;
   letterSpacing?: string | number;
 }
-
-const customProps = new Set([
-  'interactive',
-  'glass',
-  'fullWidth',
-  'variant',
-  'size',
-  'truncate',
-  'letterSpacing',
-  'textTransform',
-]);
-
-const shouldForwardProp = (prop: string) => !customProps.has(prop);
 
 export const Text = styled.p.withConfig({ shouldForwardProp })<TextProps>`
   margin: 0;
@@ -132,7 +136,7 @@ export interface HeadingProps extends SpaceProps, TypographyProps, ColorProps {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
-export const Heading = styled.h2<HeadingProps>`
+export const Heading = styled.h2.withConfig({ shouldForwardProp })<HeadingProps>`
   margin: 0;
   font-family: ${({ theme }) => theme.fonts.sans};
   color: ${({ theme }) => theme.colors.text};
@@ -349,7 +353,7 @@ export const Badge = styled.span.withConfig({ shouldForwardProp })<BadgeProps>`
   ${space}
 `;
 
-export const Divider = styled.hr<SpaceProps>`
+export const Divider = styled.hr.withConfig({ shouldForwardProp })<SpaceProps>`
   border: none;
   border-top: 1px solid ${({ theme }) => theme.colors.border};
   margin: 0;

@@ -2,9 +2,12 @@ import { LessonContent, TrackId } from '@/types/curriculum';
 import { FULL_STACK_MODULES } from '../full-stack-curriculum';
 import { DIGITAL_MARKETING_MODULES } from '../digital-marketing-curriculum';
 import { HTML_DETAILED_LESSONS } from './html-lessons';
+import { HTML_EXTENDED_LESSONS } from './html-lessons-extended';
+import { getDomainKnowledge } from './knowledge-matrix';
 
 export const DETAILED_LESSONS: Record<string, LessonContent> = {
   ...HTML_DETAILED_LESSONS,
+  ...HTML_EXTENDED_LESSONS,
   // FULL STACK: Client-Server Architecture
   'full-stack_intro-web-dev_client-server-architecture': {
     id: 'client-server-architecture',
@@ -407,7 +410,7 @@ app.listen(4000, () => {
   },
 };
 
-const TOPIC_ALIASES: Record<string, string> = {
+export const TOPIC_ALIASES: Record<string, string> = {
   'intro-to-html': 'introduction-to-html',
   'html-lists': 'lists-and-hierarchies',
   'html-tables': 'tables-and-tabular-data',
@@ -552,197 +555,59 @@ export function getLessonContent(trackId: TrackId, moduleId: string, topicId: st
     ];
   }
 
+  const knowledge = getDomainKnowledge(trackId, effectiveModuleId, effectiveTopicId, title);
+
   return {
-    id: topicId,
-    moduleId: moduleId,
+    id: effectiveTopicId,
+    moduleId: effectiveModuleId,
     trackId: trackId,
     title: title,
-    slug: topicId,
+    slug: effectiveTopicId,
     order: 1,
     duration: topic?.duration || '45m',
-    difficulty: 'Intermediate',
+    difficulty: (topic?.duration && parseInt(topic.duration, 10) > 55 ? 'Advanced' : 'Intermediate') as 'Beginner' | 'Intermediate' | 'Advanced',
     summary: summary,
-    definition: isDevelopment
-      ? `${title} is a core technological standard and architecture specification in modern full-stack web engineering that defines how software components, network protocols, and data structures interact reliably across client, server, and database runtimes.`
-      : `${title} is an essential digital marketing discipline and quantitative framework that establishes repeatable operational processes to attract targeted audiences, drive high-intent user engagement, and optimize business conversion metrics.`,
-    explanation: isDevelopment
-      ? `At an architectural level, mastering ${title} requires an in-depth understanding of execution contexts, lifecycle events, and data flow contracts. Rather than writing unvalidated or brittle code, production engineers adhere to strict design patterns—guaranteeing separation of concerns, defensive error boundaries, type safety, and predictable execution under high concurrent user load.`
-      : `From a performance marketing perspective, ${title} integrates quantitative analytics with qualitative messaging psychology. Instead of relying on guesswork, modern digital strategists deploy rigorous tracking attribution, continuous A/B split-testing, and automated algorithmic bidding to sustainably maximize customer lifetime value while reducing acquisition cost.`,
-    whyItIsUsed: isDevelopment
-      ? [
-          `Enforces standardized, deterministic behavior across diverse operating systems, browsers, and edge environments.`,
-          `Minimizes technical debt, memory leaks, and cascading UI rendering bottlenecks.`,
-          `Facilitates modular codebase maintainability and seamless collaboration across engineering teams.`,
-          `Ensures enterprise-grade security compliance, accessibility (WCAG), and reliable API response contracts.`,
-        ]
-      : [
-          `Eliminates marketing budget wastage through algorithmic audience targeting and conversion optimization.`,
-          `Establishes predictable, scalable acquisition funnels for commercial products, agencies, and SaaS platforms.`,
-          `Builds sustainable organic search visibility and domain authority through technical SEO compliance.`,
-          `Provides transparent, multi-touch attribution reporting for executive leadership and stakeholders.`,
-        ],
-    realWorldUseCases: isDevelopment
-      ? [
-          `Building scalable SaaS applications, e-commerce storefronts, and authenticated enterprise web platforms.`,
-          `Engineering transactional backend APIs, microservices, and relational PostgreSQL/MongoDB databases.`,
-          `Optimizing Core Web Vitals (LCP, INP, CLS) and real-time WebSocket communication pipelines.`,
-        ]
-      : [
-          `Structuring multi-tiered customer acquisition campaigns across Google Search, Shopping, and Meta Ads.`,
-          `Executing technical SEO audits, crawl budget optimization, and semantic structured data (Schema.org).`,
-          `Designing high-converting landing pages, lead generation funnels, and automated CRM retention sequences.`,
-        ],
+    definition: knowledge.definition,
+    explanation: knowledge.explanation,
+    whyItIsUsed: knowledge.whyItIsUsed,
+    realWorldUseCases: knowledge.realWorldUseCases,
     objectives: [
-      `Understand foundational principles and technical concepts of ${title}`,
-      `Analyze practical implementation patterns and industry use cases`,
-      `Identify common architectural errors and production anti-patterns`,
+      `Understand foundational principles and mechanics of ${title}`,
+      `Analyze practical architectural patterns and industry implementation standards`,
+      `Identify common mistakes and avoid production bottlenecks`,
       `Execute hands-on exercises and prepare for technical interview questions`,
     ],
-    keyConcepts: [
-      {
-        title: `Core Fundamentals of ${title}`,
-        explanation: `${title} represents an indispensable concept in professional ${isDevelopment ? 'software engineering' : 'digital marketing'}. Mastering its mechanics provides the foundational baseline for building scalable, high-performance systems and campaigns.`,
-      },
-      {
-        title: 'Structural Architecture & Execution',
-        explanation: `In enterprise environments, ${title} must be implemented with strict adherence to industry standards, maintainability guidelines, and clean design patterns. Understanding the underlying execution flow ensures predictable performance and reliability.`,
-      },
-      {
-        title: 'Integration & Cross-System Synergy',
-        explanation: `This topic interacts directly with adjacent modules across the ${trackId === 'full-stack' ? 'Full Stack Web Development' : 'Digital Marketing'} track. Proper encapsulation and clear boundaries ensure smooth team collaboration and maintainable codebases.`,
-      },
-      {
-        title: 'Performance & Optimization Nuances',
-        explanation: `Evaluating the trade-offs between speed, complexity, and scalability is critical when deploying ${title} to production environments handling thousands of active users or prospects.`,
-      },
-    ],
-    syntaxDefinition: isDevelopment
-      ? `// Standard Architectural Pattern for ${title}
-import { validateInput } from '@/lib/utils';
-
-export async function handleOperation(payload: unknown) {
-  // 1. Validate payload schema
-  const data = validateInput(payload);
-  
-  // 2. Execute domain logic
-  console.log('Processing ${title}:', data);
-  
-  // 3. Return structured response
-  return { success: true, timestamp: Date.now() };
-}`
-      : `// Strategic Execution Framework for ${title}
-Phase 1: Research & Competitive Intelligence
-Phase 2: Strategy Definition & Target Audience Mapping
-Phase 3: Creative & Technical Asset Deployment
-Phase 4: Multi-Variate Testing & Continuous Performance Optimization`,
-    codeExamples: isDevelopment
-      ? [
-          {
-            title: `Practical Implementation Example: ${title}`,
-            language: 'typescript',
-            code: `// Production implementation demonstrating ${title}
-interface ServiceConfig {
-  apiKey: string;
-  timeoutMs: number;
-  retries: number;
-}
-
-export class CoreService {
-  private config: ServiceConfig;
-
-  constructor(config: ServiceConfig) {
-    this.config = config;
-  }
-
-  public async executeTask<T>(input: T): Promise<{ success: boolean; data: T }> {
-    try {
-      // Execute logic according to ${title} standards
-      return { success: true, data: input };
-    } catch (error) {
-      console.error('Execution failure in ${title}:', error);
-      throw error;
-    }
-  }
-}`,
-            explanation: `This modular TypeScript class encapsulates business logic for ${title}, enforcing configuration validation and centralized error handling.`,
-            output: '{ success: true, data: { status: "processed" } }',
-          },
-        ]
-      : undefined,
-    strategyExamples: !isDevelopment
-      ? [
-          {
-            title: `Enterprise Strategy Workflow: ${title}`,
-            scenario: `A fast-growing company needs to deploy a scalable framework for ${title} to improve customer acquisition and digital conversion efficiency.`,
-            strategy: `1) Perform comprehensive market and competitor research; 2) Develop structured content and audience targeting assets; 3) Launch measured test campaigns; 4) Monitor KPIs in real-time dashboards and iterate based on data.`,
-            expectedOutcome: `Consistent 25-40% improvement in core efficiency metrics within the initial 60 days of strategic deployment.`,
-          },
-        ]
-      : undefined,
-    stepByStepGuide: [
-      {
-        step: 1,
-        title: 'Initial Discovery & Requirements Analysis',
-        details: `Define the primary objectives, input parameters, and expected deliverables for ${title} before writing code or launching campaigns.`,
-      },
-      {
-        step: 2,
-        title: 'Architecture & Foundation Setup',
-        details: `Establish the foundational configuration, import dependencies or tooling, and configure your local workspace according to industry best practices.`,
-      },
-      {
-        step: 3,
-        title: 'Implementation & Configuration',
-        details: `Write the core logic or configure campaign assets following the step-by-step methodologies detailed in this module.`,
-      },
-      {
-        step: 4,
-        title: 'Testing, Verification & Optimization',
-        details: `Validate the implementation with automated tests or audit checklists to verify error-free execution and high performance.`,
-      },
-    ],
-    realWorldApplication: `In commercial environments, ${title} is utilized daily by engineering and marketing teams at leading digital companies to deliver reliable, high-value outcomes for clients and end users.`,
-    commonMistakes: [
-      {
-        mistake: `Rushing into execution without validating underlying architecture or assumptions for ${title}.`,
-        solution: `Always map out requirements, interfaces, and expected data contracts before writing code or launching campaigns.`,
-      },
-      {
-        mistake: `Ignoring edge cases and error handling during normal operation.`,
-        solution: `Implement comprehensive validation, fallback UI, and structured logging to catch anomalies early.`,
-      },
-    ],
-    bestPractices: [
-      `Keep implementations modular, readable, and well-documented with clear type definitions.`,
-      `Measure performance metrics regularly using industry-standard profiling tools.`,
-      `Follow modern conventions and keep dependencies updated to their verified LTS releases.`,
-      `Conduct peer reviews before deploying changes to live production environments.`,
-    ],
+    keyConcepts: knowledge.keyConcepts,
+    syntaxDefinition: knowledge.syntaxDefinition,
+    codeExamples: knowledge.codeSnippet ? [knowledge.codeSnippet] : undefined,
+    strategyExamples: knowledge.strategyWorkflow ? [knowledge.strategyWorkflow] : undefined,
+    stepByStepGuide: knowledge.stepByStepGuide,
+    realWorldApplication: knowledge.realWorldApplication,
+    commonMistakes: knowledge.commonMistakes,
+    bestPractices: knowledge.bestPractices,
     exercises: [
       {
-        title: `Practical Hands-On Exercise: ${title}`,
-        task: `Build a functional prototype implementing the concepts of ${title} in your development environment. Verify that all test cases pass without errors.`,
-        hints: `Refer to the step-by-step guide and code examples above to structure your solution.`,
+        title: knowledge.exercise.title,
+        task: knowledge.exercise.task,
+        hints: knowledge.exercise.hints,
       },
     ],
-    interviewQuestions: [
-      {
-        question: `How would you explain the core significance of ${title} to a technical team lead or client?`,
-        answer: `${title} is critical because it establishes the foundational rules for scalability, performance, and maintainability. When designed correctly, it minimizes technical debt, lowers maintenance overhead, and ensures predictable, robust behavior in production.`,
-      },
-    ],
+    interviewQuestions: knowledge.interviewQuestions,
     miniAssignment: {
-      title: `Practical Case Study: ${title}`,
-      prompt: `Develop a comprehensive, 2-page implementation blueprint detailing how you would introduce and manage ${title} for a client project.`,
+      title: `Production Assignment: ${title}`,
+      prompt: `Develop a comprehensive technical specification and implementation plan detailing how you would engineer and test ${title} in a real-world enterprise product.`,
       deliverables: [
-        'Documented architecture specification or strategy outline',
-        'Step-by-step implementation plan with timeline and milestone deliverables',
+        'Documented architecture design and data flow specification',
+        'Production-ready code implementation or marketing campaign structure with verified test cases',
       ],
     },
     relatedTopics: relatedTopics,
-    officialDocs: officialDocs,
+    officialDocs: knowledge.officialDocs && knowledge.officialDocs.length > 0 ? knowledge.officialDocs : officialDocs,
     furtherReading: [
-      { title: isDevelopment ? 'W3C Web Standards Specifications' : 'Google Analytics Official Help Documentation', url: isDevelopment ? 'https://www.w3.org/' : 'https://support.google.com/analytics' },
+      {
+        title: isDevelopment ? 'W3C Web Standards Specifications' : 'Google Search Central Official Guides',
+        url: isDevelopment ? 'https://www.w3.org/' : 'https://developers.google.com/search/docs',
+      },
     ],
   };
 }
