@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
+import { notFound, redirect } from 'next/navigation';
 import { FULL_STACK_MODULES } from '@/data/curriculum/full-stack-curriculum';
-import { getLessonContent } from '@/data/curriculum/lessons/detailed-lessons';
+import {
+  getLessonContent,
+  resolveCurriculumTopic,
+} from '@/data/curriculum/lessons/detailed-lessons';
 import { FullStackTopicDocClientView } from './TopicDocClientView';
 
 type Props = {
@@ -26,13 +30,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { moduleId, topicId } = await params;
   const decodedModuleId = decodeURIComponent(moduleId || '');
   const decodedTopicId = decodeURIComponent(topicId || '');
-  const lesson = getLessonContent('full-stack', decodedModuleId, decodedTopicId);
+  const resolved = resolveCurriculumTopic('full-stack', decodedModuleId, decodedTopicId);
+
+  if (!resolved) {
+    return { title: 'Lesson Not Found | Learn with Umar' };
+  }
+
+  const lesson = getLessonContent(
+    'full-stack',
+    resolved.module.id,
+    resolved.canonicalTopicId
+  );
 
   const title = `${lesson.title} — Full Stack Web Development`;
   const description =
     lesson.summary ||
     `Master ${lesson.title} with structured explanations, verified code examples, best practices, exercises, and interview questions on Learn with Umar.`;
-  const url = `${baseUrl}/full-stack/${decodedModuleId}/${decodedTopicId}`;
+  const url = `${baseUrl}/full-stack/${resolved.module.id}/${resolved.canonicalTopicId}`;
 
   return {
     title,
@@ -67,8 +81,23 @@ export default async function FullStackTopicDocPage({ params }: Props) {
   const { moduleId, topicId } = await params;
   const decodedModuleId = decodeURIComponent(moduleId || '');
   const decodedTopicId = decodeURIComponent(topicId || '');
-  const lesson = getLessonContent('full-stack', decodedModuleId, decodedTopicId);
-  const url = `${baseUrl}/full-stack/${decodedModuleId}/${decodedTopicId}`;
+  const resolved = resolveCurriculumTopic('full-stack', decodedModuleId, decodedTopicId);
+
+  if (!resolved) notFound();
+
+  if (
+    resolved.module.id !== decodedModuleId ||
+    resolved.canonicalTopicId !== decodedTopicId
+  ) {
+    redirect(`/full-stack/${resolved.module.id}/${resolved.canonicalTopicId}`);
+  }
+
+  const lesson = getLessonContent(
+    'full-stack',
+    resolved.module.id,
+    resolved.canonicalTopicId
+  );
+  const url = `${baseUrl}/full-stack/${resolved.module.id}/${resolved.canonicalTopicId}`;
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -101,9 +130,9 @@ export default async function FullStackTopicDocPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
       <FullStackTopicDocClientView
-        key={`${decodedModuleId}___${decodedTopicId}`}
-        moduleId={decodedModuleId}
-        topicId={decodedTopicId}
+        key={`${resolved.module.id}___${resolved.canonicalTopicId}`}
+        moduleId={resolved.module.id}
+        topicId={resolved.canonicalTopicId}
       />
     </>
   );

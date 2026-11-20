@@ -1,9 +1,9 @@
 import { LessonContent, TrackId } from '@/types/curriculum';
-import { FULL_STACK_MODULES } from '../full-stack-curriculum';
+import { FULL_STACK_MODULES, type ModuleWithTopics } from '../full-stack-curriculum';
 import { DIGITAL_MARKETING_MODULES } from '../digital-marketing-curriculum';
 import { HTML_DETAILED_LESSONS } from './html-lessons';
 import { HTML_EXTENDED_LESSONS } from './html-lessons-extended';
-import { getDomainKnowledge } from './knowledge-matrix';
+import { generateLessonContent } from './generated-lessons';
 
 export const DETAILED_LESSONS: Record<string, LessonContent> = {
   ...HTML_DETAILED_LESSONS,
@@ -19,6 +19,19 @@ export const DETAILED_LESSONS: Record<string, LessonContent> = {
     duration: '50m',
     difficulty: 'Beginner',
     summary: 'Explore the fundamental architectural paradigm powering the global World Wide Web: how client runtimes initiate requests, how web servers process business logic, and how stateless network protocols synchronize data across distributed machines.',
+    definition: 'Client-server architecture is a distributed computing model that separates the application into two cooperating roles: a client that requests services or data, and a server that hosts, validates, and fulfills those requests. The browser, mobile app, or API consumer acts as the client; the web server, application server, and database tier together act as the server.',
+    explanation: 'The client owns presentation and user interaction, while the server owns shared state, business rules, and persistent data. They communicate through explicit protocols such as HTTP(S), WebSockets, or gRPC. Because the network boundary is untrusted, the server must authenticate every request, validate all input, and enforce authorization rather than relying on client-side checks. Modern systems refine this model with reverse proxies, CDNs, API gateways, background workers, and managed databases, but the core request-response contract remains the same.',
+    whyItIsUsed: [
+      'Separates user-interface code from sensitive business logic and database credentials so secrets never reach the browser.',
+      'Allows one authoritative data source to serve many clients: web browsers, native mobile apps, partner APIs, and internal tools.',
+      'Enables independent scaling of presentation, application, and database tiers behind load balancers and CDNs.',
+      'Provides a stable API boundary so teams can deploy frontend and backend changes independently.',
+    ],
+    realWorldUseCases: [
+      'A React storefront calling a Node.js API that validates inventory and creates a Stripe checkout session.',
+      'A mobile banking app authenticating with short-lived tokens before querying the bank’s ledger service.',
+      'A documentation site served from a CDN while search and progress data are persisted through authenticated API calls.',
+    ],
     objectives: [
       'Understand the roles and responsibilities of clients (browsers, mobile apps) vs servers',
       'Trace the lifecycle of an HTTP request-response round-trip through network layers',
@@ -213,8 +226,8 @@ app.listen(4000, () => {
       ],
     },
     relatedTopics: [
-      { id: 'what-is-web-development', title: 'What is Web Development?', href: '/full-stack/intro-web-dev/what-is-web-development' },
-      { id: 'how-the-internet-works', title: 'How the Internet Works', href: '/full-stack/intro-web-dev/how-the-internet-works' },
+      { id: 'what-is-web-dev', title: 'What is Web Development?', href: '/full-stack/intro-web-dev/what-is-web-dev' },
+      { id: 'how-internet-works', title: 'How the Internet Works', href: '/full-stack/intro-web-dev/how-internet-works' },
       { id: 'frontend-vs-backend', title: 'Frontend vs Backend Architecture', href: '/full-stack/intro-web-dev/frontend-vs-backend' },
       { id: 'http-and-https', title: 'HTTP and HTTPS Security Protocols', href: '/full-stack/intro-web-dev/http-and-https' },
     ],
@@ -247,6 +260,19 @@ app.listen(4000, () => {
     duration: '60m',
     difficulty: 'Beginner',
     summary: 'The three-stage technical lifecycle behind every search result: how search engine spiders discover URLs through web crawling, parse and store web page content in planetary indexes, and compute mathematical ranking signals to serve top results in milliseconds.',
+    definition: 'Crawling, indexing, and ranking are the three sequential stages of search engine retrieval. Crawling discovers URLs and downloads their content; indexing parses, renders, and stores eligible pages in a searchable database; ranking orders indexed documents by relevance, usefulness, and authority for a specific query.',
+    explanation: 'Search engines do not search the live web when a user types a query. Googlebot first discovers URLs through internal links, backlinks, redirects, and XML sitemaps, then fetches and renders each page while respecting robots.txt and crawl budget. The indexing pipeline extracts text, entities, links, and structured data, and decides whether the page is eligible to appear in results. At query time, retrieval systems combine the user’s intent with hundreds of signals — including topical relevance, link authority, freshness, page experience, and location — to produce a ranked SERP in milliseconds.',
+    whyItIsUsed: [
+      'Makes the open web discoverable without a central directory that every publisher must manually update.',
+      'Allows search engines to remove spam, duplicates, and low-quality pages before they reach users.',
+      'Connects specific user intent to the most relevant, trustworthy, and technically accessible pages.',
+      'Gives SEO practitioners a measurable diagnostic model: fix crawling, then indexing, then ranking.',
+    ],
+    realWorldUseCases: [
+      'An e-commerce team submits a clean XML sitemap and uses Search Console to diagnose thousands of unindexed product variants.',
+      'A publisher consolidates duplicate URLs with canonical tags so link equity is not split across variants.',
+      'A SaaS company improves Core Web Vitals and structured data to compete for the same commercial keywords.',
+    ],
     objectives: [
       'Master the 3 distinct phases of search engine discovery: Crawling, Indexing, and Ranking',
       'Understand how search bots (Googlebot) allocate and consume website Crawl Budget',
@@ -386,10 +412,10 @@ app.listen(4000, () => {
       ],
     },
     relatedTopics: [
-      { id: 'introduction-to-seo', title: 'Introduction to SEO', href: '/digital-marketing/seo-fundamentals/introduction-to-seo' },
-      { id: 'crawling-and-indexing', title: 'Crawling, Indexing, and Serving Mechanisms', href: '/digital-marketing/seo-fundamentals/crawling-and-indexing' },
-      { id: 'ranking-factors-overview', title: 'Core Ranking Factors & Algorithms', href: '/digital-marketing/seo-fundamentals/ranking-factors-overview' },
-      { id: 'serp-features-and-layout', title: 'SERP Anatomy & Rich Snippets', href: '/digital-marketing/seo-fundamentals/serp-features-and-layout' },
+      { id: 'intro-to-seo', title: 'Introduction to Search Engine Optimization', href: '/digital-marketing/seo-fundamentals/intro-to-seo' },
+      { id: 'how-search-engines-work', title: 'How Search Engines Work', href: '/digital-marketing/seo-fundamentals/how-search-engines-work' },
+      { id: 'search-algorithms', title: 'Google Search Algorithms & Updates', href: '/digital-marketing/seo-fundamentals/search-algorithms' },
+      { id: 'keyword-research-methodology', title: 'Keyword Research Methodology', href: '/digital-marketing/seo-fundamentals/keyword-research-methodology' },
     ],
     officialDocs: [
       {
@@ -422,6 +448,115 @@ export const TOPIC_ALIASES: Record<string, string> = {
 
 const normalize = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
+const getTrackModules = (trackId: TrackId) =>
+  trackId === 'full-stack' ? FULL_STACK_MODULES : DIGITAL_MARKETING_MODULES;
+
+export interface ResolvedCurriculumTopic {
+  module: ModuleWithTopics;
+  topic: ModuleWithTopics['topics'][number];
+  canonicalTopicId: string;
+}
+
+/**
+ * Resolve and validate a documentation URL against the curriculum. Pages use
+ * this to return a real 404 for unknown routes and to redirect legacy aliases
+ * to their canonical lesson.
+ */
+export function resolveCurriculumTopic(
+  trackId: TrackId,
+  moduleId: string,
+  topicId: string
+): ResolvedCurriculumTopic | null {
+  const modules = getTrackModules(trackId);
+  const canonicalTopicId = TOPIC_ALIASES[topicId] || topicId;
+  const mod =
+    modules.find((item) => item.id === moduleId) ||
+    modules.find((item) => normalize(item.id) === normalize(moduleId));
+
+  if (!mod) return null;
+
+  const topic =
+    mod.topics.find((item) => item.id === canonicalTopicId) ||
+    mod.topics.find((item) => normalize(item.id) === normalize(canonicalTopicId));
+
+  if (!topic) return null;
+
+  return { module: mod, topic, canonicalTopicId: topic.id };
+}
+
+/**
+ * Hand-authored lessons occasionally predate curriculum renames. Normalize
+ * their identity and make sure every related-topic link points at a real
+ * route instead of silently rendering a fallback lesson.
+ */
+function finalizeDetailedLesson(
+  lesson: LessonContent,
+  trackId: TrackId,
+  moduleId: string,
+  topicId: string
+): LessonContent {
+  const modules = getTrackModules(trackId);
+  const mod =
+    modules.find((item) => item.id === moduleId) ||
+    modules.find((item) => item.topics.some((topic) => topic.id === topicId));
+
+  if (!mod) return lesson;
+
+  const currentTopic = mod.topics.find((topic) => topic.id === topicId);
+  const validHrefs = new Set(
+    modules.flatMap((item) => item.topics.map((topic) => `/${trackId}/${item.id}/${topic.id}`))
+  );
+
+  const related = (lesson.relatedTopics || [])
+    .map((relatedTopic) => {
+      if (validHrefs.has(relatedTopic.href)) return relatedTopic;
+
+      const match = modules
+        .flatMap((item) => item.topics.map((topic) => ({ module: item, topic })))
+        .find(
+          ({ topic }) =>
+            topic.id === relatedTopic.id ||
+            normalize(topic.id) === normalize(relatedTopic.id) ||
+            normalize(topic.title) === normalize(relatedTopic.title)
+        );
+
+      return match
+        ? {
+            id: match.topic.id,
+            title: match.topic.title,
+            href: `/${trackId}/${match.module.id}/${match.topic.id}`,
+          }
+        : null;
+    })
+    .filter((relatedTopic): relatedTopic is NonNullable<typeof relatedTopic> => Boolean(relatedTopic))
+    .filter(
+      (relatedTopic, index, list) =>
+        relatedTopic.href !== `/${trackId}/${mod.id}/${topicId}` &&
+        list.findIndex((candidate) => candidate.href === relatedTopic.href) === index
+    );
+
+  for (const sibling of mod.topics) {
+    if (related.length >= 4) break;
+    if (sibling.id === topicId) continue;
+
+    const href = `/${trackId}/${mod.id}/${sibling.id}`;
+    if (!related.some((item) => item.href === href)) {
+      related.push({ id: sibling.id, title: sibling.title, href });
+    }
+  }
+
+  return {
+    ...lesson,
+    id: currentTopic?.id || lesson.id,
+    moduleId: mod.id,
+    trackId,
+    title: currentTopic?.title || lesson.title,
+    slug: currentTopic?.id || lesson.slug,
+    duration: currentTopic?.duration || lesson.duration,
+    relatedTopics: related,
+  };
+}
+
 // Generates rich content for any topic in the curriculum so no lesson is ever an empty placeholder
 export function getLessonContent(trackId: TrackId, moduleId: string, topicId: string): LessonContent {
   const canonicalTopicId = TOPIC_ALIASES[topicId] || topicId;
@@ -429,17 +564,17 @@ export function getLessonContent(trackId: TrackId, moduleId: string, topicId: st
   // 1. Direct composite key check
   const compositeKey = `${trackId}_${moduleId}_${canonicalTopicId}`;
   if (DETAILED_LESSONS[compositeKey]) {
-    return DETAILED_LESSONS[compositeKey];
+    return finalizeDetailedLesson(DETAILED_LESSONS[compositeKey], trackId, moduleId, canonicalTopicId);
   }
 
   // 2. Check with raw topicId
   const rawKey = `${trackId}_${moduleId}_${topicId}`;
   if (DETAILED_LESSONS[rawKey]) {
-    return DETAILED_LESSONS[rawKey];
+    return finalizeDetailedLesson(DETAILED_LESSONS[rawKey], trackId, moduleId, topicId);
   }
 
   // 3. Find module details
-  const modules = trackId === 'full-stack' ? FULL_STACK_MODULES : DIGITAL_MARKETING_MODULES;
+  const modules = getTrackModules(trackId);
   let mod = modules.find((m) => m.id === moduleId || normalize(m.id) === normalize(moduleId));
   if (!mod) {
     mod = modules.find((m) =>
@@ -465,7 +600,6 @@ export function getLessonContent(trackId: TrackId, moduleId: string, topicId: st
 
   const title = topic?.title || 'Comprehensive Lesson Overview';
   const summary = topic?.summary || 'Master this essential industry skill with complete documentation, practical patterns, real-world examples, and interview preparation.';
-  const isDevelopment = trackId === 'full-stack';
   const effectiveTopicId = topic?.id || canonicalTopicId;
   const effectiveModuleId = mod?.id || moduleId;
 
@@ -479,135 +613,23 @@ export function getLessonContent(trackId: TrackId, moduleId: string, topicId: st
       href: `/${trackId}/${effectiveModuleId}/${t.id}`,
     }));
 
-  // Context-specific verified official documentation links
-  let officialDocs = [
-    {
-      title: isDevelopment ? 'MDN Web Docs Official Reference' : 'Google Search Central Official Reference',
-      url: isDevelopment ? 'https://developer.mozilla.org' : 'https://developers.google.com/search/docs',
-      description: 'Verified official documentation and reference material for modern standards and technical protocols.',
-    },
-  ];
-
-  if (effectiveModuleId === 'html-complete-guide' || effectiveTopicId.includes('html')) {
-    officialDocs = [
-      {
-        title: 'MDN Web Docs: HTML Living Standard & Reference',
-        url: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
-        description: 'Comprehensive guides, element reference tables, and interactive code examples maintained by Mozilla.',
-      },
-      {
-        title: 'WHATWG HTML Living Standard Specification',
-        url: 'https://html.spec.whatwg.org/multipage/',
-        description: 'The canonical source specification for modern HTML syntax, parsing rules, and DOM interfaces.',
-      },
-      {
-        title: 'W3C Web Accessibility Initiative (WAI-ARIA)',
-        url: 'https://www.w3.org/WAI/standards-guidelines/aria/',
-        description: 'Official accessibility technical guidelines and landmark roles for accessible HTML structuring.',
-      },
-    ];
-  } else if (effectiveModuleId.includes('css') || effectiveTopicId.includes('css')) {
-    officialDocs = [
-      {
-        title: 'MDN Web Docs: CSS Reference & Flexbox/Grid Guides',
-        url: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
-        description: 'Standard reference for CSS properties, layout modes, cascade rules, and responsive design.',
-      },
-      {
-        title: 'W3C Cascading Style Sheets Specifications',
-        url: 'https://www.w3.org/Style/CSS/',
-        description: 'Official W3C working group specifications for modern CSS architecture.',
-      },
-    ];
-  } else if (effectiveModuleId.includes('react') || effectiveTopicId.includes('react')) {
-    officialDocs = [
-      {
-        title: 'React Official Documentation (react.dev)',
-        url: 'https://react.dev',
-        description: 'Official interactive documentation for React 19, hooks, component lifecycles, and architecture.',
-      },
-      {
-        title: 'React Router / Modern State Management Guide',
-        url: 'https://react.dev/learn',
-        description: 'Conceptual patterns for declarative UI composition and predictable unidirectional data flow.',
-      },
-    ];
-  } else if (effectiveModuleId.includes('next') || effectiveTopicId.includes('next')) {
-    officialDocs = [
-      {
-        title: 'Next.js App Router Documentation',
-        url: 'https://nextjs.org/docs',
-        description: 'Production architecture guides for Server Components, routing, layouts, and data fetching.',
-      },
-    ];
-  } else if (effectiveModuleId.includes('seo') || effectiveTopicId.includes('seo')) {
-    officialDocs = [
-      {
-        title: 'Google Search Central Official Documentation',
-        url: 'https://developers.google.com/search/docs',
-        description: 'Google’s official guidelines for crawling, indexing, ranking, and technical SEO compliance.',
-      },
-      {
-        title: 'Schema.org Structured Data Specifications',
-        url: 'https://schema.org',
-        description: 'Universal schemas for structured JSON-LD entities recognized by Google and Bing.',
-      },
-    ];
-  }
-
-  const knowledge = getDomainKnowledge(trackId, effectiveModuleId, effectiveTopicId, title);
-
-  return {
-    id: effectiveTopicId,
-    moduleId: effectiveModuleId,
-    trackId: trackId,
-    title: title,
-    slug: effectiveTopicId,
-    order: 1,
-    duration: topic?.duration || '45m',
-    difficulty: (topic?.duration && parseInt(topic.duration, 10) > 55 ? 'Advanced' : 'Intermediate') as 'Beginner' | 'Intermediate' | 'Advanced',
-    summary: summary,
-    definition: knowledge.definition,
-    explanation: knowledge.explanation,
-    whyItIsUsed: knowledge.whyItIsUsed,
-    realWorldUseCases: knowledge.realWorldUseCases,
-    objectives: [
-      `Understand foundational principles and mechanics of ${title}`,
-      `Analyze practical architectural patterns and industry implementation standards`,
-      `Identify common mistakes and avoid production bottlenecks`,
-      `Execute hands-on exercises and prepare for technical interview questions`,
-    ],
-    keyConcepts: knowledge.keyConcepts,
-    syntaxDefinition: knowledge.syntaxDefinition,
-    codeExamples: knowledge.codeSnippet ? [knowledge.codeSnippet] : undefined,
-    strategyExamples: knowledge.strategyWorkflow ? [knowledge.strategyWorkflow] : undefined,
-    stepByStepGuide: knowledge.stepByStepGuide,
-    realWorldApplication: knowledge.realWorldApplication,
-    commonMistakes: knowledge.commonMistakes,
-    bestPractices: knowledge.bestPractices,
-    exercises: [
-      {
-        title: knowledge.exercise.title,
-        task: knowledge.exercise.task,
-        hints: knowledge.exercise.hints,
-      },
-    ],
-    interviewQuestions: knowledge.interviewQuestions,
-    miniAssignment: {
-      title: `Production Assignment: ${title}`,
-      prompt: `Develop a comprehensive technical specification and implementation plan detailing how you would engineer and test ${title} in a real-world enterprise product.`,
-      deliverables: [
-        'Documented architecture design and data flow specification',
-        'Production-ready code implementation or marketing campaign structure with verified test cases',
-      ],
-    },
-    relatedTopics: relatedTopics,
-    officialDocs: knowledge.officialDocs && knowledge.officialDocs.length > 0 ? knowledge.officialDocs : officialDocs,
-    furtherReading: [
-      {
-        title: isDevelopment ? 'W3C Web Standards Specifications' : 'Google Search Central Official Guides',
-        url: isDevelopment ? 'https://www.w3.org/' : 'https://developers.google.com/search/docs',
-      },
-    ],
+  const moduleContext = mod ?? {
+    id: effectiveModuleId,
+    title: 'Learn with Umar Curriculum',
+    description: 'A structured, documentation-driven curriculum built for production work.',
+    badge: undefined,
   };
+
+  return generateLessonContent({
+    trackId,
+    module: moduleContext,
+    topic: {
+      id: effectiveTopicId,
+      title,
+      summary,
+      duration: topic?.duration || '45m',
+    },
+    order: mod ? mod.topics.findIndex((item) => item.id === effectiveTopicId) + 1 : 1,
+    relatedTopics,
+  });
 }

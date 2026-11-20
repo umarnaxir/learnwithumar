@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { FULL_STACK_MODULES } from '@/data/curriculum/full-stack-curriculum';
 import { FullStackModuleOverviewClientView } from './ModuleOverviewClientView';
 
@@ -61,5 +62,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function FullStackModuleOverviewPage({ params }: Props) {
   const { moduleId } = await params;
   const decodedModuleId = decodeURIComponent(moduleId || '');
+  const moduleExists = FULL_STACK_MODULES.some((mod) => mod.id === decodedModuleId);
+
+  if (!moduleExists) notFound();
+
   return <FullStackModuleOverviewClientView moduleId={decodedModuleId} />;
 }

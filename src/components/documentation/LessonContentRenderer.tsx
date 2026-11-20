@@ -129,12 +129,26 @@ const CalloutBox = styled(Box)`
   margin: 12px 0 16px;
 `;
 
+function inferSyntaxLanguage(lesson: LessonContent): string {
+  if (lesson.trackId === 'digital-marketing') return 'text';
+
+  const moduleId = lesson.moduleId.toLowerCase();
+  if (moduleId.includes('html')) return 'html';
+  if (moduleId.includes('css')) return 'css';
+  if (moduleId.includes('sql') || moduleId.includes('database')) return 'sql';
+
+  return 'typescript';
+}
+
 export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const toggleFaq = (idx: number) => {
     setOpenFaq((prev) => (prev === idx ? null : idx));
   };
+
+  const syntaxLanguage = inferSyntaxLanguage(lesson);
+  const isDevelopment = lesson.trackId === 'full-stack';
 
   return (
     <Box>
@@ -251,11 +265,11 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
         <ContentSection id="syntax">
           <SectionHeading>
             <Code2 size={16} color="#000000" />
-            <span>Syntax & Structural Blueprint</span>
+            <span>{isDevelopment ? 'Syntax & Structural Blueprint' : 'Strategy & Execution Blueprint'}</span>
           </SectionHeading>
           <CodeBlock
-            title="Syntax & Architecture Pattern"
-            language="typescript"
+            title={isDevelopment ? 'Syntax & Architecture Pattern' : 'Execution Workflow'}
+            language={syntaxLanguage}
             code={lesson.syntaxDefinition}
           />
         </ContentSection>
@@ -265,7 +279,7 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       <ContentSection id="code-examples">
         <SectionHeading>
           <Code2 size={16} color="#000000" />
-          <span>{lesson.codeExamples ? 'Example Code & Expected Output' : 'Strategic Workflows & Execution'}</span>
+          <span>{isDevelopment ? 'Example Code & Expected Output' : 'Campaign Workflow & Expected Outcome'}</span>
         </SectionHeading>
 
         {lesson.codeExamples &&
@@ -324,7 +338,11 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       <ContentSection id="step-by-step">
         <SectionHeading>
           <FileCheck2 size={16} color="#000000" />
-          <span>Step-by-Step Code & Implementation Walkthrough</span>
+          <span>
+            {isDevelopment
+              ? 'Step-by-Step Code & Implementation Walkthrough'
+              : 'Step-by-Step Practical Workflow'}
+          </span>
         </SectionHeading>
         <Box mt="12px">
           {lesson.stepByStepGuide.map((step) => (
@@ -398,7 +416,7 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       <ContentSection id="exercises">
         <SectionHeading>
           <Code2 size={16} color="#000000" />
-          <span>Practical Exercises & Technical Drills</span>
+          <span>{isDevelopment ? 'Practical Exercises & Technical Drills' : 'Practical Assignments'}</span>
         </SectionHeading>
         {lesson.exercises.map((ex, idx) => (
           <Card key={idx} p="14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="8px" mb="10px">
@@ -424,7 +442,11 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       <ContentSection id="interview-questions">
         <SectionHeading>
           <HelpCircle size={16} color="#000000" />
-          <span>Technical Interview Questions & Answers</span>
+          <span>
+            {isDevelopment
+              ? 'Technical Interview Questions & Answers'
+              : 'Marketing Interview Questions & Answers'}
+          </span>
         </SectionHeading>
         <Box mt="10px">
           {lesson.interviewQuestions.map((q, idx) => {
@@ -478,7 +500,11 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       <ContentSection id="official-docs">
         <SectionHeading>
           <ExternalLink size={16} color="#000000" />
-          <span>Official Documentation & Specifications</span>
+          <span>
+            {isDevelopment
+              ? 'Official Documentation & Specifications'
+              : 'Official Resources & Industry Guides'}
+          </span>
         </SectionHeading>
         <Box display="grid" gridTemplateColumns={['1fr', '1fr 1fr']} gap="10px">
           {lesson.officialDocs.map((doc, idx) => (

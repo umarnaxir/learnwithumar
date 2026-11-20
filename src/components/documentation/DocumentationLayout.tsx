@@ -179,16 +179,53 @@ const TopicLink = styled(Link)<{ $isActive: boolean }>`
   }
 `;
 
-const TOCItemLink = styled.a`
+const TOCItemLink = styled.a<{ $isActive: boolean }>`
   display: block;
   font-size: 11.5px;
-  color: #666666;
+  color: ${({ $isActive }) => ($isActive ? '#000000' : '#666666')};
+  font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
   text-decoration: none;
-  padding: 4px 0;
-  transition: color 0.15s ease;
+  padding: 4px 0 4px 8px;
+  border-left: 2px solid ${({ $isActive }) => ($isActive ? '#000000' : 'transparent')};
+  transition: color 0.15s ease, border-color 0.15s ease;
+  line-height: 1.35;
 
   &:hover {
     color: #000000;
+  }
+`;
+
+const MobileToc = styled.details`
+  display: block;
+  margin-bottom: 18px;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  background-color: #fafafa;
+  padding: 10px 12px;
+
+  @media (min-width: 1280px) {
+    display: none;
+  }
+
+  summary {
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #111111;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  [data-toc-list] {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #eaeaea;
   }
 `;
 
@@ -228,6 +265,7 @@ export function DocumentationLayout({
 }: DocumentationLayoutProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
+  const [activeSection, setActiveSection] = useState('introduction');
 
   const {
     profile,
@@ -239,7 +277,13 @@ export function DocumentationLayout({
   const isCompleted = profile.completedLessons.includes(currentTopicId);
   const isBookmarked = profile.bookmarkedLessons.includes(currentTopicId);
   const currentNote = profile.lessonNotes[currentTopicId] || '';
-  const [localNote, setLocalNote] = useState(currentNote);
+  const [noteDraft, setNoteDraft] = useState<{ topicId: string; value: string } | null>(null);
+
+  // The draft is scoped to the topic it was typed for. Switching lessons or
+  // receiving persisted notes therefore shows the correct note immediately,
+  // with no state-syncing effect and no risk of saving a note to the wrong
+  // topic during navigation.
+  const localNote = noteDraft?.topicId === currentTopicId ? noteDraft.value : currentNote;
 
   // Scroll to top whenever topic changes
   useEffect(() => {
@@ -247,6 +291,30 @@ export function DocumentationLayout({
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }, [currentTopicId]);
+
+  // Close the mobile curriculum drawer with Escape.
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileNavOpen(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileNavOpen]);
+
+  // Prevent the page behind the mobile curriculum drawer from scrolling.
+  useEffect(() => {
+    if (!mobileNavOpen || typeof window === 'undefined') return;
+    if (!window.matchMedia('(max-width: 1023px)').matches) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileNavOpen]);
 
   const modules =
     currentTrack === 'full-stack' ? FULL_STACK_MODULES : DIGITAL_MARKETING_MODULES;
@@ -289,6 +357,92 @@ export function DocumentationLayout({
     currentGlobalIndex >= 0 && currentGlobalIndex < allTrackLessons.length - 1
       ? allTrackLessons[currentGlobalIndex + 1]
       : null;
+
+  const isDevelopmentTrack = currentTrack === 'full-stack';
+  const rawSections = [
+    { id: 'introduction', label: 'Introduction', visible: true },
+    { id: 'definition', label: 'Definition', visible: true },
+    { id: 'explanation', label: 'Explanation', visible: true },
+    { id: 'why-used', label: 'Why It Is Used', visible: true },
+    { id: 'use-cases', label: 'Real-World Use Cases', visible: true },
+    {
+      id: 'key-concepts',
+      label: 'Key Concepts',
+      visible: Boolean(lesson.keyConcepts?.length),
+    },
+    {
+      id: 'syntax',
+      label: 'Syntax Pattern',
+      visible: Boolean(lesson.syntaxDefinition),
+    },
+    {
+      id: 'code-examples',
+      label: isDevelopmentTrack ? 'Code & Expected Output' : 'Workflow & Expected Outcome',
+      visible: Boolean(lesson.codeExamples?.length || lesson.strategyExamples?.length),
+    },
+    {
+      id: 'step-by-step',
+      label: isDevelopmentTrack ? 'Step-by-Step Guide' : 'Practical Workflow',
+      visible: Boolean(lesson.stepByStepGuide?.length),
+    },
+    { id: 'best-practices-mistakes', label: 'Best Practices', visible: true },
+    { id: 'exercises', label: isDevelopmentTrack ? 'Practical Exercises' : 'Assignments', visible: true },
+    { id: 'interview-questions', label: 'Interview Questions', visible: true },
+    {
+      id: 'related-topics',
+      label: 'Related Topics',
+      visible: Boolean(lesson.relatedTopics?.length),
+    },
+    { id: 'official-docs', label: isDevelopmentTrack ? 'Official Docs' : 'Official Resources', visible: true },
+  ];
+  const tocSections = rawSections
+    .filter((section) => section.visible)
+    .map((section, index) => ({ ...section, label: `${index + 1}. ${section.label}` }));
+
+  // Track the section currently in view so the table of contents stays honest.
+  useEffect(() => {
+    const sectionIds = rawSections.filter((section) => section.visible).map((section) => section.id);
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((element): element is HTMLElement => Boolean(element));
+
+    if (!elements.length || typeof window === 'undefined') return;
+
+    let frame = 0;
+
+    const updateActiveSection = () => {
+      frame = 0;
+      const readingLine = 96;
+      let current = elements[0].id;
+
+      for (const element of elements) {
+        if (element.getBoundingClientRect().top <= readingLine) {
+          current = element.id;
+        } else {
+          break;
+        }
+      }
+
+      setActiveSection(current);
+    };
+
+    const scheduleUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateActiveSection);
+    };
+
+    updateActiveSection();
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+    };
+    // The section set only changes when the lesson or its content changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTrack, currentModuleId, currentTopicId, lesson.id]);
 
   // Auto-scroll active item into view inside the left sidebar on initial load or route transition
   useEffect(() => {
@@ -383,7 +537,12 @@ export function DocumentationLayout({
                   : mod.id === currentModuleId;
               return (
                 <ModuleGroup key={mod.id}>
-                  <ModuleHeaderBtn onClick={() => toggleModule(mod.id)}>
+                  <ModuleHeaderBtn
+                    type="button"
+                    aria-expanded={isExpanded}
+                    aria-controls={`module-topics-${mod.id}`}
+                    onClick={() => toggleModule(mod.id)}
+                  >
                     <Flex alignItems="center" gap="6px" style={{ minWidth: 0 }}>
                       <span
                         style={{
@@ -408,7 +567,7 @@ export function DocumentationLayout({
                   </ModuleHeaderBtn>
 
                   {isExpanded && (
-                    <Box mt="1px">
+                    <Box mt="1px" id={`module-topics-${mod.id}`}>
                       {mod.topics.map((t) => {
                         const isActive = isTopicActive(mod.id, t.id);
                         const topicCompleted = profile.completedLessons.includes(t.id);
@@ -441,6 +600,27 @@ export function DocumentationLayout({
 
         {/* CENTER: Lesson Content */}
         <MainContentArea>
+          {/* Mobile/tablet table of contents (the right rail is desktop-only) */}
+          <MobileToc>
+            <summary>
+              <span>On this page</span>
+              <ChevronDown size={14} color="#666666" />
+            </summary>
+            <Box data-toc-list>
+              {tocSections.map((section) => (
+                <TOCItemLink
+                  key={section.id}
+                  href={`#${section.id}`}
+                  $isActive={activeSection === section.id}
+                  aria-current={activeSection === section.id ? 'location' : undefined}
+                  onClick={() => setActiveSection(section.id)}
+                >
+                  {section.label}
+                </TOCItemLink>
+              ))}
+            </Box>
+          </MobileToc>
+
           {/* Breadcrumb Header */}
           <Flex
             alignItems="center"
@@ -582,26 +762,17 @@ export function DocumentationLayout({
             On This Page
           </Text>
           <Box mb="22px">
-            <TOCItemLink href="#introduction">1. Introduction</TOCItemLink>
-            <TOCItemLink href="#definition">2. Definition</TOCItemLink>
-            <TOCItemLink href="#explanation">3. Explanation</TOCItemLink>
-            <TOCItemLink href="#why-used">4. Why It Is Used</TOCItemLink>
-            <TOCItemLink href="#use-cases">5. Real-World Use Cases</TOCItemLink>
-            {lesson.keyConcepts && lesson.keyConcepts.length > 0 && (
-              <TOCItemLink href="#key-concepts">6. Key Concepts</TOCItemLink>
-            )}
-            {lesson.syntaxDefinition && (
-              <TOCItemLink href="#syntax">7. Syntax Pattern</TOCItemLink>
-            )}
-            <TOCItemLink href="#code-examples">8. Code & Expected Output</TOCItemLink>
-            <TOCItemLink href="#step-by-step">9. Step-by-Step Guide</TOCItemLink>
-            <TOCItemLink href="#best-practices-mistakes">10. Best Practices</TOCItemLink>
-            <TOCItemLink href="#exercises">11. Practical Exercises</TOCItemLink>
-            <TOCItemLink href="#interview-questions">12. Interview Questions</TOCItemLink>
-            {lesson.relatedTopics && lesson.relatedTopics.length > 0 && (
-              <TOCItemLink href="#related-topics">13. Related Topics</TOCItemLink>
-            )}
-            <TOCItemLink href="#official-docs">14. Official Docs</TOCItemLink>
+            {tocSections.map((section) => (
+              <TOCItemLink
+                key={section.id}
+                href={`#${section.id}`}
+                $isActive={activeSection === section.id}
+                aria-current={activeSection === section.id ? 'location' : undefined}
+                onClick={() => setActiveSection(section.id)}
+              >
+                {section.label}
+              </TOCItemLink>
+            ))}
           </Box>
 
           {/* Notes Widget */}
@@ -613,12 +784,14 @@ export function DocumentationLayout({
               </Text>
             </Flex>
             <Text fontSize="10.5px" color="#888888">
-              Notes auto-save to browser session.
+              Notes save in this browser and survive refreshes.
             </Text>
             <NoteArea
               placeholder="Jot down key syntax, interview tips, or reminders for this topic..."
               value={localNote}
-              onChange={(e) => setLocalNote(e.target.value)}
+              onChange={(e) =>
+                setNoteDraft({ topicId: currentTopicId, value: e.target.value })
+              }
               onBlur={handleSaveNote}
             />
             <Button
@@ -640,7 +813,7 @@ export function DocumentationLayout({
             color="#888888"
             mb="10px"
           >
-            Verified Documentation
+            Official Documentation
           </Text>
           <Box>
             {lesson.officialDocs.map((doc, idx) => (

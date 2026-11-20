@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { DIGITAL_MARKETING_MODULES } from '@/data/curriculum/digital-marketing-curriculum';
 import { DigitalMarketingModuleOverviewClientView } from './ModuleOverviewClientView';
 
@@ -61,5 +62,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function DigitalMarketingModuleOverviewPage({ params }: Props) {
   const { moduleId } = await params;
   const decodedModuleId = decodeURIComponent(moduleId || '');
+  const moduleExists = DIGITAL_MARKETING_MODULES.some((mod) => mod.id === decodedModuleId);
+
+  if (!moduleExists) notFound();
+
   return <DigitalMarketingModuleOverviewClientView moduleId={decodedModuleId} />;
 }

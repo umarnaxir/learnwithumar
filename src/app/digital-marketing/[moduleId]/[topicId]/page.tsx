@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
+import { notFound, redirect } from 'next/navigation';
 import { DIGITAL_MARKETING_MODULES } from '@/data/curriculum/digital-marketing-curriculum';
-import { getLessonContent } from '@/data/curriculum/lessons/detailed-lessons';
+import {
+  getLessonContent,
+  resolveCurriculumTopic,
+} from '@/data/curriculum/lessons/detailed-lessons';
 import { DigitalMarketingTopicDocClientView } from './TopicDocClientView';
 
 type Props = {
@@ -26,13 +30,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { moduleId, topicId } = await params;
   const decodedModuleId = decodeURIComponent(moduleId || '');
   const decodedTopicId = decodeURIComponent(topicId || '');
-  const lesson = getLessonContent('digital-marketing', decodedModuleId, decodedTopicId);
+  const resolved = resolveCurriculumTopic('digital-marketing', decodedModuleId, decodedTopicId);
+
+  if (!resolved) {
+    return { title: 'Lesson Not Found | Learn with Umar' };
+  }
+
+  const lesson = getLessonContent(
+    'digital-marketing',
+    resolved.module.id,
+    resolved.canonicalTopicId
+  );
 
   const title = `${lesson.title} — Digital Marketing Mastery`;
   const description =
     lesson.summary ||
     `Master ${lesson.title} with structured explanations, industry workflows, practical exercises, and interview strategies on Learn with Umar.`;
-  const url = `${baseUrl}/digital-marketing/${decodedModuleId}/${decodedTopicId}`;
+  const url = `${baseUrl}/digital-marketing/${resolved.module.id}/${resolved.canonicalTopicId}`;
 
   return {
     title,
@@ -67,8 +81,23 @@ export default async function DigitalMarketingTopicDocPage({ params }: Props) {
   const { moduleId, topicId } = await params;
   const decodedModuleId = decodeURIComponent(moduleId || '');
   const decodedTopicId = decodeURIComponent(topicId || '');
-  const lesson = getLessonContent('digital-marketing', decodedModuleId, decodedTopicId);
-  const url = `${baseUrl}/digital-marketing/${decodedModuleId}/${decodedTopicId}`;
+  const resolved = resolveCurriculumTopic('digital-marketing', decodedModuleId, decodedTopicId);
+
+  if (!resolved) notFound();
+
+  if (
+    resolved.module.id !== decodedModuleId ||
+    resolved.canonicalTopicId !== decodedTopicId
+  ) {
+    redirect(`/digital-marketing/${resolved.module.id}/${resolved.canonicalTopicId}`);
+  }
+
+  const lesson = getLessonContent(
+    'digital-marketing',
+    resolved.module.id,
+    resolved.canonicalTopicId
+  );
+  const url = `${baseUrl}/digital-marketing/${resolved.module.id}/${resolved.canonicalTopicId}`;
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -101,9 +130,9 @@ export default async function DigitalMarketingTopicDocPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
       <DigitalMarketingTopicDocClientView
-        key={`${decodedModuleId}___${decodedTopicId}`}
-        moduleId={decodedModuleId}
-        topicId={decodedTopicId}
+        key={`${resolved.module.id}___${resolved.canonicalTopicId}`}
+        moduleId={resolved.module.id}
+        topicId={resolved.canonicalTopicId}
       />
     </>
   );
