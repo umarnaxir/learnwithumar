@@ -228,7 +228,7 @@ export function Footer() {
           flexWrap="wrap"
           gap="12px"
         >
-          <Text fontSize="12px" color="#555555">
+          <Text fontSize="12px" color="#555555" style={{ wordBreak: 'break-word' }}>
             Developed and Designed by{' '}
             <a
               href="https://umarnazir.vercel.app"
@@ -245,7 +245,7 @@ export function Footer() {
             </a>
           </Text>
 
-          <Flex alignItems="center" gap="16px">
+          <Flex alignItems="center" gap="12px" flexWrap="wrap">
             <FooterLink href="/about" style={{ fontSize: '11px' }}>
               About & Mentorship
             </FooterLink>

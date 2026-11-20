@@ -124,9 +124,13 @@ const AccordionBody = styled.div`
 const CalloutBox = styled(Box)`
   border-left: 3px solid #000000;
   background-color: #fcfcfc;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border-radius: 0 8px 8px 0;
   margin: 12px 0 16px;
+
+  @media (min-width: 640px) {
+    padding: 14px 16px;
+  }
 `;
 
 function inferSyntaxLanguage(lesson: LessonContent): string {

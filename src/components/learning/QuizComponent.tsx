@@ -16,8 +16,13 @@ const QuizCard = styled(Box)`
   background-color: #fafafa;
   border: 1px solid #eaeaea;
   border-radius: 12px;
-  padding: 24px;
-  margin: 28px 0;
+  padding: 16px 14px;
+  margin: 24px 0;
+
+  @media (min-width: 640px) {
+    padding: 24px;
+    margin: 28px 0;
+  }
 `;
 
 const OptionButton = styled.button<{
@@ -29,15 +34,21 @@ const OptionButton = styled.button<{
   text-align: left;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: 10px;
+  padding: 10px 14px;
   margin-bottom: 8px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13.5px;
   background-color: #ffffff;
   border: 1px solid #eaeaea;
   transition: all 0.15s ease;
   cursor: pointer;
+
+  @media (min-width: 640px) {
+    gap: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
 
   ${({ $isSelected }) =>
     $isSelected &&

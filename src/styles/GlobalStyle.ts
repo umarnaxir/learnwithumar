@@ -19,17 +19,32 @@ export const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     height: 100%;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   body {
     min-height: 100%;
+    width: 100%;
+    max-width: 100%;
     background-color: ${({ theme }) => theme.colors.background};
     color: ${({ theme }) => theme.colors.text};
     font-family: ${({ theme }) => theme.fonts.sans};
     line-height: ${({ theme }) => theme.lineHeights.normal};
     overflow-x: hidden;
+    position: relative;
     display: flex;
     flex-direction: column;
+  }
+
+  /* Prevent text and container overflow on small mobile viewports */
+  p, h1, h2, h3, h4, h5, h6, span, a, li {
+    overflow-wrap: break-word;
+  }
+
+  img, svg, video, canvas, audio, iframe, embed, object {
+    max-width: 100%;
+    height: auto;
   }
 
   a {
@@ -44,15 +59,19 @@ export const GlobalStyle = createGlobalStyle`
     background: none;
     cursor: pointer;
     outline: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   input, textarea, select {
     font-family: inherit;
     font-size: inherit;
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   code, pre, kbd {
     font-family: ${({ theme }) => theme.fonts.mono};
+    max-width: 100%;
   }
 
   ::selection {

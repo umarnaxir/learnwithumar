@@ -27,7 +27,11 @@ const LayoutWrapper = styled.div`
   max-width: 1440px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 16px;
+  padding: 0 12px;
+
+  @media (min-width: 480px) {
+    padding: 0 16px;
+  }
 
   @media (min-width: 768px) {
     padding: 0 20px;
@@ -49,6 +53,70 @@ const LayoutGrid = styled.div`
 
   @media (min-width: 1280px) {
     grid-template-columns: 290px minmax(0, 1fr) 250px;
+  }
+`;
+
+const CurriculumBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #eaeaea;
+  position: sticky;
+  top: 56px;
+  z-index: 35;
+  margin-left: -12px;
+  margin-right: -12px;
+
+  @media (min-width: 480px) {
+    padding: 10px 16px;
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+
+  @media (min-width: 768px) {
+    top: 62px;
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
+const DrawerBackdrop = styled.div<{ $isOpen: boolean }>`
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 90;
+  opacity: ${({ $isOpen }) => ($isOpen ? '1' : '0')};
+  visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
+const DrawerHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid #eaeaea;
+  margin: -16px -14px 14px -14px;
+  background-color: #fafafa;
+  position: sticky;
+  top: -16px;
+  z-index: 10;
+
+  @media (min-width: 1024px) {
+    display: none;
   }
 `;
 
@@ -74,12 +142,18 @@ const LeftSidebar = styled.aside<{ $isOpenOnMobile: boolean }>`
 
   @media (max-width: 1023px) {
     position: fixed;
-    top: 64px;
+    top: 0;
     left: 0;
-    right: 0;
     bottom: 0;
-    z-index: 40;
-    display: ${({ $isOpenOnMobile }) => ($isOpenOnMobile ? 'block' : 'none')};
+    width: 86%;
+    max-width: 330px;
+    height: 100vh;
+    z-index: 100;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+    transform: ${({ $isOpenOnMobile }) =>
+      $isOpenOnMobile ? 'translateX(0)' : 'translateX(-100%)'};
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
   }
 `;
 
@@ -107,10 +181,15 @@ const RightSidebar = styled.aside`
 `;
 
 const MainContentArea = styled.main`
-  padding: 24px 16px 64px;
+  padding: 18px 6px 64px;
   max-width: 100%;
   margin: 0 auto;
   width: 100%;
+  min-width: 0;
+
+  @media (min-width: 480px) {
+    padding: 24px 16px 64px;
+  }
 
   @media (min-width: 768px) {
     padding: 32px 28px 80px;
@@ -118,6 +197,35 @@ const MainContentArea = styled.main`
 
   @media (min-width: 1280px) {
     padding: 36px 36px 96px;
+  }
+`;
+
+const BreadcrumbNav = styled.nav`
+  display: flex;
+  align-items: center;
+  gap: 4px 6px;
+  font-size: 11px;
+  color: #666666;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  line-height: 1.5;
+
+  @media (min-width: 768px) {
+    font-size: 11.5px;
+  }
+
+  a {
+    color: #666666;
+    text-decoration: none;
+    &:hover {
+      color: #000000;
+    }
+  }
+
+  .current-topic {
+    color: #000000;
+    font-weight: 600;
+    word-break: break-word;
   }
 `;
 
@@ -245,6 +353,28 @@ const NoteArea = styled.textarea`
   &:focus {
     border-color: #000000;
     background-color: #ffffff;
+  }
+`;
+
+const NavFooter = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 44px;
+  padding-top: 20px;
+  border-top: 1px solid #eaeaea;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  a {
+    width: 100%;
+    @media (min-width: 640px) {
+      width: auto;
+    }
   }
 `;
 
@@ -469,36 +599,66 @@ export function DocumentationLayout({
   return (
     <LayoutWrapper>
       <LayoutGrid>
-        {/* Mobile Bar to open Curriculum Drawer */}
-        <Box
-          display={['block', 'block', 'none']}
-          p="10px 14px"
-          bg="#F8F8F8"
-          borderBottom="1px solid #EAEAEA"
-        >
-          <Flex alignItems="center" justifyContent="space-between">
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setMobileNavOpen(!mobileNavOpen)}
-            >
-              {mobileNavOpen ? <X size={13} /> : <Menu size={13} />}
-              <span>Curriculum Menu</span>
-            </Button>
-            <Badge variant="dark">
-              {currentTrack === 'full-stack' ? 'Full Stack' : 'Digital Marketing'}
-            </Badge>
-          </Flex>
-        </Box>
+        {/* Mobile/Tablet Bar to open Curriculum Drawer */}
+        <CurriculumBar>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setMobileNavOpen(true)}
+            aria-label="Open Curriculum Drawer"
+          >
+            <Menu size={14} />
+            <span>Curriculum ({currentModule?.title ? currentModule.title.split(' ')[0] : 'Menu'})</span>
+          </Button>
 
-        {/* LEFT SIDEBAR: Curriculum Browser */}
+          <Badge variant="dark">
+            {currentTrack === 'full-stack' ? 'Full Stack' : 'Digital Marketing'}
+          </Badge>
+        </CurriculumBar>
+
+        {/* Drawer Backdrop */}
+        <DrawerBackdrop
+          $isOpen={mobileNavOpen}
+          onClick={() => setMobileNavOpen(false)}
+          aria-hidden="true"
+        />
+
+        {/* LEFT SIDEBAR: Curriculum Browser (Drawer on Mobile & Tablet) */}
         <LeftSidebar $isOpenOnMobile={mobileNavOpen}>
+          {/* Drawer Top Header with Close Button for Mobile */}
+          <DrawerHeader>
+            <Flex alignItems="center" gap="6px">
+              <Box p="4px" bg="#000000" color="#FFFFFF" borderRadius="4px" display="inline-flex">
+                {currentTrack === 'full-stack' ? <Code2 size={12} /> : <TrendingUp size={12} />}
+              </Box>
+              <Text fontSize="12px" fontWeight="700" color="#000000">
+                {currentTrack === 'full-stack' ? 'Full Stack Curriculum' : 'Marketing Curriculum'}
+              </Text>
+            </Flex>
+            <button
+              onClick={() => setMobileNavOpen(false)}
+              aria-label="Close curriculum drawer"
+              style={{
+                padding: '6px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#666666',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              <X size={18} />
+            </button>
+          </DrawerHeader>
+
           {/* Active Learning Path Context Header (Context-Aware, No Track Switcher) */}
           <TrackHeaderBox>
             <Link
               href={`/${currentTrack}`}
               style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
               title={`View ${currentTrack === 'full-stack' ? 'Full Stack' : 'Digital Marketing'} Curriculum Hub`}
+              onClick={() => setMobileNavOpen(false)}
             >
               <Box p="6px" bg="#000000" color="#FFFFFF" borderRadius="6px" display="inline-flex">
                 {currentTrack === 'full-stack' ? <Code2 size={13} /> : <TrendingUp size={13} />}
@@ -622,28 +782,19 @@ export function DocumentationLayout({
           </MobileToc>
 
           {/* Breadcrumb Header */}
-          <Flex
-            alignItems="center"
-            gap="6px"
-            fontSize="11.5px"
-            color="#666666"
-            mb="14px"
-            flexWrap="wrap"
-          >
-            <Link href="/" style={{ color: '#666666', textDecoration: 'none' }}>
-              Home
-            </Link>
+          <BreadcrumbNav aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
             <span>/</span>
-            <Link href={`/${currentTrack}`} style={{ color: '#666666', textDecoration: 'none' }}>
+            <Link href={`/${currentTrack}`}>
               {currentTrack === 'full-stack' ? 'Full Stack Track' : 'Digital Marketing'}
             </Link>
             <span>/</span>
-            <Link href={`/${currentTrack}/${currentModuleId}`} style={{ color: '#666666', textDecoration: 'none' }}>
+            <Link href={`/${currentTrack}/${currentModuleId}`}>
               {currentModule?.title || 'Module'}
             </Link>
             <span>/</span>
-            <span style={{ color: '#000000', fontWeight: 600 }}>{lesson.title}</span>
-          </Flex>
+            <span className="current-topic">{lesson.title}</span>
+          </BreadcrumbNav>
 
           {/* Lesson Title & Quick Actions */}
           <Flex
@@ -655,25 +806,27 @@ export function DocumentationLayout({
             pb="14px"
             borderBottom="1px solid #EAEAEA"
           >
-            <Box>
+            <Box width={['100%', '100%', 'auto']}>
               <h1
                 style={{
-                  fontSize: '22px',
+                  fontSize: '20px',
                   fontWeight: 600,
                   letterSpacing: '-0.025em',
                   color: '#000000',
                   marginBottom: '6px',
+                  lineHeight: 1.25,
+                  wordBreak: 'break-word',
                 }}
               >
                 {lesson.title}
               </h1>
-              <Flex alignItems="center" gap="8px">
+              <Flex alignItems="center" gap="8px" flexWrap="wrap">
                 <Badge variant="neutral">Time: {lesson.duration}</Badge>
                 <Badge variant="dark">{lesson.difficulty}</Badge>
               </Flex>
             </Box>
 
-            <Flex alignItems="center" gap="8px">
+            <Flex alignItems="center" gap="8px" flexWrap="wrap" width={['100%', '100%', 'auto']}>
               {/* Bookmark button */}
               <Button
                 size="sm"
@@ -701,15 +854,7 @@ export function DocumentationLayout({
           {children}
 
           {/* Previous / Next Lesson Navigation Footer */}
-          <Flex
-            justifyContent="space-between"
-            alignItems="center"
-            mt="44px"
-            pt="20px"
-            borderTop="1px solid #EAEAEA"
-            flexWrap="wrap"
-            gap="12px"
-          >
+          <NavFooter>
             {prevLesson ? (
               <Button
                 as={Link}
@@ -746,7 +891,7 @@ export function DocumentationLayout({
                 Track Completed! Overview →
               </Button>
             )}
-          </Flex>
+          </NavFooter>
         </MainContentArea>
 
         {/* RIGHT SIDEBAR: Table of Contents & Resources */}

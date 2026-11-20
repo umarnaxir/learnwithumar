@@ -23,6 +23,22 @@ const ContentGrid = styled.div`
   }
 `;
 
+const StatsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+
+  @media (min-width: 480px) {
+    gap: 12px;
+  }
+
+  @media (min-width: 960px) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+`;
+
 export function AboutSection() {
   const pillars = [
     {
@@ -78,8 +94,8 @@ export function AboutSection() {
               day one.
             </Text>
 
-            <Flex gap="12px" flexWrap="wrap">
-              <Box p="10px 14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="6px">
+            <StatsGrid>
+              <Box p={['8px 6px', '10px 14px']} bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="6px" textAlign={['center', 'left']}>
                 <Text
                   fontSize="20px"
                   fontWeight="700"
@@ -92,7 +108,7 @@ export function AboutSection() {
                   Complete Modules
                 </Text>
               </Box>
-              <Box p="10px 14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="6px">
+              <Box p={['8px 6px', '10px 14px']} bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="6px" textAlign={['center', 'left']}>
                 <Text
                   fontSize="20px"
                   fontWeight="700"
@@ -105,7 +121,7 @@ export function AboutSection() {
                   Portfolio Projects
                 </Text>
               </Box>
-              <Box p="10px 14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="6px">
+              <Box p={['8px 6px', '10px 14px']} bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="6px" textAlign={['center', 'left']}>
                 <Text
                   fontSize="20px"
                   fontWeight="700"
@@ -118,7 +134,7 @@ export function AboutSection() {
                   Unexplained Magic
                 </Text>
               </Box>
-            </Flex>
+            </StatsGrid>
           </Box>
 
           {/* Right Column: Key Commitments */}

@@ -14,15 +14,24 @@ const CodeContainer = styled(Box)`
   margin: 16px 0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   max-width: 100%;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const CodeHeader = styled(Flex)`
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 8px 12px;
+  gap: 8px;
+  padding: 8px 10px;
   background-color: #161616;
   border-bottom: 1px solid #222222;
+  min-width: 0;
+
+  @media (min-width: 480px) {
+    padding: 8px 12px;
+    gap: 10px;
+  }
 
   @media (min-width: 768px) {
     padding: 8px 16px;
@@ -32,7 +41,7 @@ const CodeHeader = styled(Flex)`
 const CopyButton = styled.button<{ $copied: boolean }>`
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   flex-shrink: 0;
   font-size: 11px;
   font-weight: 500;
@@ -43,6 +52,7 @@ const CopyButton = styled.button<{ $copied: boolean }>`
     ${({ $copied }) => ($copied ? 'rgba(16, 185, 129, 0.3)' : 'transparent')};
   border-radius: 6px;
   padding: 4px 8px;
+  height: 28px;
   transition: all 0.15s ease;
   cursor: pointer;
 
@@ -54,18 +64,21 @@ const CopyButton = styled.button<{ $copied: boolean }>`
 
 const PreformattedCode = styled.pre`
   margin: 0;
-  padding: 14px 16px 16px;
+  padding: 12px 14px 14px;
   overflow-x: auto;
   max-width: 100%;
+  box-sizing: border-box;
   font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 12.5px;
-  line-height: 1.65;
+  font-size: 12px;
+  line-height: 1.6;
   color: #e4e4e7;
   tab-size: 2;
   -webkit-overflow-scrolling: touch;
 
   @media (min-width: 768px) {
     font-size: 13.5px;
+    padding: 14px 16px 16px;
+    line-height: 1.65;
   }
 
   code {
@@ -118,11 +131,19 @@ const PreformattedCode = styled.pre`
 const OutputBox = styled(Box)`
   background-color: #121212;
   border-top: 1px dashed #282828;
-  padding: 12px 16px;
+  padding: 10px 14px;
   font-family: ${({ theme }) => theme.fonts.mono};
-  font-size: 12.5px;
+  font-size: 11.5px;
   color: #a1a1aa;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    padding: 12px 16px;
+    font-size: 12.5px;
+  }
 `;
 
 interface CodeBlockProps {
@@ -189,7 +210,7 @@ export function CodeBlock({
   return (
     <CodeContainer>
       <CodeHeader>
-        <Flex alignItems="center" gap="8px" style={{ minWidth: 0 }}>
+        <Flex alignItems="center" gap="8px" style={{ minWidth: 0, flex: 1 }}>
           <Terminal size={13} color="#888888" style={{ flexShrink: 0 }} />
           <Text
             fontSize="12px"

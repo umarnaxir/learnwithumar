@@ -116,12 +116,12 @@ export function FullStackModuleOverviewClientView({ moduleId }: { moduleId: stri
                 style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
               >
                 <Flex
-                  alignItems="center"
+                  alignItems={['flex-start', 'flex-start', 'center']}
                   justifyContent="space-between"
-                  flexWrap="wrap"
+                  flexDirection={['column', 'column', 'row']}
                   gap="10px"
                 >
-                  <Flex alignItems="center" gap="12px">
+                  <Flex alignItems="flex-start" gap="10px" style={{ minWidth: 0, flex: 1 }}>
                     <span
                       style={{
                         fontSize: '11px',
@@ -135,22 +135,23 @@ export function FullStackModuleOverviewClientView({ moduleId }: { moduleId: stri
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
+                        marginTop: '2px',
                       }}
                     >
                       {idx + 1}
                     </span>
-                    <Box>
-                      <Text fontSize="13.5px" fontWeight="600" color="#111111" mb="2px">
+                    <Box style={{ minWidth: 0 }}>
+                      <Text fontSize="13.5px" fontWeight="600" color="#111111" mb="2px" style={{ wordBreak: 'break-word' }}>
                         {topic.title}
                       </Text>
-                      <Text fontSize="12px" color="#666666">
+                      <Text fontSize="12px" color="#666666" style={{ wordBreak: 'break-word' }}>
                         {topic.summary}
                       </Text>
                     </Box>
                   </Flex>
 
-                  <Flex alignItems="center" gap="12px">
-                    <span style={{ fontSize: '11.5px', color: '#888888' }}>
+                  <Flex alignItems="center" justifyContent="space-between" width={['100%', '100%', 'auto']} gap="12px" pt={['8px', '8px', 0]}>
+                    <span style={{ fontSize: '11.5px', color: '#888888', whiteSpace: 'nowrap' }}>
                       {topic.duration}
                     </span>
                     <Button

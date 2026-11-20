@@ -21,9 +21,11 @@ const HubHeader = styled.section`
 const FilterTabs = styled(Flex)`
   gap: 6px;
   overflow-x: auto;
-  padding: 12px 0;
+  padding: 12px 0 14px;
   margin-bottom: 24px;
   border-bottom: 1px solid #eaeaea;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 
   &::-webkit-scrollbar {
     display: none;
@@ -40,6 +42,7 @@ const FilterTabBtn = styled.button<{ $isActive: boolean }>`
   white-space: nowrap;
   transition: all 0.15s ease;
   cursor: pointer;
+  flex-shrink: 0;
 
   &:hover {
     background-color: ${({ $isActive }) => ($isActive ? '#222222' : '#EAEAEA')};
@@ -47,14 +50,28 @@ const FilterTabBtn = styled.button<{ $isActive: boolean }>`
   }
 `;
 
+const OverviewCard = styled(Card)`
+  padding: 16px 20px;
+  background-color: #faf9f6;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    width: auto;
+    min-width: 220px;
+  }
+`;
+
 const ModulesGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
+  gap: 16px;
   margin-bottom: 64px;
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
   }
 
   @media (min-width: 1200px) {
@@ -113,13 +130,7 @@ export function FullStackHubClientView() {
               </Box>
 
               {/* Curriculum Overview Card */}
-              <Card
-                p="16px 20px"
-                bg="#FAF9F6"
-                border="1px solid #EAEAEA"
-                borderRadius="10px"
-                style={{ minWidth: '220px' }}
-              >
+              <OverviewCard>
                 <Text fontSize="11px" fontWeight="600" color="#888888" textTransform="uppercase" mb="4px">
                   Curriculum Overview
                 </Text>
@@ -136,7 +147,7 @@ export function FullStackHubClientView() {
                 <Text fontSize="11.5px" color="#666666">
                   200+ Documented Lessons • 7 Levels
                 </Text>
-              </Card>
+              </OverviewCard>
             </Flex>
           </Container>
         </HubHeader>
@@ -203,6 +214,8 @@ export function FullStackHubClientView() {
                         letterSpacing: '-0.015em',
                         marginBottom: '6px',
                         cursor: 'pointer',
+                        wordBreak: 'break-word',
+                        overflowWrap: 'break-word',
                       }}
                     >
                       {mod.title}
@@ -219,6 +232,8 @@ export function FullStackHubClientView() {
                       WebkitLineClamp: 3,
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden',
+                      wordBreak: 'break-word',
+                      overflowWrap: 'break-word',
                     }}
                   >
                     {mod.description}
@@ -282,7 +297,7 @@ export function FullStackHubClientView() {
                             e.currentTarget.style.color = '#222222';
                           }}
                         >
-                          <Flex alignItems="center" gap="6px" style={{ minWidth: 0 }}>
+                          <Flex alignItems="center" gap="6px" style={{ minWidth: 0, flex: 1 }}>
                             <ChevronRight size={12} color="#888888" style={{ flexShrink: 0 }} />
                             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {t.title}

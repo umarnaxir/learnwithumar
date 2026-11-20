@@ -22,9 +22,15 @@ const PageHeader = styled.section`
 const FilterStrip = styled(Flex)`
   gap: 6px;
   overflow-x: auto;
-  padding: 12px 0;
+  padding: 12px 0 14px;
   margin: 24px 0 28px;
   border-bottom: 1px solid #eaeaea;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const FilterBtn = styled.button<{ $isActive: boolean }>`
@@ -37,6 +43,7 @@ const FilterBtn = styled.button<{ $isActive: boolean }>`
   white-space: nowrap;
   transition: all 0.15s ease;
   cursor: pointer;
+  flex-shrink: 0;
 
   &:hover {
     background-color: ${({ $isActive }) => ($isActive ? '#222222' : '#EAEAEA')};
@@ -48,8 +55,12 @@ const AssignmentDetailCard = styled(Card)`
   margin-bottom: 20px;
   border: 1px solid #eaeaea;
   border-radius: 10px;
-  padding: 20px;
+  padding: 16px;
   background: #ffffff;
+
+  @media (min-width: 640px) {
+    padding: 20px;
+  }
 `;
 
 const StatusSelector = styled.select`
@@ -144,13 +155,13 @@ export function ProjectsClientView() {
                 <AssignmentDetailCard key={item.id}>
                   {/* Card Header */}
                   <Flex
-                    alignItems="center"
+                    alignItems={['flex-start', 'flex-start', 'center']}
                     justifyContent="space-between"
-                    flexWrap="wrap"
+                    flexDirection={['column', 'column', 'row']}
                     gap="10px"
                     mb="14px"
                   >
-                    <Flex alignItems="center" gap="8px">
+                    <Flex alignItems="center" gap="8px" flexWrap="wrap">
                       <span
                         style={{
                           fontSize: '10px',
@@ -167,7 +178,7 @@ export function ProjectsClientView() {
                       <Badge variant="dark">{item.difficulty}</Badge>
                     </Flex>
 
-                    <Flex alignItems="center" gap="10px">
+                    <Flex alignItems="center" justifyContent={['space-between', 'space-between', 'flex-end']} width={['100%', '100%', 'auto']} gap="10px">
                       <Flex alignItems="center" gap="4px" fontSize="11.5px" color="#666666">
                         <Clock size={13} />
                         <span>~{item.estimatedHours} Hours</span>
@@ -314,10 +325,10 @@ export function ProjectsClientView() {
                   {/* Submission Instructions */}
                   <Box pt="12px" borderTop="1px solid #EAEAEA">
                     <Flex
-                      alignItems="center"
+                      alignItems={['flex-start', 'flex-start', 'center']}
                       justifyContent="space-between"
-                      flexWrap="wrap"
-                      gap="10px"
+                      flexDirection={['column', 'column', 'row']}
+                      gap="12px"
                     >
                       <Box>
                         <Text fontSize="11px" fontWeight="700" color="#888888">
@@ -331,6 +342,7 @@ export function ProjectsClientView() {
                       <Button
                         size="sm"
                         variant={currentStatus === 'Submitted' ? 'secondary' : 'primary'}
+                        width={['100%', '100%', 'auto']}
                         onClick={() =>
                           updateAssignmentStatus(
                             item.id,

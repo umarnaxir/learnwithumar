@@ -134,7 +134,7 @@ export function DocsClientView() {
           </Container>
         </DocHeader>
 
-        <Container style={{ padding: '40px 20px 64px' }}>
+        <Container style={{ padding: '32px 14px 64px' }}>
           {/* Official Standards Section */}
           <Box mb="48px">
             <Text
@@ -168,7 +168,7 @@ export function DocsClientView() {
                     </Text>
                     <ExternalLink size={12} color="#888888" />
                   </Flex>
-                  <Text fontSize="13px" fontWeight="600" color="#000000">
+                  <Text fontSize="13px" fontWeight="600" color="#000000" style={{ wordBreak: 'break-word' }}>
                     {doc.title}
                   </Text>
                 </Card>
@@ -178,26 +178,26 @@ export function DocsClientView() {
 
           {/* Full Stack Documentation Section */}
           <Box mb="48px">
-            <Flex alignItems="center" gap="8px" mb="16px">
-              <Code2 size={18} color="#000000" />
-              <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#000000' }}>
+            <Flex alignItems="center" gap="8px" mb="16px" flexWrap="wrap">
+              <Code2 size={18} color="#000000" style={{ flexShrink: 0 }} />
+              <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#000000', wordBreak: 'break-word' }}>
                 Full Stack Web Development Documentation ({filteredFullStack.length} Modules)
               </h2>
             </Flex>
 
             <Box display="grid" gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap="16px">
               {filteredFullStack.map((mod) => (
-                <Card key={mod.id} p="18px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="10px">
+                <Card key={mod.id} p={['14px', '18px']} bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="10px">
                   <Flex alignItems="center" justifyContent="space-between" mb="6px">
                     <Badge variant="dark">Module {mod.moduleNumber}</Badge>
                     <span style={{ fontSize: '11px', color: '#888888' }}>
                       {mod.topics.length} Lessons
                     </span>
                   </Flex>
-                  <Text fontSize="14px" fontWeight="600" color="#000000" mb="4px">
+                  <Text fontSize="14px" fontWeight="600" color="#000000" mb="4px" style={{ wordBreak: 'break-word' }}>
                     {mod.title}
                   </Text>
-                  <Text fontSize="12px" color="#555555" mb="12px">
+                  <Text fontSize="12px" color="#555555" mb="12px" style={{ wordBreak: 'break-word' }}>
                     {mod.description}
                   </Text>
 
@@ -242,26 +242,26 @@ export function DocsClientView() {
 
           {/* Digital Marketing Documentation Section */}
           <Box>
-            <Flex alignItems="center" gap="8px" mb="16px">
-              <TrendingUp size={18} color="#000000" />
-              <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#000000' }}>
+            <Flex alignItems="center" gap="8px" mb="16px" flexWrap="wrap">
+              <TrendingUp size={18} color="#000000" style={{ flexShrink: 0 }} />
+              <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#000000', wordBreak: 'break-word' }}>
                 Digital Marketing Documentation ({filteredMarketing.length} Modules)
               </h2>
             </Flex>
 
             <Box display="grid" gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap="16px">
               {filteredMarketing.map((mod) => (
-                <Card key={mod.id} p="18px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="10px">
+                <Card key={mod.id} p={['14px', '18px']} bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="10px">
                   <Flex alignItems="center" justifyContent="space-between" mb="6px">
                     <Badge variant="dark">Module {mod.moduleNumber}</Badge>
                     <span style={{ fontSize: '11px', color: '#888888' }}>
                       {mod.topics.length} Lessons
                     </span>
                   </Flex>
-                  <Text fontSize="14px" fontWeight="600" color="#000000" mb="4px">
+                  <Text fontSize="14px" fontWeight="600" color="#000000" mb="4px" style={{ wordBreak: 'break-word' }}>
                     {mod.title}
                   </Text>
-                  <Text fontSize="12px" color="#555555" mb="12px">
+                  <Text fontSize="12px" color="#555555" mb="12px" style={{ wordBreak: 'break-word' }}>
                     {mod.description}
                   </Text>
 

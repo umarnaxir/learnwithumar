@@ -21,12 +21,17 @@ const HeroWrapper = styled.section`
 
 const HeroTitle = styled.h1`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 600;
   letter-spacing: -0.025em;
-  line-height: 1.14;
+  line-height: 1.15;
   color: #000000;
   margin-bottom: 12px;
+
+  @media (min-width: 400px) {
+    font-size: 28px;
+    line-height: 1.14;
+  }
 
   @media (min-width: 640px) {
     font-size: 34px;
@@ -39,23 +44,35 @@ const HeroTitle = styled.h1`
 
 const HeroSubtitle = styled.p`
   font-family: ${({ theme }) => theme.fonts.sans};
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 450;
   line-height: 1.6;
   color: #555555;
   max-width: 600px;
   margin: 0 auto 24px;
 
+  @media (min-width: 480px) {
+    font-size: 13.5px;
+  }
+
   @media (min-width: 768px) {
     font-size: 14px;
   }
 `;
 
-const MetricsStrip = styled(Flex)`
-  margin-top: 44px;
-  justify-content: center;
-  gap: 28px;
-  flex-wrap: wrap;
+const MetricsStrip = styled.div`
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 12px;
+
+  @media (min-width: 540px) {
+    display: flex;
+    margin-top: 44px;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
 
   @media (min-width: 640px) {
     gap: 48px;
@@ -72,12 +89,16 @@ const MetricBox = styled(Box)`
 
 const MetricValue = styled.div`
   font-family: ${({ theme }) => theme.fonts.numbers};
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 700;
   color: #000000;
   letter-spacing: -0.04em;
   line-height: 1.05;
   font-feature-settings: 'tnum' on, 'lnum' on;
+
+  @media (min-width: 480px) {
+    font-size: 38px;
+  }
 
   @media (min-width: 640px) {
     font-size: 46px;

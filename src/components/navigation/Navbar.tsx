@@ -25,8 +25,12 @@ const NavWrapper = styled.div<{ $isScrolled: boolean }>`
   left: 0;
   right: 0;
   z-index: 50;
-  padding: 8px 12px 0;
+  padding: 8px 10px 0;
   transition: all 0.2s ease;
+
+  @media (min-width: 480px) {
+    padding: 8px 12px 0;
+  }
 
   @media (min-width: 768px) {
     padding: 10px 16px 0;
@@ -38,7 +42,7 @@ const NavHeader = styled.header<{ $isScrolled: boolean }>`
   max-width: 1040px;
   margin: 0 auto;
   height: 52px;
-  padding: 0 14px;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -55,6 +59,10 @@ const NavHeader = styled.header<{ $isScrolled: boolean }>`
       ? '0 6px 24px rgba(0, 0, 0, 0.05)'
       : '0 1px 4px rgba(0, 0, 0, 0.02)'};
   transition: all 0.25s ease;
+
+  @media (min-width: 480px) {
+    padding: 0 14px;
+  }
 `;
 
 const BrandLogo = styled(Link)`
@@ -62,6 +70,7 @@ const BrandLogo = styled(Link)`
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  flex-shrink: 0;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
@@ -127,16 +136,28 @@ const SearchTriggerButton = styled.button`
   background-color: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 6px;
-  padding: 4px 10px;
+  padding: 6px 9px;
   font-size: 12px;
   color: ${({ theme }) => theme.colors.textMuted};
   cursor: pointer;
   transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  @media (min-width: 480px) {
+    padding: 5px 10px;
+  }
 
   &:hover {
     border-color: #000000;
     color: ${({ theme }) => theme.colors.text};
     background-color: #ffffff;
+  }
+`;
+
+const SearchLabel = styled.span`
+  @media (max-width: 479px) {
+    display: none;
   }
 `;
 
@@ -149,32 +170,74 @@ const KbdShortcut = styled.kbd`
   border-radius: 3px;
   padding: 1px 4px;
   color: ${({ theme }) => theme.colors.textSecondary};
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
+const HamburgerButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  color: #000000;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  @media (min-width: 900px) {
+    display: none;
+  }
+`;
+
+const MobileMenuBackdrop = styled.div<{ $isOpen: boolean }>`
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 44;
+  opacity: ${({ $isOpen }) => ($isOpen ? '1' : '0')};
+  visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+
+  @media (min-width: 900px) {
+    display: none;
+  }
 `;
 
 const MobileMenuDrawer = styled(Box) <{ $isOpen: boolean }>`
   position: fixed;
   top: 66px;
-  left: 12px;
-  right: 12px;
-  max-width: 1040px;
+  left: 10px;
+  right: 10px;
+  max-width: 600px;
   margin: 0 auto;
   background: #ffffff;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
   z-index: 45;
-  padding: 20px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: calc(100vh - 80px);
+  max-height: calc(100vh - 84px);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   transform: ${({ $isOpen }) => ($isOpen ? 'translateY(0)' : 'translateY(-10px)')};
   opacity: ${({ $isOpen }) => ($isOpen ? '1' : '0')};
   visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
-  @media (min-width: 1024px) {
+  @media (min-width: 900px) {
     display: none;
   }
 `;
@@ -183,14 +246,15 @@ const MobileNavLink = styled(Link) <{ $isActive: boolean }>`
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: ${({ $isActive }) => ($isActive ? '600' : '450')};
   color: ${({ $isActive, theme }) =>
     $isActive ? theme.colors.text : theme.colors.textSecondary};
-  padding: 9px 12px;
-  border-radius: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
   background-color: ${({ $isActive, theme }) =>
     $isActive ? theme.colors.surface : 'transparent'};
+  transition: all 0.15s ease;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.surface};
@@ -216,12 +280,26 @@ export function Navbar() {
     queueMicrotask(() => setIsMobileMenuOpen(false));
   }, [pathname]);
 
-  // Keyboard shortcut listener for Cmd+K / Ctrl+K
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
+    }
+  }, [isMobileMenuOpen]);
+
+  // Keyboard shortcut listener for Cmd+K / Ctrl+K and Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsSearchOpen((prev) => !prev);
+      }
+      if (e.key === 'Escape') {
+        setIsMobileMenuOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -294,42 +372,51 @@ export function Navbar() {
               title="Search documentation (Cmd+K)"
             >
               <Search size={13} />
-              <span>Search docs...</span>
+              <SearchLabel>Search docs...</SearchLabel>
               <KbdShortcut>⌘K</KbdShortcut>
             </SearchTriggerButton>
 
-            <Box display={['none', 'none', 'block']}>
+            <Box display={['none', 'none', 'none', 'block']}>
               <Button as={Link} href="/full-stack" size="sm" variant="primary">
                 Start Learning
               </Button>
             </Box>
 
             {/* Mobile Menu Hamburger */}
-            <Box display={['block', 'block', 'none']}>
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Toggle Navigation Menu"
-                style={{
-                  padding: '6px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#000000',
-                }}
-              >
-                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
-            </Box>
+            <HamburgerButton
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+              aria-expanded={isMobileMenuOpen}
+            >
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </HamburgerButton>
           </Flex>
         </NavHeader>
       </NavWrapper>
 
+      {/* Mobile Menu Backdrop */}
+      <MobileMenuBackdrop
+        $isOpen={isMobileMenuOpen}
+        onClick={() => setIsMobileMenuOpen(false)}
+        aria-hidden="true"
+      />
+
       {/* Mobile Menu Drawer */}
       <MobileMenuDrawer $isOpen={isMobileMenuOpen}>
-        <Box mb="8px">
-          <Text fontSize="11px" fontWeight="700" color="#888888" mb="6px">
+        <Flex alignItems="center" justifyContent="space-between" mb="8px" pb="8px" borderBottom="1px solid #EAEAEA">
+          <Text fontSize="11px" fontWeight="700" color="#888888" letterSpacing="0.06em">
             PLATFORM NAVIGATION
           </Text>
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-label="Close menu"
+            style={{ padding: '4px', color: '#888888', display: 'flex', alignItems: 'center' }}
+          >
+            <X size={16} />
+          </button>
+        </Flex>
+
+        <Box mb="8px">
           {navLinks.map((link) => {
             const Icon = link.icon;
             const isActive = isLinkActive(link.href);

@@ -30,25 +30,36 @@ const AccordionCard = styled.div`
 
 const QuestionBtn = styled.button`
   width: 100%;
-  padding: 14px 16px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
   background-color: #ffffff;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 600;
   color: #111111;
   text-align: left;
   cursor: pointer;
+
+  @media (min-width: 640px) {
+    padding: 14px 16px;
+    gap: 12px;
+    font-size: 13.5px;
+  }
 `;
 
 const AnswerBox = styled.div`
-  padding: 0 16px 16px;
-  font-size: 12.5px;
+  padding: 0 14px 14px;
+  font-size: 12px;
   line-height: 1.6;
   color: #555555;
   background-color: #ffffff;
+
+  @media (min-width: 640px) {
+    padding: 0 16px 16px;
+    font-size: 12.5px;
+  }
 `;
 
 export function FAQSection() {

@@ -24,9 +24,34 @@ const SectionHeader = styled(Box)`
 `;
 
 const PathsGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  gap: 16px;
+  padding-bottom: 16px;
+  margin-left: -16px;
+  margin-right: -16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    overflow-x: visible;
+  }
 
   @media (min-width: 860px) {
     grid-template-columns: 1fr 1fr;
@@ -38,18 +63,43 @@ const PathCard = styled.div`
   background: #ffffff;
   border: 1px solid #eaeaea;
   border-radius: 12px;
-  padding: 24px 22px;
+  padding: 20px 18px;
   display: flex;
   flex-direction: column;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  flex: 0 0 86%;
+  min-width: 270px;
+  max-width: 360px;
+  scroll-snap-align: start;
+
+  @media (min-width: 768px) {
+    flex: initial;
+    min-width: 0;
+    max-width: none;
+    padding: 24px 22px;
+  }
 
   &:hover {
     border-color: #000000;
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+`;
+
+const MobileScrollHint = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #888888;
+  margin-bottom: 12px;
+
+  @media (min-width: 768px) {
+    display: none;
   }
 `;
 
@@ -114,6 +164,10 @@ export function LearningPathCards() {
             documentation-backed mastery track.
           </Text>
         </SectionHeader>
+
+        <MobileScrollHint>
+          <span>Swipe to explore tracks →</span>
+        </MobileScrollHint>
 
         <PathsGrid>
           {/* TRACK 1: Full Stack Web Development */}

@@ -159,7 +159,7 @@ export function AboutClientView() {
 
             {/* Right Column: Platform Metrics & Callout */}
             <Box>
-              <Card p="20px" bg="#FAF9F6" border="1px solid #000000" borderRadius="10px" mb="20px">
+              <Card p={['16px', '20px']} bg="#FAF9F6" border="1px solid #000000" borderRadius="10px" mb="20px">
                 <Badge variant="dark" mb="10px">
                   Curriculum Overview
                 </Badge>
@@ -172,29 +172,29 @@ export function AboutClientView() {
                 </Text>
 
                 <Box display="flex" flexDirection="column" gap="8px" mb="20px">
-                  <Flex justifyContent="space-between" fontSize="11.5px" borderBottom="1px solid #EAEAEA" pb="5px">
+                  <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="4px" fontSize="11.5px" borderBottom="1px solid #EAEAEA" pb="5px">
                     <span style={{ color: '#666666' }}>Published Modules:</span>
                     <strong style={{ color: '#000000', fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif" }}>
                       40 Full Modules
                     </strong>
                   </Flex>
-                  <Flex justifyContent="space-between" fontSize="11.5px" borderBottom="1px solid #EAEAEA" pb="5px">
+                  <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="4px" fontSize="11.5px" borderBottom="1px solid #EAEAEA" pb="5px">
                     <span style={{ color: '#666666' }}>Documented Lessons:</span>
                     <strong style={{ color: '#000000', fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif" }}>
                       380+ Topics
                     </strong>
                   </Flex>
-                  <Flex justifyContent="space-between" fontSize="11.5px" borderBottom="1px solid #EAEAEA" pb="5px">
+                  <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="4px" fontSize="11.5px" borderBottom="1px solid #EAEAEA" pb="5px">
                     <span style={{ color: '#666666' }}>Portfolio Projects:</span>
                     <strong style={{ color: '#000000', fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif" }}>
                       24 Production Projects
                     </strong>
                   </Flex>
-                  <Flex justifyContent="space-between" fontSize="11.5px" borderBottom="1px solid #EAEAEA" pb="5px">
+                  <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="4px" fontSize="11.5px" borderBottom="1px solid #EAEAEA" pb="5px">
                     <span style={{ color: '#666666' }}>Styling Architecture:</span>
                     <strong style={{ color: '#000000' }}>Styled Components & System</strong>
                   </Flex>
-                  <Flex justifyContent="space-between" fontSize="11.5px">
+                  <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="4px" fontSize="11.5px">
                     <span style={{ color: '#666666' }}>Framework:</span>
                     <strong style={{ color: '#000000' }}>Next.js App Router & React 19</strong>
                   </Flex>

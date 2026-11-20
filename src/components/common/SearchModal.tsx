@@ -27,12 +27,17 @@ const Overlay = styled.div<{ $isOpen: boolean }>`
   display: ${({ $isOpen }) => ($isOpen ? 'flex' : 'none')};
   align-items: flex-start;
   justify-content: center;
-  padding: 80px 16px 24px;
+  padding: 16px 10px 12px;
+
+  @media (min-width: 640px) {
+    padding: 80px 16px 24px;
+  }
 `;
 
 const DialogContainer = styled.div`
   width: 100%;
   max-width: 640px;
+  max-height: calc(100vh - 32px);
   background: #ffffff;
   border: 1px solid #eaeaea;
   border-radius: 14px;
@@ -57,18 +62,28 @@ const DialogContainer = styled.div`
 const SearchInputHeader = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
+  gap: 10px;
+  padding: 12px 14px;
   border-bottom: 1px solid #eaeaea;
+
+  @media (min-width: 640px) {
+    gap: 12px;
+    padding: 16px 20px;
+  }
 `;
 
 const SearchInputElement = styled.input`
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 16px;
+  font-size: 15px;
   color: #000000;
   outline: none;
+  min-width: 0;
+
+  @media (min-width: 640px) {
+    font-size: 16px;
+  }
 
   &::placeholder {
     color: #888888;
@@ -78,20 +93,26 @@ const SearchInputElement = styled.input`
 const ResultsList = styled.div`
   max-height: 420px;
   overflow-y: auto;
-  padding: 12px;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+
+  @media (min-width: 640px) {
+    padding: 12px;
+  }
 `;
 
 const ResultItemLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
+  padding: 10px 12px;
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.15s ease;
+  min-width: 0;
 
   &:hover {
     background-color: #f5f5f5;
@@ -102,11 +123,22 @@ const FooterBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 10px 14px;
   border-top: 1px solid #eaeaea;
   background-color: #fafafa;
-  font-size: 12px;
+  font-size: 11.5px;
   color: #888888;
+
+  @media (min-width: 640px) {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+
+  .shortcut-hint {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
 `;
 
 export function SearchModal({
@@ -285,7 +317,7 @@ export function SearchModal({
         </ResultsList>
 
         <FooterBar>
-          <span>Navigate with arrows • Press ESC to dismiss</span>
+          <span className="shortcut-hint">Navigate with arrows • Press ESC to dismiss</span>
           <span>{filtered.length} results available</span>
         </FooterBar>
       </DialogContainer>

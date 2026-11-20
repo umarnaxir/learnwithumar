@@ -62,7 +62,7 @@ export function LearningPathsClientView() {
         <Container>
           <TracksGrid>
             {/* FULL STACK TRACK SUMMARY */}
-            <Card p="24px" bg="#FFFFFF" border="1px solid #000000" borderRadius="12px">
+            <Card p={['18px 16px', '24px']} bg="#FFFFFF" border="1px solid #000000" borderRadius="12px">
               <Flex alignItems="center" justifyContent="space-between" mb="16px">
                 <Box p="10px" bg="#000000" color="#FFFFFF" borderRadius="8px">
                   <Code2 size={20} />
@@ -77,6 +77,7 @@ export function LearningPathsClientView() {
                   letterSpacing: '-0.02em',
                   color: '#000000',
                   marginBottom: '8px',
+                  wordBreak: 'break-word',
                 }}
               >
                 Full Stack Web Development
@@ -107,16 +108,17 @@ export function LearningPathsClientView() {
                       p="8px 12px"
                       bg="#F8F8F8"
                       borderRadius="6px"
+                      gap="8px"
                     >
-                      <Flex alignItems="center" gap="8px">
-                        <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#888888' }}>
+                      <Flex alignItems="center" gap="8px" style={{ minWidth: 0, flex: 1 }}>
+                        <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#888888', flexShrink: 0 }}>
                           L{lvl.levelNumber}
                         </span>
-                        <Text fontSize="12px" fontWeight="600" color="#111111">
+                        <Text fontSize="12px" fontWeight="600" color="#111111" truncate>
                           {lvl.title}
                         </Text>
                       </Flex>
-                      <span style={{ fontSize: '11px', color: '#666666' }}>
+                      <span style={{ fontSize: '11px', color: '#666666', flexShrink: 0 }}>
                         {FULL_STACK_MODULES.filter((m) => m.levelId === lvl.id).length} Modules
                       </span>
                     </Flex>
@@ -137,7 +139,7 @@ export function LearningPathsClientView() {
             </Card>
 
             {/* DIGITAL MARKETING TRACK SUMMARY */}
-            <Card p="24px" bg="#FFFFFF" border="1px solid #000000" borderRadius="12px">
+            <Card p={['18px 16px', '24px']} bg="#FFFFFF" border="1px solid #000000" borderRadius="12px">
               <Flex alignItems="center" justifyContent="space-between" mb="16px">
                 <Box p="10px" bg="#000000" color="#FFFFFF" borderRadius="8px">
                   <TrendingUp size={20} />
@@ -152,6 +154,7 @@ export function LearningPathsClientView() {
                   letterSpacing: '-0.02em',
                   color: '#000000',
                   marginBottom: '8px',
+                  wordBreak: 'break-word',
                 }}
               >
                 Digital Marketing Mastery
@@ -183,16 +186,17 @@ export function LearningPathsClientView() {
                       p="8px 12px"
                       bg="#F8F8F8"
                       borderRadius="6px"
+                      gap="8px"
                     >
-                      <Flex alignItems="center" gap="8px">
-                        <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#888888' }}>
+                      <Flex alignItems="center" gap="8px" style={{ minWidth: 0, flex: 1 }}>
+                        <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#888888', flexShrink: 0 }}>
                           L{lvl.levelNumber}
                         </span>
-                        <Text fontSize="12px" fontWeight="600" color="#111111">
+                        <Text fontSize="12px" fontWeight="600" color="#111111" truncate>
                           {lvl.title}
                         </Text>
                       </Flex>
-                      <span style={{ fontSize: '11px', color: '#666666' }}>
+                      <span style={{ fontSize: '11px', color: '#666666', flexShrink: 0 }}>
                         {DIGITAL_MARKETING_MODULES.filter((m) => m.levelId === lvl.id).length} Modules
                       </span>
                     </Flex>
