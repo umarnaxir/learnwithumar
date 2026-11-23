@@ -316,7 +316,6 @@ export function Navbar() {
     { label: 'Digital Marketing', href: '/digital-marketing', icon: TrendingUp },
     { label: 'Documentation', href: '/docs', icon: BookOpen },
     { label: 'Projects', href: '/projects', icon: FolderGit2 },
-
   ];
 
   const isLinkActive = (href: string) => {

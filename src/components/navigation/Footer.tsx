@@ -182,6 +182,11 @@ export function Footer() {
                   Google Analytics 4 & Attribution
                 </FooterLink>
               </li>
+              <li>
+                <FooterLink href="/backlinks">
+                  Backlink Directory (160+ Sources)
+                </FooterLink>
+              </li>
             </FooterLinkList>
           </Box>
 

@@ -7,6 +7,7 @@ import { Box, Flex, Text, Badge } from '@/components/ui/primitives';
 import { FULL_STACK_MODULES } from '@/data/curriculum/full-stack-curriculum';
 import { DIGITAL_MARKETING_MODULES } from '@/data/curriculum/digital-marketing-curriculum';
 import { ALL_ASSIGNMENTS } from '@/data/assignments/assignments-data';
+import { ALL_BACKLINK_SOURCES } from '@/data/backlinks/backlinks-data';
 import { Search, X, Code2, TrendingUp, FolderGit2, ArrowRight } from 'lucide-react';
 
 interface SearchResultItem {
@@ -14,7 +15,13 @@ interface SearchResultItem {
   title: string;
   subtitle: string;
   href: string;
-  category: 'Full Stack' | 'Digital Marketing' | 'Project' | 'Documentation';
+  category:
+    | 'Full Stack'
+    | 'Digital Marketing'
+    | 'Project'
+    | 'Documentation'
+    | 'SEO Directory'
+    | 'Backlink Source';
 }
 
 const Overlay = styled.div<{ $isOpen: boolean }>`
@@ -210,6 +217,25 @@ export function SearchModal({
       subtitle: `${asgn.type} • ${asgn.difficulty} • ${asgn.estimatedHours}h`,
       href: '/projects',
       category: 'Project',
+    });
+  });
+
+  // Backlink Directory
+  allSearchableItems.push({
+    id: 'backlinks-directory-hub',
+    title: 'Backlink Directory',
+    subtitle: '160+ High-Authority Sources (DR 99 to DR 18) • Top Picks & Search',
+    href: '/backlinks',
+    category: 'SEO Directory',
+  });
+
+  ALL_BACKLINK_SOURCES.slice(0, 40).forEach((bl) => {
+    allSearchableItems.push({
+      id: `bl-${bl.id}`,
+      title: bl.name,
+      subtitle: `DR ${bl.dr} • DA ${bl.da} • ${bl.category} (${bl.submissionType})`,
+      href: '/backlinks',
+      category: 'Backlink Source',
     });
   });
 
