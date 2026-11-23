@@ -135,8 +135,12 @@ const CircularMarker = styled.button<{ $isHighlighted?: boolean }>`
   border: 1.5px solid #000000;
   box-shadow: 0 0 0 6px #ffffff;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    background-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
   padding: 0;
+  will-change: background-color, color, transform;
 
   &:hover {
     transform: scale(1.08);
@@ -162,7 +166,13 @@ const PhasePanel = styled.div<{ $isHighlighted?: boolean }>`
   padding: 24px 22px;
   display: flex;
   flex-direction: column;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    background-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: background-color, color, border-color, box-shadow;
   height: 100%;
   cursor: pointer;
   outline: none;
@@ -185,7 +195,10 @@ const IconHolder = styled.div<{ $isHighlighted?: boolean }>`
   color: ${({ $isHighlighted }) => ($isHighlighted ? '#ffffff' : '#000000')};
   margin-bottom: 20px;
   display: inline-flex;
-  transition: color 0.25s ease, transform 0.25s ease;
+  transition:
+    color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: color;
 `;
 
 const PhaseTitle = styled.h3<{ $isHighlighted?: boolean }>`
@@ -195,7 +208,8 @@ const PhaseTitle = styled.h3<{ $isHighlighted?: boolean }>`
   color: ${({ $isHighlighted }) => ($isHighlighted ? '#ffffff' : '#000000')};
   margin: 0 0 10px;
   line-height: 1.3;
-  transition: color 0.25s ease;
+  transition: color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: color;
 `;
 
 const PhaseDescription = styled.p<{ $isHighlighted?: boolean }>`
@@ -203,7 +217,8 @@ const PhaseDescription = styled.p<{ $isHighlighted?: boolean }>`
   line-height: 1.6;
   color: ${({ $isHighlighted }) => ($isHighlighted ? '#d4d4d8' : '#555555')};
   margin: 0;
-  transition: color 0.25s ease;
+  transition: color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: color;
 `;
 
 /* ================= MOBILE & TABLET VERTICAL TIMELINE ================= */
@@ -254,22 +269,27 @@ const MobileMarker = styled.button<{ $isHighlighted?: boolean }>`
   box-shadow: 0 0 0 4px #ffffff;
   z-index: 2;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    background-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
   padding: 0;
+  will-change: background-color, color, transform;
 `;
 
 /* Custom Code Snippet Icon matching </> in the design */
-function CodeSnippetIcon({ size = 22, color = 'currentColor' }: { size?: number; color?: string }) {
+function CodeSnippetIcon({ size = 22 }: { size?: number }) {
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 24 24"
       fill="none"
-      stroke={color}
+      stroke="currentColor"
       strokeWidth="2.2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      style={{ transition: 'stroke 500ms cubic-bezier(0.4, 0, 0.2, 1)' }}
     >
       <polyline points="16 18 22 12 16 6" />
       <polyline points="8 6 2 12 8 18" />
@@ -386,7 +406,7 @@ export function HowLearningWorks() {
                 >
                   <IconHolder $isHighlighted={isActive}>
                     {st.customIcon ? (
-                      <CodeSnippetIcon size={24} color={isActive ? '#FFFFFF' : '#000000'} />
+                      <CodeSnippetIcon size={24} />
                     ) : IconComponent ? (
                       <IconComponent size={24} />
                     ) : null}
@@ -417,6 +437,7 @@ export function HowLearningWorks() {
                 </MobileMarker>
                 <PhasePanel
                   $isHighlighted={isActive}
+                  onMouseEnter={() => setActiveStep(st.num)}
                   onClick={() => setActiveStep(st.num)}
                   tabIndex={0}
                   role="button"
@@ -429,7 +450,7 @@ export function HowLearningWorks() {
                 >
                   <IconHolder $isHighlighted={isActive}>
                     {st.customIcon ? (
-                      <CodeSnippetIcon size={22} color={isActive ? '#FFFFFF' : '#000000'} />
+                      <CodeSnippetIcon size={22} />
                     ) : IconComponent ? (
                       <IconComponent size={22} />
                     ) : null}

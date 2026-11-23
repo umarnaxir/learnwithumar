@@ -19,15 +19,16 @@ import {
   FolderGit2,
 } from 'lucide-react';
 
-const NavWrapper = styled.div<{ $isScrolled: boolean }>`
-  position: sticky;
+const NavWrapper = styled.div`
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 900;
+  z-index: 1000;
   padding: 8px 10px 0;
-  transition: all 0.25s ease;
   background-color: transparent;
+  pointer-events: none;
+  transition: all 0.25s ease;
 
   @media (min-width: 480px) {
     padding: 8px 12px 0;
@@ -47,24 +48,41 @@ const NavHeader = styled.header<{ $isScrolled: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 12px;
+  pointer-events: auto;
   background-color: ${({ $isScrolled }) =>
-    $isScrolled ? 'rgba(255, 255, 255, 0.92)' : 'transparent'};
+    $isScrolled ? 'rgba(255, 255, 255, 0.88)' : 'transparent'};
   backdrop-filter: ${({ $isScrolled }) =>
-    $isScrolled ? 'blur(16px)' : 'none'};
+    $isScrolled ? 'blur(20px) saturate(180%)' : 'none'};
   -webkit-backdrop-filter: ${({ $isScrolled }) =>
-    $isScrolled ? 'blur(16px)' : 'none'};
+    $isScrolled ? 'blur(20px) saturate(180%)' : 'none'};
   border: 1px solid
     ${({ $isScrolled }) =>
-    $isScrolled ? 'rgba(234, 234, 234, 0.9)' : 'transparent'};
-  border-radius: 10px;
+    $isScrolled ? 'rgba(230, 230, 235, 0.85)' : 'transparent'};
   box-shadow: ${({ $isScrolled }) =>
     $isScrolled
-      ? '0 6px 24px rgba(0, 0, 0, 0.05)'
+      ? '0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
       : 'none'};
-  transition: all 0.25s ease;
+  transition:
+    background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    backdrop-filter 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    -webkit-backdrop-filter 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
   @media (min-width: 480px) {
     padding: 0 14px;
+  }
+`;
+
+const NavPlaceholder = styled.div`
+  height: 60px;
+  width: 100%;
+  pointer-events: none;
+  visibility: hidden;
+
+  @media (min-width: 768px) {
+    height: 62px;
   }
 `;
 
@@ -206,7 +224,7 @@ const MobileMenuBackdrop = styled.div<{ $isOpen: boolean }>`
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 950;
+  z-index: 1050;
   opacity: ${({ $isOpen }) => ($isOpen ? '1' : '0')};
   visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
   transition: opacity 0.2s ease, visibility 0.2s ease;
@@ -227,7 +245,7 @@ const MobileMenuDrawer = styled(Box) <{ $isOpen: boolean }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
-  z-index: 960;
+  z-index: 1100;
   padding: 18px;
   display: flex;
   flex-direction: column;
@@ -273,9 +291,10 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+      setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -342,7 +361,7 @@ export function Navbar() {
 
   return (
     <>
-      <NavWrapper $isScrolled={isScrolled}>
+      <NavWrapper>
         <NavHeader $isScrolled={isScrolled}>
           {/* Brand Logo (</>) */}
           <BrandLogo href="/" aria-label="Learn with Umar Home" title="Learn with Umar">
@@ -395,6 +414,9 @@ export function Navbar() {
           </Flex>
         </NavHeader>
       </NavWrapper>
+
+      {/* Spacing placeholder for document flow */}
+      <NavPlaceholder aria-hidden="true" />
 
       {/* Mobile Menu Backdrop */}
       <MobileMenuBackdrop

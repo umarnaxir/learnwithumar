@@ -19,7 +19,7 @@ export const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     height: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100%;
   }
 
@@ -31,7 +31,7 @@ export const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.colors.text};
     font-family: ${({ theme }) => theme.fonts.sans};
     line-height: ${({ theme }) => theme.lineHeights.normal};
-    overflow-x: hidden;
+    overflow-x: clip;
     position: relative;
     display: flex;
     flex-direction: column;
