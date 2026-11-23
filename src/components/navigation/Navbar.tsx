@@ -24,9 +24,10 @@ const NavWrapper = styled.div<{ $isScrolled: boolean }>`
   top: 0;
   left: 0;
   right: 0;
-  z-index: 50;
+  z-index: 900;
   padding: 8px 10px 0;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
+  background-color: transparent;
 
   @media (min-width: 480px) {
     padding: 8px 12px 0;
@@ -47,17 +48,19 @@ const NavHeader = styled.header<{ $isScrolled: boolean }>`
   align-items: center;
   justify-content: space-between;
   background-color: ${({ $isScrolled }) =>
-    $isScrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.88)'};
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+    $isScrolled ? 'rgba(255, 255, 255, 0.92)' : 'transparent'};
+  backdrop-filter: ${({ $isScrolled }) =>
+    $isScrolled ? 'blur(16px)' : 'none'};
+  -webkit-backdrop-filter: ${({ $isScrolled }) =>
+    $isScrolled ? 'blur(16px)' : 'none'};
   border: 1px solid
-    ${({ $isScrolled, theme }) =>
-    $isScrolled ? theme.colors.border : 'rgba(234, 234, 234, 0.85)'};
+    ${({ $isScrolled }) =>
+    $isScrolled ? 'rgba(234, 234, 234, 0.9)' : 'transparent'};
   border-radius: 10px;
   box-shadow: ${({ $isScrolled }) =>
     $isScrolled
       ? '0 6px 24px rgba(0, 0, 0, 0.05)'
-      : '0 1px 4px rgba(0, 0, 0, 0.02)'};
+      : 'none'};
   transition: all 0.25s ease;
 
   @media (min-width: 480px) {
@@ -203,7 +206,7 @@ const MobileMenuBackdrop = styled.div<{ $isOpen: boolean }>`
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 44;
+  z-index: 950;
   opacity: ${({ $isOpen }) => ($isOpen ? '1' : '0')};
   visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
   transition: opacity 0.2s ease, visibility 0.2s ease;
@@ -224,7 +227,7 @@ const MobileMenuDrawer = styled(Box) <{ $isOpen: boolean }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
-  z-index: 45;
+  z-index: 960;
   padding: 18px;
   display: flex;
   flex-direction: column;

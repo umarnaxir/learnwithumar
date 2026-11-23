@@ -23,7 +23,7 @@ const Overlay = styled.div<{ $isOpen: boolean }>`
   background-color: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 100;
+  z-index: 1200;
   display: ${({ $isOpen }) => ($isOpen ? 'flex' : 'none')};
   align-items: flex-start;
   justify-content: center;
