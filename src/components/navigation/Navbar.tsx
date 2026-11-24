@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import styled from 'styled-components';
 import { Box, Flex, Button, Text } from '@/components/ui/primitives';
 import { SearchModal } from '@/components/common/SearchModal';
+import { useAppTheme } from '@/context/ThemeContext';
 import {
   Search,
   BookOpen,
@@ -17,6 +18,8 @@ import {
   Code2,
   TrendingUp,
   FolderGit2,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 const NavWrapper = styled.div`
@@ -50,18 +53,20 @@ const NavHeader = styled.header<{ $isScrolled: boolean }>`
   justify-content: space-between;
   border-radius: 12px;
   pointer-events: auto;
-  background-color: ${({ $isScrolled }) =>
-    $isScrolled ? 'rgba(255, 255, 255, 0.88)' : 'transparent'};
+  background-color: ${({ $isScrolled, theme }) =>
+    $isScrolled ? theme.colors.navbarGlass : 'transparent'};
   backdrop-filter: ${({ $isScrolled }) =>
     $isScrolled ? 'blur(20px) saturate(180%)' : 'none'};
   -webkit-backdrop-filter: ${({ $isScrolled }) =>
     $isScrolled ? 'blur(20px) saturate(180%)' : 'none'};
   border: 1px solid
-    ${({ $isScrolled }) =>
-    $isScrolled ? 'rgba(230, 230, 235, 0.85)' : 'transparent'};
-  box-shadow: ${({ $isScrolled }) =>
+    ${({ $isScrolled, theme }) =>
+    $isScrolled ? theme.colors.navbarBorder : 'transparent'};
+  box-shadow: ${({ $isScrolled, theme }) =>
     $isScrolled
-      ? '0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
+      ? (theme.mode === 'dark'
+          ? '0 8px 32px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4)'
+          : '0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)')
       : 'none'};
   transition:
     background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
@@ -104,8 +109,8 @@ const LogoBox = styled.div`
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textInverse};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,7 +118,7 @@ const LogoBox = styled.div`
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: #1a1a1a;
+    opacity: 0.9;
   }
 `;
 
@@ -143,10 +148,10 @@ const NavItemLink = styled(Link) <{ $isActive: boolean }>`
     background-color: ${({ theme }) => theme.colors.surface};
   }
 
-  ${({ $isActive }) =>
+  ${({ $isActive, theme }) =>
     $isActive &&
     `
-    background-color: #F4F4F5;
+    background-color: ${theme.mode === 'dark' ? '#1E1E1E' : '#F4F4F5'};
   `}
 `;
 
@@ -170,9 +175,9 @@ const SearchTriggerButton = styled.button`
   }
 
   &:hover {
-    border-color: #000000;
+    border-color: ${({ theme }) => theme.colors.borderHover};
     color: ${({ theme }) => theme.colors.text};
-    background-color: #ffffff;
+    background-color: ${({ theme }) => (theme.mode === 'dark' ? '#171717' : '#ffffff')};
   }
 `;
 
@@ -186,7 +191,7 @@ const KbdShortcut = styled.kbd`
   font-family: inherit;
   font-size: 9.5px;
   font-weight: 600;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#1A1A1A' : '#ffffff')};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 3px;
   padding: 1px 4px;
@@ -197,6 +202,32 @@ const KbdShortcut = styled.kbd`
   }
 `;
 
+const ThemeToggleBtn = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text};
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    background-color: ${({ theme }) => (theme.mode === 'dark' ? '#171717' : '#ffffff')};
+    transform: scale(1.04);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+`;
+
 const HamburgerButton = styled.button`
   display: flex;
   align-items: center;
@@ -204,13 +235,14 @@ const HamburgerButton = styled.button`
   width: 34px;
   height: 34px;
   border-radius: 6px;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
   transition: background-color 0.15s ease;
   flex-shrink: 0;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: ${({ theme }) =>
+      theme.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
   }
 
   @media (min-width: 900px) {
@@ -221,7 +253,7 @@ const HamburgerButton = styled.button`
 const MobileMenuBackdrop = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 1050;
@@ -241,10 +273,13 @@ const MobileMenuDrawer = styled(Box) <{ $isOpen: boolean }>`
   right: 10px;
   max-width: 600px;
   margin: 0 auto;
-  background: #ffffff;
+  background: ${({ theme }) => (theme.mode === 'dark' ? '#0D0D0D' : '#ffffff')};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: ${({ theme }) =>
+    theme.mode === 'dark'
+      ? '0 16px 40px rgba(0, 0, 0, 0.8)'
+      : '0 16px 40px rgba(0, 0, 0, 0.15)'};
   z-index: 1100;
   padding: 18px;
   display: flex;
@@ -279,12 +314,13 @@ const MobileNavLink = styled(Link) <{ $isActive: boolean }>`
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.surface};
-    color: #000000;
+    color: ${({ theme }) => theme.colors.text};
   }
 `;
 
 export function Navbar() {
   const pathname = usePathname();
+  const { isDark, toggleTheme } = useAppTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -397,6 +433,15 @@ export function Navbar() {
               <KbdShortcut>⌘K</KbdShortcut>
             </SearchTriggerButton>
 
+            {/* Theme Toggle Button */}
+            <ThemeToggleBtn
+              onClick={toggleTheme}
+              aria-label={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+              title={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+            >
+              {isDark ? <Sun size={15} /> : <Moon size={15} />}
+            </ThemeToggleBtn>
+
             <Box display={['none', 'none', 'none', 'block']}>
               <Button as={Link} href="/full-stack" size="sm" variant="primary">
                 Start Learning
@@ -427,17 +472,44 @@ export function Navbar() {
 
       {/* Mobile Menu Drawer */}
       <MobileMenuDrawer $isOpen={isMobileMenuOpen}>
-        <Flex alignItems="center" justifyContent="space-between" mb="8px" pb="8px" borderBottom="1px solid #EAEAEA">
-          <Text fontSize="11px" fontWeight="700" color="#888888" letterSpacing="0.06em">
+        <Flex alignItems="center" justifyContent="space-between" mb="8px" pb="8px" borderBottom="1px solid" borderColor="border">
+          <Text fontSize="11px" fontWeight="700" color="textMuted" letterSpacing="0.06em">
             PLATFORM NAVIGATION
           </Text>
           <button
             onClick={() => setIsMobileMenuOpen(false)}
             aria-label="Close menu"
-            style={{ padding: '4px', color: '#888888', display: 'flex', alignItems: 'center' }}
+            style={{ padding: '4px', color: isDark ? '#A1A1AA' : '#888888', display: 'flex', alignItems: 'center' }}
           >
             <X size={16} />
           </button>
+        </Flex>
+
+        {/* Mobile Theme Toggle Row */}
+        <Flex
+          alignItems="center"
+          justifyContent="space-between"
+          p="8px 10px"
+          mb="8px"
+          borderRadius="8px"
+          bg={isDark ? '#141414' : '#F5F5F5'}
+          border="1px solid"
+          borderColor="border"
+        >
+          <Flex alignItems="center" gap="8px">
+            {isDark ? <Moon size={15} /> : <Sun size={15} />}
+            <Text fontSize="12.5px" fontWeight="500">
+              {isDark ? 'Dark Theme' : 'Light Theme'}
+            </Text>
+          </Flex>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={toggleTheme}
+            style={{ height: '26px', padding: '2px 8px', fontSize: '11px' }}
+          >
+            {isDark ? 'Switch to Light' : 'Switch to Dark'}
+          </Button>
         </Flex>
 
         <Box mb="8px">
@@ -458,7 +530,7 @@ export function Navbar() {
           })}
         </Box>
 
-        <Box mt="auto" pt="12px" borderTop="1px solid #EAEAEA">
+        <Box mt="auto" pt="12px" borderTop="1px solid" borderColor="border">
           <Button
             as={Link}
             href="/learning-paths"

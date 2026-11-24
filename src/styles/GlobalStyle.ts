@@ -2,9 +2,6 @@
 
 import { createGlobalStyle } from 'styled-components';
 
-// Fonts are loaded with <link> tags in app/layout.tsx. Importing remote
-// stylesheets inside createGlobalStyle triggers styled-components' CSSOM
-// warning in production, so keep @import out of this stylesheet.
 export const GlobalStyle = createGlobalStyle`
   *, *::before, *::after {
     box-sizing: border-box;
@@ -23,6 +20,21 @@ export const GlobalStyle = createGlobalStyle`
     max-width: 100%;
   }
 
+  html[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  html[data-theme='dark'] body {
+    background-color: #000000;
+    color: #FFFFFF;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: ${({ theme }) => theme.fonts.sans};
+    color: inherit;
+    font-weight: 700;
+  }
+
   body {
     min-height: 100%;
     width: 100%;
@@ -35,6 +47,7 @@ export const GlobalStyle = createGlobalStyle`
     position: relative;
     display: flex;
     flex-direction: column;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   /* Prevent text and container overflow on small mobile viewports */
@@ -75,8 +88,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::selection {
-    background-color: #000000;
-    color: #FFFFFF;
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.textInverse};
   }
 
   /* Custom subtle scrollbar */
@@ -90,11 +103,11 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #D9D9D9;
+    background: ${({ theme }) => (theme.mode === 'dark' ? '#333333' : '#D9D9D9')};
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #999999;
+    background: ${({ theme }) => (theme.mode === 'dark' ? '#555555' : '#999999')};
   }
 `;

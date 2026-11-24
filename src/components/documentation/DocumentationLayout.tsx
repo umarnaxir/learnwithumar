@@ -62,8 +62,8 @@ const CurriculumBar = styled.div`
   justify-content: space-between;
   gap: 10px;
   padding: 10px 12px;
-  background-color: #fafafa;
-  border-bottom: 1px solid #eaeaea;
+  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#080808' : '#fafafa')};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   position: sticky;
   top: 56px;
   z-index: 35;
@@ -108,9 +108,9 @@ const DrawerHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 12px 14px;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   margin: -16px -14px 14px -14px;
-  background-color: #fafafa;
+  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#0D0D0D' : '#fafafa')};
   position: sticky;
   top: -16px;
   z-index: 10;
@@ -121,8 +121,8 @@ const DrawerHeader = styled.div`
 `;
 
 const LeftSidebar = styled.aside<{ $isOpenOnMobile: boolean }>`
-  background-color: #ffffff;
-  border-right: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-right: 1px solid ${({ theme }) => theme.colors.border};
   padding: 16px 14px;
   overflow-y: auto;
   height: calc(100vh - 64px);
@@ -133,11 +133,11 @@ const LeftSidebar = styled.aside<{ $isOpenOnMobile: boolean }>`
     width: 4px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #eaeaea;
+    background: ${({ theme }) => theme.colors.border};
     border-radius: 4px;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: #cccccc;
+    background: ${({ theme }) => (theme.mode === 'dark' ? '#444444' : '#cccccc')};
   }
 
   @media (max-width: 1023px) {
@@ -149,7 +149,7 @@ const LeftSidebar = styled.aside<{ $isOpenOnMobile: boolean }>`
     max-width: 330px;
     height: 100vh;
     z-index: 100;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
     transform: ${({ $isOpenOnMobile }) =>
       $isOpenOnMobile ? 'translateX(0)' : 'translateX(-100%)'};
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
@@ -159,8 +159,8 @@ const LeftSidebar = styled.aside<{ $isOpenOnMobile: boolean }>`
 
 const RightSidebar = styled.aside`
   display: none;
-  background-color: #ffffff;
-  border-left: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-left: 1px solid ${({ theme }) => theme.colors.border};
   padding: 20px 16px;
   overflow-y: auto;
   height: calc(100vh - 64px);
@@ -171,7 +171,7 @@ const RightSidebar = styled.aside`
     width: 4px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #eaeaea;
+    background: ${({ theme }) => theme.colors.border};
     border-radius: 4px;
   }
 
@@ -205,7 +205,7 @@ const BreadcrumbNav = styled.nav`
   align-items: center;
   gap: 4px 6px;
   font-size: 11px;
-  color: #666666;
+  color: ${({ theme }) => theme.colors.textMuted};
   margin-bottom: 14px;
   flex-wrap: wrap;
   line-height: 1.5;
@@ -215,15 +215,15 @@ const BreadcrumbNav = styled.nav`
   }
 
   a {
-    color: #666666;
+    color: ${({ theme }) => theme.colors.textSecondary};
     text-decoration: none;
     &:hover {
-      color: #000000;
+      color: ${({ theme }) => theme.colors.text};
     }
   }
 
   .current-topic {
-    color: #000000;
+    color: ${({ theme }) => theme.colors.text};
     font-weight: 600;
     word-break: break-word;
   }
@@ -231,15 +231,15 @@ const BreadcrumbNav = styled.nav`
 
 const TrackHeaderBox = styled.div`
   padding: 10px 12px;
-  background-color: #f8f8f8;
+  background-color: ${({ theme }) => theme.colors.surface};
   border-radius: 8px;
   margin-bottom: 14px;
-  border: 1px solid #eaeaea;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   transition: all 0.15s ease;
 
   &:hover {
-    background-color: #f2f2f2;
-    border-color: #000000;
+    background-color: ${({ theme }) => theme.colors.surfaceHover};
+    border-color: ${({ theme }) => theme.colors.borderHover};
   }
 `;
 
@@ -256,13 +256,13 @@ const ModuleHeaderBtn = styled.button`
   border-radius: 5px;
   font-size: 12px;
   font-weight: 600;
-  color: #111111;
+  color: ${({ theme }) => theme.colors.text};
   text-align: left;
   transition: background-color 0.15s ease;
   cursor: pointer;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors.surface};
   }
 `;
 
@@ -274,41 +274,42 @@ const TopicLink = styled(Link)<{ $isActive: boolean }>`
   padding: 6px 10px 6px 18px;
   border-radius: 6px;
   font-size: 11.5px;
-  color: ${({ $isActive }) => ($isActive ? '#000000' : '#555555')};
+  color: ${({ $isActive, theme }) => ($isActive ? theme.colors.text : theme.colors.textSecondary)};
   font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
-  background-color: ${({ $isActive }) => ($isActive ? '#F4F4F5' : 'transparent')};
+  background-color: ${({ $isActive, theme }) =>
+    $isActive ? (theme.mode === 'dark' ? '#18181B' : '#F4F4F5') : 'transparent'};
   text-decoration: none;
   transition: all 0.15s ease;
-  border-left: 2px solid ${({ $isActive }) => ($isActive ? '#000000' : 'transparent')};
+  border-left: 2px solid ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : 'transparent')};
 
   &:hover {
-    background-color: #f5f5f5;
-    color: #000000;
+    background-color: ${({ theme }) => theme.colors.surface};
+    color: ${({ theme }) => theme.colors.text};
   }
 `;
 
 const TOCItemLink = styled.a<{ $isActive: boolean }>`
   display: block;
   font-size: 11.5px;
-  color: ${({ $isActive }) => ($isActive ? '#000000' : '#666666')};
+  color: ${({ $isActive, theme }) => ($isActive ? theme.colors.text : theme.colors.textMuted)};
   font-weight: ${({ $isActive }) => ($isActive ? '600' : '400')};
   text-decoration: none;
   padding: 4px 0 4px 8px;
-  border-left: 2px solid ${({ $isActive }) => ($isActive ? '#000000' : 'transparent')};
+  border-left: 2px solid ${({ $isActive, theme }) => ($isActive ? theme.colors.primary : 'transparent')};
   transition: color 0.15s ease, border-color 0.15s ease;
   line-height: 1.35;
 
   &:hover {
-    color: #000000;
+    color: ${({ theme }) => theme.colors.text};
   }
 `;
 
 const MobileToc = styled.details`
   display: block;
   margin-bottom: 18px;
-  border: 1px solid #eaeaea;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 8px;
-  background-color: #fafafa;
+  background-color: ${({ theme }) => theme.colors.surface};
   padding: 10px 12px;
 
   @media (min-width: 1280px) {
@@ -319,7 +320,7 @@ const MobileToc = styled.details`
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
-    color: #111111;
+    color: ${({ theme }) => theme.colors.text};
     list-style: none;
     display: flex;
     align-items: center;
@@ -333,7 +334,7 @@ const MobileToc = styled.details`
   [data-toc-list] {
     margin-top: 8px;
     padding-top: 8px;
-    border-top: 1px solid #eaeaea;
+    border-top: 1px solid ${({ theme }) => theme.colors.border};
   }
 `;
 
@@ -342,17 +343,17 @@ const NoteArea = styled.textarea`
   height: 90px;
   padding: 8px 10px;
   font-size: 12px;
-  border: 1px solid #eaeaea;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 6px;
-  background-color: #fafafa;
-  color: #000000;
+  background-color: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text};
   resize: vertical;
   outline: none;
   margin-top: 6px;
 
   &:focus {
-    border-color: #000000;
-    background-color: #ffffff;
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    background-color: ${({ theme }) => theme.colors.cardBg};
   }
 `;
 
@@ -362,7 +363,7 @@ const NavFooter = styled.div`
   gap: 12px;
   margin-top: 44px;
   padding-top: 20px;
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 
   @media (min-width: 640px) {
     flex-direction: row;
@@ -628,10 +629,10 @@ export function DocumentationLayout({
           {/* Drawer Top Header with Close Button for Mobile */}
           <DrawerHeader>
             <Flex alignItems="center" gap="6px">
-              <Box p="4px" bg="#000000" color="#FFFFFF" borderRadius="4px" display="inline-flex">
+              <Box p="4px" bg="primary" color="textInverse" borderRadius="4px" display="inline-flex">
                 {currentTrack === 'full-stack' ? <Code2 size={12} /> : <TrendingUp size={12} />}
               </Box>
-              <Text fontSize="12px" fontWeight="700" color="#000000">
+              <Text fontSize="12px" fontWeight="700" color="text">
                 {currentTrack === 'full-stack' ? 'Full Stack Curriculum' : 'Marketing Curriculum'}
               </Text>
             </Flex>
@@ -643,7 +644,7 @@ export function DocumentationLayout({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#666666',
+                color: 'inherit',
                 borderRadius: '4px',
                 cursor: 'pointer',
               }}
@@ -660,14 +661,14 @@ export function DocumentationLayout({
               title={`View ${currentTrack === 'full-stack' ? 'Full Stack' : 'Digital Marketing'} Curriculum Hub`}
               onClick={() => setMobileNavOpen(false)}
             >
-              <Box p="6px" bg="#000000" color="#FFFFFF" borderRadius="6px" display="inline-flex">
+              <Box p="6px" bg="primary" color="textInverse" borderRadius="6px" display="inline-flex">
                 {currentTrack === 'full-stack' ? <Code2 size={13} /> : <TrendingUp size={13} />}
               </Box>
               <Box>
-                <Text fontSize="12px" fontWeight="600" color="#000000">
+                <Text fontSize="12px" fontWeight="600" color="text">
                   {currentTrack === 'full-stack' ? 'Full Stack Development' : 'Digital Marketing'}
                 </Text>
-                <Text fontSize="10.5px" color="#666666">
+                <Text fontSize="10.5px" color="textSecondary">
                   {currentTrack === 'full-stack' ? '20 Modules • 200+ Topics' : '20 Modules • 180+ Topics'}
                 </Text>
               </Box>
@@ -715,7 +716,7 @@ export function DocumentationLayout({
                       >
                         M{mod.moduleNumber}
                       </span>
-                      <Text fontSize="12px" fontWeight="550" truncate color="#111111">
+                      <Text fontSize="12px" fontWeight="550" truncate color="text">
                         {mod.title}
                       </Text>
                     </Flex>
@@ -810,9 +811,9 @@ export function DocumentationLayout({
               <h1
                 style={{
                   fontSize: '20px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   letterSpacing: '-0.025em',
-                  color: '#000000',
+                  color: 'inherit',
                   marginBottom: '6px',
                   lineHeight: 1.25,
                   wordBreak: 'break-word',
@@ -923,12 +924,12 @@ export function DocumentationLayout({
           {/* Notes Widget */}
           <Box mb="22px">
             <Flex alignItems="center" gap="5px" mb="6px">
-              <StickyNote size={13} color="#000000" />
-              <Text fontSize="11.5px" fontWeight="700" color="#111111">
+              <StickyNote size={13} color="currentColor" />
+              <Text fontSize="11.5px" fontWeight="700" color="text">
                 Personal Study Notes
               </Text>
             </Flex>
-            <Text fontSize="10.5px" color="#888888">
+            <Text fontSize="10.5px" color="textMuted">
               Notes save in this browser and survive refreshes.
             </Text>
             <NoteArea
@@ -955,7 +956,7 @@ export function DocumentationLayout({
             fontWeight="700"
             textTransform="uppercase"
             letterSpacing="0.06em"
-            color="#888888"
+            color="textMuted"
             mb="10px"
           >
             Official Documentation
@@ -970,7 +971,7 @@ export function DocumentationLayout({
                   style={{
                     fontSize: '11.5px',
                     fontWeight: 600,
-                    color: '#111111',
+                    color: 'inherit',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -982,9 +983,9 @@ export function DocumentationLayout({
                   <span style={{ textDecoration: 'underline', textUnderlineOffset: '2px' }}>
                     {doc.title}
                   </span>
-                  <ExternalLink size={11} color="#666666" style={{ flexShrink: 0 }} />
+                  <ExternalLink size={11} color="currentColor" style={{ opacity: 0.7, flexShrink: 0 }} />
                 </a>
-                <Text fontSize="10.5px" color="#666666" lineHeight="normal">
+                <Text fontSize="10.5px" color="textSecondary" lineHeight="normal">
                   {doc.description}
                 </Text>
               </Box>

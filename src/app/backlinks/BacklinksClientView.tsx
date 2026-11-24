@@ -28,12 +28,11 @@ import {
 
 const HeroSection = styled.section`
   padding: 56px 0 40px;
-  background: radial-gradient(
-    circle at 50% -10%,
-    rgba(240, 240, 242, 0.75) 0%,
-    rgba(255, 255, 255, 1) 80%
-  );
-  border-bottom: 1px solid #eaeaea;
+  background: ${({ theme }) =>
+    theme.mode === 'dark'
+      ? 'radial-gradient(circle at 50% -10%, rgba(30, 30, 30, 0.5) 0%, rgba(0, 0, 0, 1) 80%)'
+      : 'radial-gradient(circle at 50% -10%, rgba(240, 240, 242, 0.75) 0%, rgba(255, 255, 255, 1) 80%)'};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   text-align: center;
 
   @media (min-width: 768px) {
@@ -43,8 +42,8 @@ const HeroSection = styled.section`
 
 const SectionBadge = styled.div`
   display: inline-block;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textInverse};
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -60,7 +59,7 @@ const HeroHeading = styled.h1`
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.15;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   max-width: 800px;
   margin: 0 auto 16px;
 
@@ -77,7 +76,7 @@ const HeroSubtitle = styled.p`
   font-size: 13.5px;
   font-weight: 450;
   line-height: 1.6;
-  color: #555555;
+  color: ${({ theme }) => theme.colors.textSecondary};
   max-width: 680px;
   margin: 0 auto 28px;
 
@@ -94,7 +93,7 @@ const StatsStrip = styled.div`
   gap: 12px 24px;
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
@@ -112,7 +111,7 @@ const StatValue = styled.div`
   font-family: ${({ theme }) => theme.fonts.numbers};
   font-size: 24px;
   font-weight: 700;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   line-height: 1.1;
   letter-spacing: -0.03em;
 
@@ -123,7 +122,7 @@ const StatValue = styled.div`
 
 const StatLabel = styled.div`
   font-size: 11.5px;
-  color: #666666;
+  color: ${({ theme }) => theme.colors.textMuted};
   font-weight: 500;
   margin-top: 4px;
 `;
@@ -132,8 +131,8 @@ const StatLabel = styled.div`
 
 const TopPicksSection = styled.section`
   padding: 56px 0;
-  background-color: #fafafc;
-  border-bottom: 1px solid #eaeaea;
+  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#080808' : '#fafafc')};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const TopPicksHeader = styled.div`
@@ -162,19 +161,19 @@ const TopPicksGrid = styled.div`
 `;
 
 const TopPickCard = styled.div`
-  background: #ffffff;
-  border: 1px solid #eaeaea;
+  background: ${({ theme }) => theme.colors.cardBg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
   padding: 18px 16px;
   display: flex;
   flex-direction: column;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  box-shadow: ${({ theme }) => theme.shadows.card};
 
   &:hover {
-    border-color: #000000;
+    border-color: ${({ theme }) => theme.colors.borderHover};
     transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+    box-shadow: ${({ theme }) => theme.shadows.cardHover};
   }
 `;
 
@@ -189,9 +188,9 @@ const RankBadge = styled.span`
   font-family: ${({ theme }) => theme.fonts.mono};
   font-size: 11px;
   font-weight: 700;
-  color: #666666;
-  background-color: #f4f4f5;
-  border: 1px solid #e5e5e7;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 2px 6px;
   border-radius: 4px;
 `;
@@ -200,8 +199,8 @@ const DrBadge = styled.span<{ $high?: boolean }>`
   font-family: ${({ theme }) => theme.fonts.numbers};
   font-size: 11px;
   font-weight: 800;
-  background-color: ${({ $high }) => ($high ? '#000000' : '#f0f0f2')};
-  color: ${({ $high }) => ($high ? '#ffffff' : '#111111')};
+  background-color: ${({ $high, theme }) => ($high ? theme.colors.primary : theme.colors.surface)};
+  color: ${({ $high, theme }) => ($high ? theme.colors.textInverse : theme.colors.text)};
   border-radius: 9999px;
   padding: 3px 8px;
   letter-spacing: -0.01em;
@@ -210,7 +209,7 @@ const DrBadge = styled.span<{ $high?: boolean }>`
 const CardTitle = styled.h3`
   font-size: 16px;
   font-weight: 700;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   letter-spacing: -0.02em;
   margin: 0 0 6px;
   line-height: 1.25;
@@ -218,12 +217,12 @@ const CardTitle = styled.h3`
 
 const CardMeta = styled.p`
   font-size: 12px;
-  color: #666666;
+  color: ${({ theme }) => theme.colors.textSecondary};
   margin: 0 0 16px;
   line-height: 1.4;
 
   strong {
-    color: #000000;
+    color: ${({ theme }) => theme.colors.text};
     font-weight: 600;
   }
 `;
@@ -241,8 +240,9 @@ const VisitButton = styled.a`
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textInverse};
+  border: 1px solid ${({ theme }) => theme.colors.primary};
   font-size: 12px;
   font-weight: 600;
   height: 34px;
@@ -251,9 +251,23 @@ const VisitButton = styled.a`
   transition: all 0.2s ease;
   white-space: nowrap;
 
+  & > * {
+    color: inherit;
+  }
+
   &:hover {
-    background-color: #222222;
+    background-color: ${({ theme }) => (theme.mode === 'dark' ? '#000000' : '#FFFFFF')};
+    color: ${({ theme }) => (theme.mode === 'dark' ? '#FFFFFF' : '#000000')};
+    border-color: ${({ theme }) => (theme.mode === 'dark' ? '#FFFFFF' : '#000000')};
     transform: translateY(-1px);
+    box-shadow: ${({ theme }) =>
+      theme.mode === 'dark'
+        ? '0 4px 12px rgba(255, 255, 255, 0.15)'
+        : '0 4px 12px rgba(0, 0, 0, 0.12)'};
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `;
 
@@ -263,17 +277,33 @@ const CopyButton = styled.button<{ $copied?: boolean }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ $copied }) => ($copied ? '#000000' : '#ffffff')};
-  color: ${({ $copied }) => ($copied ? '#ffffff' : '#333333')};
-  border: 1px solid ${({ $copied }) => ($copied ? '#000000' : '#e5e7eb')};
+  background-color: ${({ $copied, theme }) => ($copied ? theme.colors.primary : theme.colors.cardBg)};
+  color: ${({ $copied, theme }) => ($copied ? theme.colors.textInverse : theme.colors.textSecondary)};
+  border: 1px solid ${({ $copied, theme }) => ($copied ? theme.colors.primary : theme.colors.border)};
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
 
+  & > * {
+    color: inherit;
+  }
+
   &:hover {
-    border-color: #000000;
-    color: ${({ $copied }) => ($copied ? '#ffffff' : '#000000')};
+    background-color: ${({ $copied, theme }) =>
+      $copied
+        ? (theme.mode === 'dark' ? '#000000' : '#FFFFFF')
+        : theme.colors.surface};
+    color: ${({ $copied, theme }) =>
+      $copied
+        ? (theme.mode === 'dark' ? '#FFFFFF' : '#000000')
+        : theme.colors.text};
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `;
 
@@ -281,7 +311,7 @@ const CopyButton = styled.button<{ $copied?: boolean }>`
 
 const DirectorySection = styled.section`
   padding: 64px 0 80px;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const DirectoryHeader = styled.div`
@@ -292,12 +322,12 @@ const DirectoryHeader = styled.div`
 
 /* Controls: Search & Filters */
 const ControlsContainer = styled.div`
-  background: #ffffff;
-  border: 1px solid #eaeaea;
+  background: ${({ theme }) => theme.colors.cardBg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 28px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  box-shadow: ${({ theme }) => theme.shadows.card};
 
   @media (min-width: 768px) {
     padding: 20px;
@@ -314,7 +344,7 @@ const SearchInputRow = styled.div`
 const SearchIconHolder = styled.div`
   position: absolute;
   left: 14px;
-  color: #888888;
+  color: ${({ theme }) => theme.colors.textMuted};
   display: flex;
   align-items: center;
   pointer-events: none;
@@ -325,21 +355,21 @@ const SearchInput = styled.input`
   height: 44px;
   padding: 0 42px 0 42px;
   font-size: 14px;
-  color: #000000;
-  background-color: #f7f7f8;
-  border: 1px solid #e5e5e7;
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 8px;
   outline: none;
   transition: all 0.2s ease;
 
   &:focus {
-    background-color: #ffffff;
-    border-color: #000000;
+    background-color: ${({ theme }) => theme.colors.cardBg};
+    border-color: ${({ theme }) => theme.colors.borderHover};
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
   }
 
   &::placeholder {
-    color: #888888;
+    color: ${({ theme }) => theme.colors.textMuted};
   }
 `;
 
@@ -353,13 +383,13 @@ const ClearSearchBtn = styled.button`
   justify-content: center;
   background: transparent;
   border: none;
-  color: #888888;
+  color: ${({ theme }) => theme.colors.textMuted};
   cursor: pointer;
   border-radius: 50%;
 
   &:hover {
-    color: #000000;
-    background-color: #e5e5e7;
+    color: ${({ theme }) => theme.colors.text};
+    background-color: ${({ theme }) => theme.colors.surfaceHover};
   }
 `;
 
@@ -382,9 +412,9 @@ const CategoryPill = styled.button<{ $active: boolean }>`
   padding: 6px 14px;
   font-size: 12px;
   font-weight: ${({ $active }) => ($active ? '600' : '450')};
-  color: ${({ $active }) => ($active ? '#ffffff' : '#444444')};
-  background-color: ${({ $active }) => ($active ? '#000000' : '#f4f4f5')};
-  border: 1px solid ${({ $active }) => ($active ? '#000000' : '#e5e5e7')};
+  color: ${({ $active, theme }) => ($active ? theme.colors.textInverse : theme.colors.textSecondary)};
+  background-color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.surface)};
+  border: 1px solid ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.border)};
   border-radius: 9999px;
   white-space: nowrap;
   cursor: pointer;
@@ -392,8 +422,18 @@ const CategoryPill = styled.button<{ $active: boolean }>`
   flex-shrink: 0;
 
   &:hover {
-    background-color: ${({ $active }) => ($active ? '#1a1a1a' : '#eaeaea')};
-    color: ${({ $active }) => ($active ? '#ffffff' : '#000000')};
+    background-color: ${({ $active, theme }) =>
+      $active
+        ? (theme.mode === 'dark' ? '#000000' : '#FFFFFF')
+        : theme.colors.surfaceHover};
+    color: ${({ $active, theme }) =>
+      $active
+        ? (theme.mode === 'dark' ? '#FFFFFF' : '#000000')
+        : theme.colors.text};
+    border-color: ${({ $active, theme }) =>
+      $active
+        ? (theme.mode === 'dark' ? '#FFFFFF' : '#000000')
+        : theme.colors.borderHover};
   }
 `;
 
@@ -405,7 +445,7 @@ const SecondaryFiltersRow = styled.div`
   flex-wrap: wrap;
   gap: 12px;
   padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const FilterGroup = styled.div`
@@ -420,9 +460,9 @@ const SelectBox = styled.select`
   padding: 0 10px;
   font-size: 12px;
   font-weight: 500;
-  color: #333333;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 6px;
   outline: none;
   cursor: pointer;
@@ -430,7 +470,7 @@ const SelectBox = styled.select`
 
   &:hover,
   &:focus {
-    border-color: #000000;
+    border-color: ${({ theme }) => theme.colors.borderHover};
   }
 `;
 
@@ -440,14 +480,14 @@ const ClearAllBtn = styled.button`
   gap: 4px;
   font-size: 11.5px;
   font-weight: 500;
-  color: #888888;
+  color: ${({ theme }) => theme.colors.textMuted};
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 4px 6px;
 
   &:hover {
-    color: #000000;
+    color: ${({ theme }) => theme.colors.text};
     text-decoration: underline;
   }
 `;
@@ -455,7 +495,7 @@ const ClearAllBtn = styled.button`
 const ResultsCount = styled.div`
   font-size: 12.5px;
   font-weight: 500;
-  color: #666666;
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 /* Directory Grid */
@@ -479,20 +519,20 @@ const DirectoryGrid = styled.div`
 `;
 
 const DirectoryCard = styled.div`
-  background: #ffffff;
-  border: 1px solid #eaeaea;
+  background: ${({ theme }) => theme.colors.cardBg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
   padding: 20px 18px;
   display: flex;
   flex-direction: column;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  box-shadow: ${({ theme }) => theme.shadows.card};
 
   &:hover {
-    border-color: #000000;
+    border-color: ${({ theme }) => theme.colors.borderHover};
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+    box-shadow: ${({ theme }) => theme.shadows.cardHover};
   }
 `;
 
@@ -513,9 +553,9 @@ const DaBadge = styled.span`
   font-family: ${({ theme }) => theme.fonts.mono};
   font-size: 10.5px;
   font-weight: 600;
-  color: #555555;
-  background-color: #f7f7f8;
-  border: 1px solid #e5e5e7;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 2px 6px;
   border-radius: 4px;
 `;
@@ -525,9 +565,9 @@ const SubmissionTag = styled.span<{ $type: string }>`
   font-weight: 600;
   padding: 2px 7px;
   border-radius: 4px;
-  background-color: ${({ $type }) =>
-    $type === 'Free' ? '#F4F4F5' : $type === 'Free + Paid' ? '#EAEAEA' : '#E5E5E7'};
-  color: #222222;
+  background-color: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   display: inline-block;
   margin-bottom: 12px;
   align-self: flex-start;
@@ -535,7 +575,7 @@ const SubmissionTag = styled.span<{ $type: string }>`
 
 const UrlSnippet = styled.div`
   font-size: 11.5px;
-  color: #777777;
+  color: ${({ theme }) => theme.colors.textMuted};
   display: flex;
   align-items: center;
   gap: 4px;
@@ -548,26 +588,28 @@ const UrlSnippet = styled.div`
 const EmptyStateBox = styled.div`
   text-align: center;
   padding: 56px 20px;
-  background-color: #fafafa;
-  border: 1px dashed #cccccc;
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px dashed ${({ theme }) => theme.colors.border};
   border-radius: 12px;
   margin: 20px 0;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const ToastNotification = styled.div<{ $visible: boolean }>`
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#FFFFFF' : '#000000')};
+  color: ${({ theme }) => (theme.mode === 'dark' ? '#000000' : '#FFFFFF')};
   padding: 10px 16px;
   border-radius: 8px;
   font-size: 12.5px;
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  border: 1px solid ${({ theme }) => (theme.mode === 'dark' ? '#EAEAEA' : '#333333')};
   z-index: 1000;
   opacity: ${({ $visible }) => ($visible ? '1' : '0')};
   transform: ${({ $visible }) => ($visible ? 'translateY(0)' : 'translateY(10px)')};
@@ -702,7 +744,7 @@ export function BacklinksClientView() {
         <TopPicksSection id="top-picks">
           <Container>
             <TopPicksHeader>
-              <SectionBadge style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+              <SectionBadge>
                 TOP PICKS
               </SectionBadge>
               <h2
@@ -710,13 +752,13 @@ export function BacklinksClientView() {
                   fontSize: '24px',
                   fontWeight: 700,
                   letterSpacing: '-0.025em',
-                  color: '#000000',
+                  color: 'inherit',
                   margin: '0 0 10px',
                 }}
               >
                 Priority Launch &amp; Listing Platforms
               </h2>
-              <Text fontSize="13.5px" color="#555555" lineHeight="relaxed">
+              <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed">
                 The ten highest-value, most consistently effective platforms in the full directory
                 below. Tap any card to visit.
               </Text>
@@ -767,7 +809,7 @@ export function BacklinksClientView() {
         <DirectorySection id="full-directory">
           <Container>
             <DirectoryHeader>
-              <SectionBadge style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+              <SectionBadge>
                 FULL DIRECTORY
               </SectionBadge>
               <h2
@@ -775,13 +817,13 @@ export function BacklinksClientView() {
                   fontSize: '24px',
                   fontWeight: 700,
                   letterSpacing: '-0.025em',
-                  color: '#000000',
+                  color: 'inherit',
                   margin: '0 0 10px',
                 }}
               >
                 Every Source, Sorted by Authority Tier
               </h2>
-              <Text fontSize="13.5px" color="#555555" lineHeight="relaxed">
+              <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed">
                 Ranked #1&ndash;#{ALL_BACKLINK_SOURCES.length} by Domain Rating. Filter by category,
                 tier, or search by name.
               </Text>
@@ -905,7 +947,7 @@ export function BacklinksClientView() {
 
                       <Text
                         fontSize="12px"
-                        color="#555555"
+                        color="textSecondary"
                         lineHeight="relaxed"
                         mb="12px"
                         style={{
@@ -948,18 +990,18 @@ export function BacklinksClientView() {
               </DirectoryGrid>
             ) : (
               <EmptyStateBox>
-                <Text fontSize="16px" fontWeight="600" color="#111111" mb="6px">
+                <Text fontSize="16px" fontWeight="600" color="text" mb="6px">
                   No backlink sources found
                 </Text>
-                <Text fontSize="13px" color="#666666" mb="16px">
+                <Text fontSize="13px" color="textSecondary" mb="16px">
                   Try adjusting your search query, clearing filters, or switching category tabs.
                 </Text>
                 <button
                   onClick={resetAllFilters}
                   style={{
                     padding: '8px 16px',
-                    backgroundColor: '#000000',
-                    color: '#ffffff',
+                    backgroundColor: 'var(--primary-btn-bg, #000000)',
+                    color: 'var(--primary-btn-text, #ffffff)',
                     border: 'none',
                     borderRadius: '6px',
                     fontSize: '12.5px',

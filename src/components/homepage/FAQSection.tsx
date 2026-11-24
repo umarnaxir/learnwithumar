@@ -7,8 +7,8 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const SectionWrapper = styled.section`
   padding: 48px 0;
-  background-color: #ffffff;
-  border-top: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const FAQContainer = styled(Box)`
@@ -17,14 +17,14 @@ const FAQContainer = styled(Box)`
 `;
 
 const AccordionCard = styled.div`
-  border: 1px solid #eaeaea;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 8px;
   margin-bottom: 8px;
   overflow: hidden;
   transition: border-color 0.15s ease;
 
   &:hover {
-    border-color: #000000;
+    border-color: ${({ theme }) => theme.colors.borderHover};
   }
 `;
 
@@ -35,10 +35,10 @@ const QuestionBtn = styled.button`
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.cardBg};
   font-size: 13px;
   font-weight: 600;
-  color: #111111;
+  color: ${({ theme }) => theme.colors.text};
   text-align: left;
   cursor: pointer;
 
@@ -53,8 +53,8 @@ const AnswerBox = styled.div`
   padding: 0 14px 14px;
   font-size: 12px;
   line-height: 1.6;
-  color: #555555;
-  background-color: #ffffff;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  background-color: ${({ theme }) => theme.colors.cardBg};
 
   @media (min-width: 640px) {
     padding: 0 16px 16px;
@@ -108,13 +108,12 @@ export function FAQSection() {
               fontSize: '23px',
               fontWeight: 600,
               letterSpacing: '-0.025em',
-              color: '#000000',
               marginBottom: '8px',
             }}
           >
             Clear Answers to Common Questions.
           </h2>
-          <Text fontSize="13.5px" color="#555555" lineHeight="relaxed">
+          <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed">
             Everything you need to know about the Learn with Umar curriculum and
             training architecture.
           </Text>
@@ -128,9 +127,9 @@ export function FAQSection() {
                 <QuestionBtn onClick={() => toggle(idx)}>
                   <span>{faq.q}</span>
                   {isOpen ? (
-                    <ChevronUp size={15} color="#000000" />
+                    <ChevronUp size={15} color="currentColor" />
                   ) : (
-                    <ChevronDown size={15} color="#888888" />
+                    <ChevronDown size={15} color="currentColor" style={{ opacity: 0.6 }} />
                   )}
                 </QuestionBtn>
                 {isOpen && <AnswerBox>{faq.a}</AnswerBox>}

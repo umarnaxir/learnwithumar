@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Box, Flex, Container, Text, Divider } from '@/components/ui/primitives';
 
 const FooterWrapper = styled.footer`
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.background};
   border-top: 1px solid ${({ theme }) => theme.colors.border};
   padding: 44px 0 24px;
   margin-top: auto;
@@ -80,7 +80,7 @@ export function Footer() {
             </Flex>
             <Text
               fontSize="12.5px"
-              color="#555555"
+              color="textSecondary"
               lineHeight="relaxed"
               mb="14px"
               style={{ maxWidth: '300px' }}
@@ -91,7 +91,7 @@ export function Footer() {
             </Text>
             <Flex alignItems="center" gap="6px">
               <StatusDot />
-              <Text fontSize="11px" color="#555555" fontWeight="500">
+              <Text fontSize="11px" color="textSecondary" fontWeight="500">
                 Curriculum Active • 40 Modules Published
               </Text>
             </Flex>
@@ -233,14 +233,14 @@ export function Footer() {
           flexWrap="wrap"
           gap="12px"
         >
-          <Text fontSize="12px" color="#555555" style={{ wordBreak: 'break-word' }}>
+          <Text fontSize="12px" color="textSecondary" style={{ wordBreak: 'break-word' }}>
             Developed and Designed by{' '}
             <a
               href="https://umarnazir.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: '#000000',
+                color: 'inherit',
                 fontWeight: 600,
                 textDecoration: 'underline',
                 textUnderlineOffset: '3px',

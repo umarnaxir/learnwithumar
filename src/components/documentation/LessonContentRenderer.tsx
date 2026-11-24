@@ -32,7 +32,7 @@ const SectionHeading = styled.h2`
   font-size: 15.5px;
   font-weight: 600;
   letter-spacing: -0.015em;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@ const SectionHeading = styled.h2`
 const LeadParagraph = styled.p`
   font-size: 13.5px;
   line-height: 1.65;
-  color: #333333;
+  color: ${({ theme }) => theme.colors.textSecondary};
   margin-bottom: 16px;
 `;
 
@@ -60,7 +60,7 @@ const ObjectiveItem = styled.li`
   align-items: flex-start;
   gap: 8px;
   font-size: 12.5px;
-  color: #222222;
+  color: ${({ theme }) => theme.colors.text};
   line-height: 1.5;
 `;
 
@@ -74,8 +74,8 @@ const StepBadge = styled.div`
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textInverse};
   font-size: 11px;
   font-family: ${({ theme }) => theme.fonts.numbers};
   font-weight: 700;
@@ -88,7 +88,7 @@ const StepBadge = styled.div`
 `;
 
 const AccordionItemBox = styled.div`
-  border: 1px solid #eaeaea;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 6px;
   margin-bottom: 8px;
   overflow: hidden;
@@ -100,30 +100,30 @@ const AccordionHeader = styled.button`
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background-color: #fafafa;
+  background-color: ${({ theme }) => theme.colors.surface};
   text-align: left;
   font-size: 12.5px;
   font-weight: 600;
-  color: #111111;
+  color: ${({ theme }) => theme.colors.text};
   cursor: pointer;
 
   &:hover {
-    background-color: #f2f2f2;
+    background-color: ${({ theme }) => theme.colors.surfaceHover};
   }
 `;
 
 const AccordionBody = styled.div`
   padding: 12px 14px;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.cardBg};
   font-size: 12px;
   line-height: 1.55;
-  color: #444444;
-  border-top: 1px solid #eaeaea;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const CalloutBox = styled(Box)`
-  border-left: 3px solid #000000;
-  background-color: #fcfcfc;
+  border-left: 3px solid ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.surface};
   padding: 12px 14px;
   border-radius: 0 8px 8px 0;
   margin: 12px 0 16px;
@@ -131,6 +131,39 @@ const CalloutBox = styled(Box)`
   @media (min-width: 640px) {
     padding: 14px 16px;
   }
+`;
+
+const TargetOutcomeBox = styled(Box)`
+  padding: 8px 12px;
+  background-color: ${({ theme }) =>
+    theme.mode === 'dark' ? 'rgba(16, 185, 129, 0.12)' : '#ECFDF5'};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.mode === 'dark' ? 'rgba(16, 185, 129, 0.3)' : '#A7F3D0'};
+  border-radius: 5px;
+  color: ${({ theme }) => (theme.mode === 'dark' ? '#6EE7B7' : '#065F46')};
+`;
+
+const BestPracticeBox = styled(Box)`
+  padding: 12px;
+  background-color: ${({ theme }) =>
+    theme.mode === 'dark' ? 'rgba(16, 185, 129, 0.12)' : '#ECFDF5'};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.mode === 'dark' ? 'rgba(16, 185, 129, 0.3)' : '#A7F3D0'};
+  border-radius: 6px;
+  color: ${({ theme }) => (theme.mode === 'dark' ? '#A7F3D0' : '#065F46')};
+`;
+
+const MistakeBox = styled(Box)`
+  padding: 12px;
+  background-color: ${({ theme }) =>
+    theme.mode === 'dark' ? 'rgba(239, 68, 68, 0.12)' : '#FEF2F2'};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.mode === 'dark' ? 'rgba(239, 68, 68, 0.3)' : '#FECACA'};
+  border-radius: 6px;
+  margin-bottom: 8px;
 `;
 
 function inferSyntaxLanguage(lesson: LessonContent): string {
@@ -159,7 +192,7 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 1. TOPIC INTRODUCTION */}
       <ContentSection id="introduction">
         <SectionHeading>
-          <BookOpen size={16} color="#000000" />
+          <BookOpen size={16} color="currentColor" />
           <span>Topic Introduction</span>
         </SectionHeading>
         <LeadParagraph>{lesson.summary}</LeadParagraph>
@@ -168,14 +201,14 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 2. DEFINITION */}
       <ContentSection id="definition">
         <SectionHeading>
-          <FileCheck2 size={16} color="#000000" />
+          <FileCheck2 size={16} color="currentColor" />
           <span>Definition</span>
         </SectionHeading>
         <CalloutBox>
-          <Text fontSize="13px" fontWeight="600" color="#000000" mb="4px">
+          <Text fontSize="13px" fontWeight="600" color="text" mb="4px">
             Core Definition:
           </Text>
-          <Text fontSize="12.5px" color="#333333" lineHeight="relaxed">
+          <Text fontSize="12.5px" color="textSecondary" lineHeight="relaxed">
             {lesson.definition ||
               `${lesson.title} is a verified standard and methodological foundation in modern ${
                 lesson.trackId === 'full-stack' ? 'full-stack web development' : 'digital marketing'
@@ -187,11 +220,11 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 3. EXPLANATION */}
       <ContentSection id="explanation">
         <SectionHeading>
-          <Lightbulb size={16} color="#000000" />
+          <Lightbulb size={16} />
           <span>In-Depth Explanation</span>
         </SectionHeading>
-        <Card p="16px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="8px" mb="12px">
-          <Text fontSize="13px" color="#444444" lineHeight="relaxed">
+        <Card p="16px" bg="cardBg" border="1px solid" borderColor="border" borderRadius="8px" mb="12px">
+          <Text fontSize="13px" color="textSecondary" lineHeight="relaxed">
             {lesson.explanation ||
               `Understanding ${lesson.title} requires mastering both its internal mechanics and its practical integration across the engineering stack. In production, this concept guarantees consistency, performance, and fault tolerance under high-traffic conditions.`}
           </Text>
@@ -201,10 +234,10 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 4. WHY IT IS USED */}
       <ContentSection id="why-used">
         <SectionHeading>
-          <CheckCircle size={16} color="#000000" />
+          <CheckCircle size={16} />
           <span>Why It Is Used & Significance</span>
         </SectionHeading>
-        <Card p="16px" bg="#FBFBFC" border="1px solid #EAEAEA" borderRadius="8px">
+        <Card p="16px" bg="surface" border="1px solid" borderColor="border" borderRadius="8px">
           <ObjectiveList>
             {(lesson.whyItIsUsed && lesson.whyItIsUsed.length > 0
               ? lesson.whyItIsUsed
@@ -222,18 +255,18 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 5. REAL-WORLD USE CASES */}
       <ContentSection id="use-cases">
         <SectionHeading>
-          <Briefcase size={16} color="#000000" />
+          <Briefcase size={16} />
           <span>Real-World Use Cases</span>
         </SectionHeading>
-        <Card p="16px" bg="#FAF9F6" border="1px solid #EAEAEA" borderRadius="8px">
-          <Text fontSize="12.5px" color="#333333" lineHeight="relaxed" mb="10px">
+        <Card p="16px" bg="surface" border="1px solid" borderColor="border" borderRadius="8px">
+          <Text fontSize="12.5px" color="textSecondary" lineHeight="relaxed" mb="10px">
             {lesson.realWorldApplication}
           </Text>
           {lesson.realWorldUseCases && lesson.realWorldUseCases.length > 0 && (
             <ObjectiveList>
               {lesson.realWorldUseCases.map((useCase, idx) => (
                 <ObjectiveItem key={idx}>
-                  <span style={{ fontWeight: 700, color: '#000000' }}>•</span>
+                  <span style={{ fontWeight: 700, color: 'inherit' }}>•</span>
                   <span>{useCase}</span>
                 </ObjectiveItem>
               ))}
@@ -246,16 +279,16 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {lesson.keyConcepts && lesson.keyConcepts.length > 0 && (
         <ContentSection id="key-concepts">
           <SectionHeading>
-            <Lightbulb size={16} color="#000000" />
+            <Lightbulb size={16} />
             <span>Key Architectural Concepts</span>
           </SectionHeading>
           <Box display="grid" gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap="12px" mt="12px">
             {lesson.keyConcepts.map((concept, idx) => (
-              <Card key={idx} p="14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="8px">
-                <Text fontSize="13px" fontWeight="700" color="#111111" mb="4px">
+              <Card key={idx} p="14px" bg="cardBg" border="1px solid" borderColor="border" borderRadius="8px">
+                <Text fontSize="13px" fontWeight="700" color="text" mb="4px">
                   {concept.title}
                 </Text>
-                <Text fontSize="12px" color="#555555" lineHeight="relaxed">
+                <Text fontSize="12px" color="textSecondary" lineHeight="relaxed">
                   {concept.explanation}
                 </Text>
               </Card>
@@ -268,7 +301,7 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {lesson.syntaxDefinition && (
         <ContentSection id="syntax">
           <SectionHeading>
-            <Code2 size={16} color="#000000" />
+            <Code2 size={16} color="currentColor" />
             <span>{isDevelopment ? 'Syntax & Structural Blueprint' : 'Strategy & Execution Blueprint'}</span>
           </SectionHeading>
           <CodeBlock
@@ -282,17 +315,17 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 8. EXAMPLE CODE & EXPECTED OUTPUT */}
       <ContentSection id="code-examples">
         <SectionHeading>
-          <Code2 size={16} color="#000000" />
+          <Code2 size={16} color="currentColor" />
           <span>{isDevelopment ? 'Example Code & Expected Output' : 'Campaign Workflow & Expected Outcome'}</span>
         </SectionHeading>
 
         {lesson.codeExamples &&
           lesson.codeExamples.map((ex, idx) => (
             <Box key={idx} mb="20px">
-              <Text fontSize="13px" fontWeight="600" color="#222222" mb="4px">
+              <Text fontSize="13px" fontWeight="600" color="text" mb="4px">
                 {ex.title}
               </Text>
-              <Text fontSize="12px" color="#666666" mb="8px">
+              <Text fontSize="12px" color="textSecondary" mb="8px">
                 {ex.explanation}
               </Text>
               <CodeBlock
@@ -306,34 +339,34 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
 
         {lesson.strategyExamples &&
           lesson.strategyExamples.map((strat, idx) => (
-            <Card key={idx} p="16px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="8px" mb="12px">
+            <Card key={idx} p="16px" bg="cardBg" border="1px solid" borderColor="border" borderRadius="8px" mb="12px">
               <Badge variant="dark" mb="6px">
                 Scenario Case Study
               </Badge>
-              <Text fontSize="14px" fontWeight="700" color="#111111" mb="6px">
+              <Text fontSize="14px" fontWeight="700" color="text" mb="6px">
                 {strat.title}
               </Text>
               <Box mb="10px">
-                <Text fontSize="11px" fontWeight="700" color="#888888" textTransform="uppercase">
+                <Text fontSize="11px" fontWeight="700" color="textMuted" textTransform="uppercase">
                   Challenge / Scenario:
                 </Text>
-                <Text fontSize="12px" color="#444444" mt="2px">
+                <Text fontSize="12px" color="textSecondary" mt="2px">
                   {strat.scenario}
                 </Text>
               </Box>
               <Box mb="10px">
-                <Text fontSize="11px" fontWeight="700" color="#888888" textTransform="uppercase">
+                <Text fontSize="11px" fontWeight="700" color="textMuted" textTransform="uppercase">
                   Strategic Execution:
                 </Text>
-                <Text fontSize="12px" color="#222222" mt="2px">
+                <Text fontSize="12px" color="textSecondary" mt="2px">
                   {strat.strategy}
                 </Text>
               </Box>
-              <Box p="8px 12px" bg="#ECFDF5" border="1px solid #A7F3D0" borderRadius="5px">
-                <Text fontSize="11.5px" color="#065F46" fontWeight="600">
+              <TargetOutcomeBox>
+                <Text fontSize="11.5px" color="inherit" fontWeight="600">
                   Target Outcome: {strat.expectedOutcome}
                 </Text>
-              </Box>
+              </TargetOutcomeBox>
             </Card>
           ))}
       </ContentSection>
@@ -341,7 +374,7 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 9. STEP-BY-STEP CODE EXPLANATION */}
       <ContentSection id="step-by-step">
         <SectionHeading>
-          <FileCheck2 size={16} color="#000000" />
+          <FileCheck2 size={16} />
           <span>
             {isDevelopment
               ? 'Step-by-Step Code & Implementation Walkthrough'
@@ -353,10 +386,10 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
             <StepContainer key={step.step}>
               <StepBadge>{step.step}</StepBadge>
               <Box>
-                <Text fontSize="13px" fontWeight="700" color="#111111" mb="2px">
+                <Text fontSize="13px" fontWeight="700" color="text" mb="2px">
                   {step.title}
                 </Text>
-                <Text fontSize="12px" color="#555555" lineHeight="relaxed">
+                <Text fontSize="12px" color="textSecondary" lineHeight="relaxed">
                   {step.details}
                 </Text>
               </Box>
@@ -372,45 +405,38 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
           <Box>
             <Flex alignItems="center" gap="6px" mb="10px">
               <CheckCircle size={15} color="#10B981" />
-              <Text fontSize="13.5px" fontWeight="700" color="#111111">
+              <Text fontSize="13.5px" fontWeight="700" color="text">
                 Industry Best Practices
               </Text>
             </Flex>
-            <Box p="12px" bg="#ECFDF5" border="1px solid #A7F3D0" borderRadius="6px">
+            <BestPracticeBox>
               <ul style={{ margin: 0, paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {lesson.bestPractices.map((bp, idx) => (
-                  <li key={idx} style={{ fontSize: '12px', color: '#065F46' }}>
+                  <li key={idx} style={{ fontSize: '12px', color: 'inherit' }}>
                     {bp}
                   </li>
                 ))}
               </ul>
-            </Box>
+            </BestPracticeBox>
           </Box>
 
           {/* Common Mistakes */}
           <Box>
             <Flex alignItems="center" gap="6px" mb="10px">
               <AlertTriangle size={15} color="#EF4444" />
-              <Text fontSize="13.5px" fontWeight="700" color="#111111">
+              <Text fontSize="13.5px" fontWeight="700" color="text">
                 Common Mistakes to Avoid
               </Text>
             </Flex>
             {lesson.commonMistakes.map((m, idx) => (
-              <Box
-                key={idx}
-                p="12px"
-                bg="#FEF2F2"
-                border="1px solid #FECACA"
-                borderRadius="6px"
-                mb="8px"
-              >
-                <Text fontSize="12px" fontWeight="700" color="#991B1B" mb="2px">
+              <MistakeBox key={idx}>
+                <Text fontSize="12px" fontWeight="700" mb="2px">
                   Mistake: {m.mistake}
                 </Text>
-                <Text fontSize="11.5px" color="#7F1D1D">
+                <Text fontSize="11.5px" opacity={0.9}>
                   Solution: {m.solution}
                 </Text>
-              </Box>
+              </MistakeBox>
             ))}
           </Box>
         </Box>
@@ -419,22 +445,22 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 11. PRACTICAL EXERCISES */}
       <ContentSection id="exercises">
         <SectionHeading>
-          <Code2 size={16} color="#000000" />
+          <Code2 size={16} />
           <span>{isDevelopment ? 'Practical Exercises & Technical Drills' : 'Practical Assignments'}</span>
         </SectionHeading>
         {lesson.exercises.map((ex, idx) => (
-          <Card key={idx} p="14px" bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="8px" mb="10px">
+          <Card key={idx} p="14px" bg="cardBg" border="1px solid" borderColor="border" borderRadius="8px" mb="10px">
             <Flex alignItems="center" gap="6px" mb="4px">
               <Badge variant="dark">Drill #{idx + 1}</Badge>
-              <Text fontSize="13px" fontWeight="700" color="#111111">
+              <Text fontSize="13px" fontWeight="700" color="text">
                 {ex.title}
               </Text>
             </Flex>
-            <Text fontSize="12px" color="#444444" mb="6px">
+            <Text fontSize="12px" color="textSecondary" mb="6px">
               {ex.task}
             </Text>
             {ex.hints && (
-              <Text fontSize="11px" color="#888888" fontStyle="italic">
+              <Text fontSize="11px" color="textMuted" fontStyle="italic">
                 Hint: {ex.hints}
               </Text>
             )}
@@ -445,7 +471,7 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 12. INTERVIEW QUESTIONS */}
       <ContentSection id="interview-questions">
         <SectionHeading>
-          <HelpCircle size={16} color="#000000" />
+          <HelpCircle size={16} />
           <span>
             {isDevelopment
               ? 'Technical Interview Questions & Answers'
@@ -472,7 +498,7 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {lesson.relatedTopics && lesson.relatedTopics.length > 0 && (
         <ContentSection id="related-topics">
           <SectionHeading>
-            <Compass size={16} color="#000000" />
+            <Compass size={16} />
             <span>Related Topics in this Module</span>
           </SectionHeading>
           <Box display="grid" gridTemplateColumns={['1fr', '1fr 1fr']} gap="10px">
@@ -480,8 +506,9 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
               <Card
                 key={rel.id}
                 p="12px 14px"
-                bg="#FFFFFF"
-                border="1px solid #EAEAEA"
+                bg="cardBg"
+                border="1px solid"
+                borderColor="border"
                 borderRadius="6px"
                 as={Link}
                 href={rel.href}
@@ -489,7 +516,7 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
                 style={{ textDecoration: 'none' }}
               >
                 <Flex alignItems="center" justifyContent="space-between">
-                  <Text fontSize="12.5px" fontWeight="600" color="#111111">
+                  <Text fontSize="12.5px" fontWeight="600" color="text">
                     {rel.title}
                   </Text>
                   <ArrowRight size={13} color="#888888" />
@@ -503,7 +530,7 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
       {/* 14. OFFICIAL DOCUMENTATION LINKS */}
       <ContentSection id="official-docs">
         <SectionHeading>
-          <ExternalLink size={16} color="#000000" />
+          <ExternalLink size={16} />
           <span>
             {isDevelopment
               ? 'Official Documentation & Specifications'
@@ -515,8 +542,9 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
             <Card
               key={idx}
               p="14px 16px"
-              bg="#FFFFFF"
-              border="1px solid #EAEAEA"
+              bg="cardBg"
+              border="1px solid"
+              borderColor="border"
               borderRadius="8px"
               as="a"
               href={doc.url}
@@ -534,14 +562,14 @@ export function LessonContentRenderer({ lesson }: { lesson: LessonContent }) {
                 <Text
                   fontSize="13px"
                   fontWeight="600"
-                  color="#000000"
+                  color="text"
                   style={{ textDecoration: 'underline', textUnderlineOffset: '2px' }}
                 >
                   {doc.title}
                 </Text>
-                <ExternalLink size={12} color="#000000" style={{ flexShrink: 0 }} />
+                <ExternalLink size={12} style={{ flexShrink: 0 }} />
               </Flex>
-              <Text fontSize="11.5px" color="#555555" lineHeight="relaxed">
+              <Text fontSize="11.5px" color="textSecondary" lineHeight="relaxed">
                 {doc.description}
               </Text>
             </Card>

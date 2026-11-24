@@ -14,7 +14,7 @@ import {
 
 const SectionWrapper = styled.section`
   padding: 48px 0;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const PillarsGrid = styled.div`
@@ -73,7 +73,7 @@ const MobileScrollHint = styled.div`
   justify-content: center;
   gap: 6px;
   font-size: 11px;
-  color: #888888;
+  color: ${({ theme }) => theme.colors.textMuted};
   margin-top: 14px;
 
   @media (min-width: 640px) {
@@ -133,13 +133,12 @@ export function WhyLearnWithUs() {
               fontSize: '23px',
               fontWeight: 600,
               letterSpacing: '-0.025em',
-              color: '#000000',
               marginBottom: '8px',
             }}
           >
             The Engineering Mindset Applied to Modern Education.
           </h2>
-          <Text fontSize="13.5px" color="#555555" lineHeight="relaxed">
+          <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed">
             We discarded generic slideshows and hand-waving explanations. Here is
             how we train interns to become high-performing professionals.
           </Text>
@@ -153,20 +152,23 @@ export function WhyLearnWithUs() {
           {reasons.map((r, idx) => {
             const Icon = r.icon;
             return (
-              <PillarCard key={idx} p="20px 18px" bg="#FFFFFF" border="1px solid #EAEAEA" interactive>
+              <PillarCard key={idx} p="20px 18px" bg="cardBg" border="1px solid" borderColor="border" interactive>
                 <Box
                   p="8px"
-                  bg="#F4F4F5"
+                  bg="surface"
+                  border="1px solid"
+                  borderColor="border"
                   borderRadius="6px"
                   display="inline-flex"
+                  color="text"
                   mb="12px"
                 >
-                  <Icon size={16} color="#000000" />
+                  <Icon size={16} color="currentColor" />
                 </Box>
-                <Text fontSize="14.5px" fontWeight="600" color="#111111" mb="6px">
+                <Text fontSize="14.5px" fontWeight="600" color="text" mb="6px">
                   {r.title}
                 </Text>
-                <Text fontSize="12.5px" color="#555555" lineHeight="relaxed">
+                <Text fontSize="12.5px" color="textSecondary" lineHeight="relaxed">
                   {r.description}
                 </Text>
               </PillarCard>

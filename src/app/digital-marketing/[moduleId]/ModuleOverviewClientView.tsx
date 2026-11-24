@@ -11,8 +11,24 @@ import { ArrowRight } from 'lucide-react';
 
 const ModuleHeader = styled.section`
   padding: 40px 0 28px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+const LessonNumberCircle = styled.span`
+  font-size: 11px;
+  font-weight: 700;
+  background-color: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
 `;
 
 export function DigitalMarketingModuleOverviewClientView({ moduleId }: { moduleId: string }) {
@@ -45,11 +61,11 @@ export function DigitalMarketingModuleOverviewClientView({ moduleId }: { moduleI
           <Container>
             <Box maxWidth="680px">
               <Flex alignItems="center" gap="6px" mb="10px">
-                <Link href="/digital-marketing" style={{ fontSize: '12px', color: '#666666' }}>
+                <Link href="/digital-marketing" style={{ fontSize: '12px', color: 'inherit', opacity: 0.7 }}>
                   Digital Marketing Track
                 </Link>
-                <span style={{ fontSize: '11px', color: '#999999' }}>/</span>
-                <span style={{ fontSize: '12px', color: '#000000', fontWeight: 600 }}>
+                <span style={{ fontSize: '11px', opacity: 0.5 }}>/</span>
+                <span style={{ fontSize: '12px', color: 'inherit', fontWeight: 600 }}>
                   Module {mod.moduleNumber}
                 </span>
               </Flex>
@@ -57,16 +73,16 @@ export function DigitalMarketingModuleOverviewClientView({ moduleId }: { moduleI
               <h1
                 style={{
                   fontSize: '24px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   letterSpacing: '-0.025em',
-                  color: '#000000',
+                  color: 'inherit',
                   marginBottom: '8px',
                 }}
               >
                 {mod.title}
               </h1>
 
-              <Text fontSize="13.5px" color="#555555" lineHeight="relaxed" mb="18px">
+              <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed" mb="18px">
                 {mod.description}
               </Text>
 
@@ -94,7 +110,7 @@ export function DigitalMarketingModuleOverviewClientView({ moduleId }: { moduleI
           <Text
             fontSize="11px"
             fontWeight="700"
-            color="#888888"
+            color="textMuted"
             textTransform="uppercase"
             letterSpacing="0.06em"
             mb="16px"
@@ -109,8 +125,9 @@ export function DigitalMarketingModuleOverviewClientView({ moduleId }: { moduleI
                 as={Link}
                 href={`/digital-marketing/${mod.id}/${topic.id}`}
                 p="14px 18px"
-                bg="#FFFFFF"
-                border="1px solid #EAEAEA"
+                bg="cardBg"
+                border="1px solid"
+                borderColor="border"
                 borderRadius="8px"
                 interactive
                 style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
@@ -122,36 +139,21 @@ export function DigitalMarketingModuleOverviewClientView({ moduleId }: { moduleI
                   gap="10px"
                 >
                   <Flex alignItems="flex-start" gap="10px" style={{ minWidth: 0, flex: 1 }}>
-                    <span
-                      style={{
-                        fontSize: '11px',
-                        fontWeight: 700,
-                        backgroundColor: '#F4F4F5',
-                        color: '#555555',
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        marginTop: '2px',
-                      }}
-                    >
+                    <LessonNumberCircle>
                       {idx + 1}
-                    </span>
+                    </LessonNumberCircle>
                     <Box style={{ minWidth: 0 }}>
-                      <Text fontSize="13.5px" fontWeight="600" color="#111111" mb="2px" style={{ wordBreak: 'break-word' }}>
+                      <Text fontSize="13.5px" fontWeight="600" color="text" mb="2px" style={{ wordBreak: 'break-word' }}>
                         {topic.title}
                       </Text>
-                      <Text fontSize="12px" color="#666666" style={{ wordBreak: 'break-word' }}>
+                      <Text fontSize="12px" color="textSecondary" style={{ wordBreak: 'break-word' }}>
                         {topic.summary}
                       </Text>
                     </Box>
                   </Flex>
 
                   <Flex alignItems="center" justifyContent="space-between" width={['100%', '100%', 'auto']} gap="12px" pt={['8px', '8px', 0]}>
-                    <span style={{ fontSize: '11.5px', color: '#888888', whiteSpace: 'nowrap' }}>
+                    <span style={{ fontSize: '11.5px', color: 'inherit', opacity: 0.7, whiteSpace: 'nowrap' }}>
                       {topic.duration}
                     </span>
                     <Button

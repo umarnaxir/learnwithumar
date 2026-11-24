@@ -45,10 +45,13 @@ const DialogContainer = styled.div`
   width: 100%;
   max-width: 640px;
   max-height: calc(100vh - 32px);
-  background: #ffffff;
-  border: 1px solid #eaeaea;
+  background: ${({ theme }) => (theme.mode === 'dark' ? '#0D0D0D' : '#ffffff')};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 14px;
-  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.2);
+  box-shadow: ${({ theme }) =>
+    theme.mode === 'dark'
+      ? '0 20px 48px -12px rgba(0, 0, 0, 0.8)'
+      : '0 20px 48px -12px rgba(0, 0, 0, 0.2)'};
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -71,7 +74,7 @@ const SearchInputHeader = styled.div`
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   @media (min-width: 640px) {
     gap: 12px;
@@ -84,7 +87,7 @@ const SearchInputElement = styled.input`
   border: none;
   background: transparent;
   font-size: 15px;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   outline: none;
   min-width: 0;
 
@@ -93,7 +96,7 @@ const SearchInputElement = styled.input`
   }
 
   &::placeholder {
-    color: #888888;
+    color: ${({ theme }) => theme.colors.textMuted};
   }
 `;
 
@@ -122,7 +125,7 @@ const ResultItemLink = styled(Link)`
   min-width: 0;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${({ theme }) => theme.colors.surface};
   }
 `;
 
@@ -131,10 +134,10 @@ const FooterBar = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  border-top: 1px solid #eaeaea;
-  background-color: #fafafa;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#080808' : '#fafafa')};
   font-size: 11.5px;
-  color: #888888;
+  color: ${({ theme }) => theme.colors.textMuted};
 
   @media (min-width: 640px) {
     padding: 10px 20px;
@@ -257,7 +260,7 @@ export function SearchModal({
     <Overlay $isOpen={isOpen} onClick={handleBackdropClick}>
       <DialogContainer>
         <SearchInputHeader>
-          <Search size={18} color="#555555" />
+          <Search size={18} color="currentColor" style={{ opacity: 0.6 }} />
           <SearchInputElement
             ref={inputRef}
             placeholder="Search concepts, modules, lessons, projects (e.g. Next.js, SEO, SQL, React)..."
@@ -270,7 +273,7 @@ export function SearchModal({
           <button
             onClick={onClose}
             aria-label="Close search"
-            style={{ color: '#888888', padding: '4px' }}
+            style={{ color: 'inherit', opacity: 0.6, padding: '4px' }}
           >
             <X size={18} />
           </button>
@@ -279,10 +282,10 @@ export function SearchModal({
         <ResultsList>
           {filtered.length === 0 ? (
             <Box p="32px" textAlign="center">
-              <Text color="#555555" fontSize="14px">
+              <Text color="textSecondary" fontSize="14px">
                 No matching results found for &quot;{query}&quot;
               </Text>
-              <Text color="#888888" fontSize="12px" mt="6px">
+              <Text color="textMuted" fontSize="12px" mt="6px">
                 Try searching for HTML, Flexbox, React, NestJS, SEO, Google Ads, or Meta Ads.
               </Text>
             </Box>
@@ -291,13 +294,13 @@ export function SearchModal({
               const getIcon = () => {
                 switch (item.category) {
                   case 'Full Stack':
-                    return <Code2 size={16} color="#000000" />;
+                    return <Code2 size={16} />;
                   case 'Digital Marketing':
-                    return <TrendingUp size={16} color="#000000" />;
+                    return <TrendingUp size={16} />;
                   case 'Project':
-                    return <FolderGit2 size={16} color="#000000" />;
+                    return <FolderGit2 size={16} />;
                   default:
-                    return <Search size={16} color="#555555" />;
+                    return <Search size={16} />;
                 }
               };
 
@@ -311,7 +314,8 @@ export function SearchModal({
                     <Box
                       p="8px"
                       borderRadius="6px"
-                      bg="#F4F4F5"
+                      bg="surface"
+                      color="text"
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
@@ -322,11 +326,11 @@ export function SearchModal({
                       <Text
                         fontSize="14px"
                         fontWeight="600"
-                        color="#000000"
+                        color="text"
                       >
                         {item.title}
                       </Text>
-                      <Text fontSize="12px" color="#666666">
+                      <Text fontSize="12px" color="textSecondary">
                         {item.subtitle}
                       </Text>
                     </Box>

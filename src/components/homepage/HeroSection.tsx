@@ -8,11 +8,10 @@ import { ArrowRight } from 'lucide-react';
 
 const HeroWrapper = styled.section`
   padding: 56px 0 36px;
-  background: radial-gradient(
-    circle at 50% 0%,
-    rgba(244, 244, 244, 0.6) 0%,
-    rgba(255, 255, 255, 1) 75%
-  );
+  background: ${({ theme }) =>
+    theme.mode === 'dark'
+      ? 'radial-gradient(circle at 50% 0%, rgba(30, 30, 30, 0.4) 0%, rgba(0, 0, 0, 1) 75%)'
+      : 'radial-gradient(circle at 50% 0%, rgba(244, 244, 244, 0.6) 0%, rgba(255, 255, 255, 1) 75%)'};
 
   @media (min-width: 768px) {
     padding: 72px 0 48px;
@@ -25,7 +24,7 @@ const HeroTitle = styled.h1`
   font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.15;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 12px;
 
   @media (min-width: 400px) {
@@ -47,7 +46,7 @@ const HeroSubtitle = styled.p`
   font-size: 13px;
   font-weight: 450;
   line-height: 1.6;
-  color: #555555;
+  color: ${({ theme }) => theme.colors.textSecondary};
   max-width: 600px;
   margin: 0 auto 24px;
 
@@ -91,7 +90,7 @@ const MetricValue = styled.div`
   font-family: ${({ theme }) => theme.fonts.numbers};
   font-size: 30px;
   font-weight: 700;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   letter-spacing: -0.04em;
   line-height: 1.05;
   font-feature-settings: 'tnum' on, 'lnum' on;
@@ -111,7 +110,7 @@ const MetricValue = styled.div`
 
 const MetricLabel = styled.div`
   font-size: 12.5px;
-  color: #555555;
+  color: ${({ theme }) => theme.colors.textSecondary};
   font-weight: 450;
   margin-top: 6px;
   letter-spacing: -0.01em;

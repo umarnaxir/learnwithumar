@@ -13,8 +13,8 @@ interface QuizQuestion {
 }
 
 const QuizCard = styled(Box)`
-  background-color: #fafafa;
-  border: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.cardBg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
   padding: 16px 14px;
   margin: 24px 0;
@@ -39,8 +39,9 @@ const OptionButton = styled.button<{
   margin-bottom: 8px;
   border-radius: 8px;
   font-size: 13.5px;
-  background-color: #ffffff;
-  border: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   transition: all 0.15s ease;
   cursor: pointer;
 
@@ -50,35 +51,47 @@ const OptionButton = styled.button<{
     font-size: 14px;
   }
 
-  ${({ $isSelected }) =>
+  ${({ $isSelected, theme }) =>
     $isSelected &&
     `
-    border-color: #000000;
-    background-color: #F8F8F8;
+    border-color: ${theme.mode === 'dark' ? '#FFFFFF' : '#000000'};
+    background-color: ${theme.mode === 'dark' ? '#222222' : '#F0F0F0'};
     font-weight: 500;
   `}
 
-  ${({ $isSubmitted, $isCorrect, $isSelected }) => {
+  ${({ $isSubmitted, $isCorrect, $isSelected, theme }) => {
     if ($isSubmitted) {
       if ($isCorrect) {
-        return `
-          border-color: #10B981 !important;
-          background-color: #ECFDF5 !important;
-          color: #065F46;
-        `;
+        return theme.mode === 'dark'
+          ? `
+            border-color: #10B981 !important;
+            background-color: rgba(16, 185, 129, 0.15) !important;
+            color: #6EE7B7 !important;
+          `
+          : `
+            border-color: #10B981 !important;
+            background-color: #ECFDF5 !important;
+            color: #065F46 !important;
+          `;
       }
       if ($isSelected && !$isCorrect) {
-        return `
-          border-color: #EF4444 !important;
-          background-color: #FEF2F2 !important;
-          color: #991B1B;
-        `;
+        return theme.mode === 'dark'
+          ? `
+            border-color: #EF4444 !important;
+            background-color: rgba(239, 68, 68, 0.15) !important;
+            color: #FCA5A5 !important;
+          `
+          : `
+            border-color: #EF4444 !important;
+            background-color: #FEF2F2 !important;
+            color: #991B1B !important;
+          `;
       }
     }
   }}
 
   &:hover {
-    border-color: #000000;
+    border-color: ${({ theme }) => theme.colors.borderHover};
   }
 `;
 
@@ -87,7 +100,10 @@ const OptionCircle = styled.span<{ $isSelected: boolean }>`
   height: 18px;
   border-radius: 50%;
   border: 1.5px solid
-    ${({ $isSelected }) => ($isSelected ? '#000000' : '#CCCCCC')};
+    ${({ $isSelected, theme }) =>
+      $isSelected
+        ? (theme.mode === 'dark' ? '#FFFFFF' : '#000000')
+        : (theme.mode === 'dark' ? '#444444' : '#CCCCCC')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,9 +114,24 @@ const OptionCircle = styled.span<{ $isSelected: boolean }>`
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: #000000;
+    background-color: ${({ theme }) => (theme.mode === 'dark' ? '#FFFFFF' : '#000000')};
     display: ${({ $isSelected }) => ($isSelected ? 'block' : 'none')};
   }
+`;
+
+const FeedbackBox = styled(Box)<{ $isCorrect: boolean }>`
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  background-color: ${({ $isCorrect, theme }) =>
+    $isCorrect
+      ? (theme.mode === 'dark' ? 'rgba(16, 185, 129, 0.15)' : '#ECFDF5')
+      : (theme.mode === 'dark' ? 'rgba(239, 68, 68, 0.15)' : '#FEF2F2')};
+  border: 1px solid
+    ${({ $isCorrect, theme }) =>
+      $isCorrect
+        ? (theme.mode === 'dark' ? 'rgba(16, 185, 129, 0.35)' : '#A7F3D0')
+        : (theme.mode === 'dark' ? 'rgba(239, 68, 68, 0.35)' : '#FECACA')};
 `;
 
 export function QuizComponent({
@@ -165,8 +196,8 @@ export function QuizComponent({
     <QuizCard>
       <Flex alignItems="center" justifyContent="space-between" mb="14px">
         <Flex alignItems="center" gap="8px">
-          <HelpCircle size={16} color="#000000" />
-          <Text fontSize="14px" fontWeight="600">
+          <HelpCircle size={16} color="currentColor" />
+          <Text fontSize="14px" fontWeight="600" color="text">
             {title}
           </Text>
         </Flex>
@@ -175,7 +206,7 @@ export function QuizComponent({
         </Badge>
       </Flex>
 
-      <Text fontSize="15px" fontWeight="600" mb="16px" color="#111111">
+      <Text fontSize="15px" fontWeight="600" mb="16px" color="text">
         {currentQ.question}
       </Text>
 
@@ -196,21 +227,7 @@ export function QuizComponent({
       </Box>
 
       {isSubmitted && (
-        <Box
-          p="12px 16px"
-          borderRadius="8px"
-          mb="16px"
-          bg={
-            selectedOption === currentQ.correctIndex
-              ? '#ECFDF5'
-              : '#FEF2F2'
-          }
-          border={`1px solid ${
-            selectedOption === currentQ.correctIndex
-              ? '#A7F3D0'
-              : '#FECACA'
-          }`}
-        >
+        <FeedbackBox $isCorrect={selectedOption === currentQ.correctIndex}>
           <Flex alignItems="center" gap="6px" mb="4px">
             {selectedOption === currentQ.correctIndex ? (
               <CheckCircle2 size={16} color="#10B981" />
@@ -222,8 +239,8 @@ export function QuizComponent({
               fontWeight="700"
               color={
                 selectedOption === currentQ.correctIndex
-                  ? '#065F46'
-                  : '#991B1B'
+                  ? '#10B981'
+                  : '#EF4444'
               }
             >
               {selectedOption === currentQ.correctIndex
@@ -231,10 +248,10 @@ export function QuizComponent({
                 : 'Not quite correct.'}
             </Text>
           </Flex>
-          <Text fontSize="13px" color="#333333">
+          <Text fontSize="13px" color="text">
             {currentQ.explanation}
           </Text>
-        </Box>
+        </FeedbackBox>
       )}
 
       <Flex justifyContent="flex-end" gap="10px">

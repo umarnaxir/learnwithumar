@@ -7,9 +7,9 @@ import { BookOpen, ShieldCheck, Rocket } from 'lucide-react';
 
 const SectionWrapper = styled.section`
   padding: 64px 0;
-  background-color: #ffffff;
-  border-top: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   @media (min-width: 768px) {
     padding: 80px 0;
@@ -30,8 +30,8 @@ const HeaderWrapper = styled.div`
 
 const SectionBadge = styled.div`
   display: inline-block;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textInverse};
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -47,7 +47,7 @@ const MainHeading = styled.h2`
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.2;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   margin: 0 0 14px;
 
   @media (min-width: 640px) {
@@ -67,11 +67,15 @@ const UnderlineSvg = styled.svg`
   height: 8px;
   margin-top: 3px;
   overflow: visible;
+
+  path {
+    stroke: ${({ theme }) => theme.colors.text};
+  }
 `;
 
 const SubtitleText = styled.p`
   font-size: 13.5px;
-  color: #555555;
+  color: ${({ theme }) => theme.colors.textSecondary};
   line-height: 1.6;
   margin: 0;
   max-width: 540px;
@@ -106,7 +110,7 @@ const HorizontalLineTrack = styled.div`
     left: 12.5%;
     right: 12.5%;
     height: 1px;
-    background-color: #000000;
+    background-color: ${({ theme }) => (theme.mode === 'dark' ? '#FFFFFF' : '#000000')};
     z-index: 1;
     transform: translateY(-50%);
   }
@@ -129,11 +133,22 @@ const CircularMarker = styled.button<{ $isHighlighted?: boolean }>`
   font-family: ${({ theme }) => theme.fonts.numbers};
   font-size: 12px;
   font-weight: 700;
-  background-color: ${({ $isHighlighted }) =>
-    $isHighlighted ? '#000000' : '#ffffff'};
-  color: ${({ $isHighlighted }) => ($isHighlighted ? '#ffffff' : '#000000')};
-  border: 1.5px solid #000000;
-  box-shadow: 0 0 0 6px #ffffff;
+  background-color: ${({ $isHighlighted, theme }) => {
+    if (theme.mode === 'dark') {
+      return $isHighlighted ? '#FFFFFF' : '#000000';
+    } else {
+      return $isHighlighted ? '#000000' : '#FFFFFF';
+    }
+  }};
+  color: ${({ $isHighlighted, theme }) => {
+    if (theme.mode === 'dark') {
+      return $isHighlighted ? '#000000' : '#FFFFFF';
+    } else {
+      return $isHighlighted ? '#FFFFFF' : '#000000';
+    }
+  }};
+  border: 1.5px solid ${({ theme }) => (theme.mode === 'dark' ? '#FFFFFF' : '#000000')};
+  box-shadow: 0 0 0 6px ${({ theme }) => theme.colors.background};
   cursor: pointer;
   transition:
     background-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
@@ -157,11 +172,28 @@ const DesktopCardsGrid = styled.div`
 /* ================= PANEL CARDS ================= */
 
 const PhasePanel = styled.div<{ $isHighlighted?: boolean }>`
-  background-color: ${({ $isHighlighted }) =>
-    $isHighlighted ? '#000000' : '#ffffff'};
-  color: ${({ $isHighlighted }) => ($isHighlighted ? '#ffffff' : '#000000')};
+  background-color: ${({ $isHighlighted, theme }) => {
+    if (theme.mode === 'dark') {
+      return $isHighlighted ? '#FFFFFF' : theme.colors.cardBg;
+    } else {
+      return $isHighlighted ? '#000000' : '#FFFFFF';
+    }
+  }};
+  color: ${({ $isHighlighted, theme }) => {
+    if (theme.mode === 'dark') {
+      return $isHighlighted ? '#000000' : '#FFFFFF';
+    } else {
+      return $isHighlighted ? '#FFFFFF' : '#000000';
+    }
+  }};
   border: 1px solid
-    ${({ $isHighlighted }) => ($isHighlighted ? '#000000' : '#e5e7eb')};
+    ${({ $isHighlighted, theme }) => {
+      if (theme.mode === 'dark') {
+        return $isHighlighted ? '#FFFFFF' : theme.colors.border;
+      } else {
+        return $isHighlighted ? '#000000' : theme.colors.border;
+      }
+    }};
   border-radius: 12px;
   padding: 24px 22px;
   display: flex;
@@ -178,21 +210,54 @@ const PhasePanel = styled.div<{ $isHighlighted?: boolean }>`
   outline: none;
 
   &:hover {
-    border-color: #000000;
+    border-color: ${({ $isHighlighted, theme }) => {
+      if (theme.mode === 'dark') {
+        return $isHighlighted ? '#FFFFFF' : theme.colors.borderHover;
+      } else {
+        return $isHighlighted ? '#000000' : theme.colors.borderHover;
+      }
+    }};
     transform: translateY(-2px);
-    box-shadow: ${({ $isHighlighted }) =>
+    box-shadow: ${({ $isHighlighted, theme }) =>
       $isHighlighted
-        ? '0 12px 28px rgba(0, 0, 0, 0.15)'
-        : '0 8px 20px rgba(0, 0, 0, 0.05)'};
+        ? (theme.mode === 'dark' ? '0 12px 28px rgba(255, 255, 255, 0.15)' : '0 12px 28px rgba(0, 0, 0, 0.15)')
+        : (theme.mode === 'dark' ? '0 8px 20px rgba(0, 0, 0, 0.4)' : '0 8px 20px rgba(0, 0, 0, 0.05)')};
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px #000000;
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.borderHover};
+  }
+
+  /* Explicit child overrides to guarantee contrast */
+  h3 {
+    color: ${({ $isHighlighted, theme }) => {
+      if (theme.mode === 'dark') {
+        return $isHighlighted ? '#000000 !important' : '#FFFFFF !important';
+      } else {
+        return $isHighlighted ? '#FFFFFF !important' : '#000000 !important';
+      }
+    }};
+  }
+
+  p {
+    color: ${({ $isHighlighted, theme }) => {
+      if (theme.mode === 'dark') {
+        return $isHighlighted ? '#000000 !important' : '#FFFFFF !important';
+      } else {
+        return $isHighlighted ? '#FFFFFF !important' : '#555555 !important';
+      }
+    }};
   }
 `;
 
 const IconHolder = styled.div<{ $isHighlighted?: boolean }>`
-  color: ${({ $isHighlighted }) => ($isHighlighted ? '#ffffff' : '#000000')};
+  color: ${({ $isHighlighted, theme }) => {
+    if (theme.mode === 'dark') {
+      return $isHighlighted ? '#000000 !important' : '#FFFFFF !important';
+    } else {
+      return $isHighlighted ? '#FFFFFF !important' : '#000000 !important';
+    }
+  }};
   margin-bottom: 20px;
   display: inline-flex;
   transition:
@@ -205,7 +270,13 @@ const PhaseTitle = styled.h3<{ $isHighlighted?: boolean }>`
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.015em;
-  color: ${({ $isHighlighted }) => ($isHighlighted ? '#ffffff' : '#000000')};
+  color: ${({ $isHighlighted, theme }) => {
+    if (theme.mode === 'dark') {
+      return $isHighlighted ? '#000000 !important' : '#FFFFFF !important';
+    } else {
+      return $isHighlighted ? '#FFFFFF !important' : '#000000 !important';
+    }
+  }};
   margin: 0 0 10px;
   line-height: 1.3;
   transition: color 500ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -215,7 +286,13 @@ const PhaseTitle = styled.h3<{ $isHighlighted?: boolean }>`
 const PhaseDescription = styled.p<{ $isHighlighted?: boolean }>`
   font-size: 12.5px;
   line-height: 1.6;
-  color: ${({ $isHighlighted }) => ($isHighlighted ? '#d4d4d8' : '#555555')};
+  color: ${({ $isHighlighted, theme }) => {
+    if (theme.mode === 'dark') {
+      return $isHighlighted ? '#000000 !important' : '#FFFFFF !important';
+    } else {
+      return $isHighlighted ? '#FFFFFF !important' : '#555555 !important';
+    }
+  }};
   margin: 0;
   transition: color 500ms cubic-bezier(0.4, 0, 0.2, 1);
   will-change: color;
@@ -241,7 +318,7 @@ const MobileTimelineContainer = styled.div`
     top: 16px;
     bottom: 24px;
     width: 1px;
-    background-color: #000000;
+    background-color: ${({ theme }) => (theme.mode === 'dark' ? '#FFFFFF' : '#000000')};
   }
 `;
 
@@ -262,11 +339,22 @@ const MobileMarker = styled.button<{ $isHighlighted?: boolean }>`
   font-family: ${({ theme }) => theme.fonts.numbers};
   font-size: 12px;
   font-weight: 700;
-  background-color: ${({ $isHighlighted }) =>
-    $isHighlighted ? '#000000' : '#ffffff'};
-  color: ${({ $isHighlighted }) => ($isHighlighted ? '#ffffff' : '#000000')};
-  border: 1.5px solid #000000;
-  box-shadow: 0 0 0 4px #ffffff;
+  background-color: ${({ $isHighlighted, theme }) => {
+    if (theme.mode === 'dark') {
+      return $isHighlighted ? '#FFFFFF' : '#000000';
+    } else {
+      return $isHighlighted ? '#000000' : '#FFFFFF';
+    }
+  }};
+  color: ${({ $isHighlighted, theme }) => {
+    if (theme.mode === 'dark') {
+      return $isHighlighted ? '#000000' : '#FFFFFF';
+    } else {
+      return $isHighlighted ? '#FFFFFF' : '#000000';
+    }
+  }};
+  border: 1.5px solid ${({ theme }) => (theme.mode === 'dark' ? '#FFFFFF' : '#000000')};
+  box-shadow: 0 0 0 4px ${({ theme }) => theme.colors.background};
   z-index: 2;
   cursor: pointer;
   transition:
@@ -349,7 +437,7 @@ export function HowLearningWorks() {
               <UnderlineSvg viewBox="0 0 160 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M2 6C45 9 115 9 158 4"
-                  stroke="#000000"
+                  stroke="currentColor"
                   strokeWidth="3.6"
                   strokeLinecap="round"
                 />

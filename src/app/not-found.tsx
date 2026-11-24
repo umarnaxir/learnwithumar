@@ -26,8 +26,8 @@ export default function NotFound() {
               justifyContent="center"
               width="52px"
               height="52px"
-              bg="#000000"
-              color="#FFFFFF"
+              bg="primary"
+              color="textInverse"
               borderRadius="12px"
               mb="20px"
             >
@@ -36,7 +36,7 @@ export default function NotFound() {
             <Text
               fontSize="11px"
               fontWeight="700"
-              color="#888888"
+              color="textMuted"
               textTransform="uppercase"
               letterSpacing="0.08em"
               mb="8px"
@@ -46,15 +46,15 @@ export default function NotFound() {
             <h1
               style={{
                 fontSize: '26px',
-                fontWeight: 600,
+                fontWeight: 700,
                 letterSpacing: '-0.03em',
-                color: '#000000',
+                color: 'inherit',
                 marginBottom: '10px',
               }}
             >
               This lesson does not exist
             </h1>
-            <Text fontSize="13.5px" color="#555555" lineHeight="relaxed" mb="24px">
+            <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed" mb="24px">
               The URL may be outdated, or the topic may have moved. Return to the curriculum and
               choose a valid module or lesson.
             </Text>

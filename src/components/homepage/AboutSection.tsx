@@ -6,9 +6,9 @@ import { Container } from '@/components/ui/primitives';
 
 const AboutWrapper = styled.section`
   padding: 64px 0;
-  background-color: #ffffff;
-  border-top: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   @media (min-width: 768px) {
     padding: 80px 0;
@@ -41,8 +41,8 @@ const LeftColumn = styled.div`
 const SectionBadge = styled.div`
   display: inline-block;
   align-self: flex-start;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.textInverse};
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -58,7 +58,7 @@ const MainHeading = styled.h2`
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.2;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 20px;
 
   @media (min-width: 640px) {
@@ -82,17 +82,21 @@ const UnderlineSvg = styled.svg`
   height: 8px;
   margin-top: 3px;
   overflow: visible;
+
+  path {
+    stroke: ${({ theme }) => theme.colors.text};
+  }
 `;
 
 const DescriptionParagraph = styled.p`
   font-size: 13.5px;
   font-weight: 400;
   line-height: 1.65;
-  color: #444444;
+  color: ${({ theme }) => theme.colors.textSecondary};
   margin: 0 0 16px;
 
   strong {
-    color: #000000;
+    color: ${({ theme }) => theme.colors.text};
     font-weight: 600;
   }
 `;
@@ -119,7 +123,7 @@ const StatBlock = styled.div`
 const StatDivider = styled.div`
   width: 1px;
   height: 40px;
-  background-color: #e5e7eb;
+  background-color: ${({ theme }) => theme.colors.border};
   margin-right: 28px;
   flex-shrink: 0;
 
@@ -132,7 +136,7 @@ const StatValue = styled.div`
   font-family: ${({ theme }) => theme.fonts.numbers};
   font-size: 28px;
   font-weight: 700;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   line-height: 1.05;
   letter-spacing: -0.03em;
   font-feature-settings: 'tnum' on, 'lnum' on;
@@ -144,7 +148,7 @@ const StatValue = styled.div`
 
 const StatLabel = styled.div`
   font-size: 11.5px;
-  color: #666666;
+  color: ${({ theme }) => theme.colors.textMuted};
   font-weight: 450;
   margin-top: 6px;
   letter-spacing: -0.01em;
@@ -169,7 +173,7 @@ const TimelineList = styled.div`
     top: 14px;
     bottom: 24px;
     width: 1px;
-    background-color: #e5e7eb;
+    background-color: ${({ theme }) => theme.colors.border};
   }
 `;
 
@@ -178,7 +182,7 @@ const TimelineItem = styled.div`
   padding-bottom: 26px;
 
   &:not(:last-child) {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
     margin-bottom: 26px;
   }
 
@@ -194,16 +198,16 @@ const TimelineMarker = styled.div`
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  border: 2px solid #000000;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px #ffffff;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.background};
+  box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.background};
   z-index: 2;
 `;
 
 const TimelineTitle = styled.h3`
   font-size: 15.5px;
   font-weight: 700;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
   letter-spacing: -0.02em;
   margin: 0 0 8px;
   line-height: 1.3;
@@ -215,7 +219,7 @@ const TimelineTitle = styled.h3`
 
 const TimelineDescription = styled.p`
   font-size: 13px;
-  color: #555555;
+  color: ${({ theme }) => theme.colors.textSecondary};
   line-height: 1.6;
   margin: 0;
 `;
@@ -254,7 +258,7 @@ export function AboutSection() {
                 <UnderlineSvg viewBox="0 0 280 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M2 6.5C80 2 200 2 278 6"
-                    stroke="#000000"
+                    stroke="currentColor"
                     strokeWidth="3.6"
                     strokeLinecap="round"
                   />

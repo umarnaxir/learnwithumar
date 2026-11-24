@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { useServerInsertedHTML } from 'next/navigation';
-import { ServerStyleSheet, StyleSheetManager, ThemeProvider } from 'styled-components';
-import { theme } from './theme';
+import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
+import { AppThemeProvider } from '@/context/ThemeContext';
 import { GlobalStyle } from './GlobalStyle';
 import { shouldForwardProp } from '@/components/ui/primitives';
 
@@ -23,20 +23,20 @@ export default function StyledComponentsRegistry({
   if (typeof window !== 'undefined') {
     return (
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>
-        <ThemeProvider theme={theme}>
+        <AppThemeProvider>
           <GlobalStyle />
           {children}
-        </ThemeProvider>
+        </AppThemeProvider>
       </StyleSheetManager>
     );
   }
 
   return (
     <StyleSheetManager sheet={styledComponentsStyleSheet.instance} shouldForwardProp={shouldForwardProp}>
-      <ThemeProvider theme={theme}>
+      <AppThemeProvider>
         <GlobalStyle />
         {children}
-      </ThemeProvider>
+      </AppThemeProvider>
     </StyleSheetManager>
   );
 }

@@ -4,16 +4,57 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { Box, Flex, Container, Text, Button } from '@/components/ui/primitives';
+import { useAppTheme } from '@/context/ThemeContext';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 const CTAWrapper = styled.section`
   padding: 56px 0;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#FFFFFF' : '#000000')};
+  color: ${({ theme }) => (theme.mode === 'dark' ? '#000000' : '#FFFFFF')};
+  border-top: 1px solid ${({ theme }) => (theme.mode === 'dark' ? '#EAEAEA' : 'transparent')};
+  border-bottom: 1px solid ${({ theme }) => (theme.mode === 'dark' ? '#EAEAEA' : 'transparent')};
   text-align: center;
+  transition: background-color 0.25s ease, color 0.25s ease;
+`;
+
+const CTAHeading = styled.h2<{ $isDark: boolean }>`
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: ${({ $isDark }) => ($isDark ? '#000000 !important' : '#FFFFFF !important')};
+  margin-bottom: 10px;
+  line-height: 1.25;
+`;
+
+const CTAPrimaryBtn = styled(Button)<{ $isDark: boolean }>`
+  background-color: ${({ $isDark }) => ($isDark ? '#000000' : '#FFFFFF')};
+  color: ${({ $isDark }) => ($isDark ? '#FFFFFF' : '#000000')};
+  border: 1px solid ${({ $isDark }) => ($isDark ? '#000000' : '#FFFFFF')};
+
+  &:hover {
+    background-color: ${({ $isDark }) => ($isDark ? '#27272A' : '#F4F4F5')};
+    border-color: ${({ $isDark }) => ($isDark ? '#27272A' : '#F4F4F5')};
+    color: ${({ $isDark }) => ($isDark ? '#FFFFFF' : '#000000')};
+    transform: translateY(-1px);
+  }
+`;
+
+const CTAOutlineBtn = styled(Button)<{ $isDark: boolean }>`
+  background-color: transparent;
+  color: ${({ $isDark }) => ($isDark ? '#000000' : '#FFFFFF')};
+  border: 1px solid ${({ $isDark }) => ($isDark ? '#18181B' : '#52525B')};
+
+  &:hover {
+    background-color: ${({ $isDark }) => ($isDark ? '#000000' : '#FFFFFF')};
+    color: ${({ $isDark }) => ($isDark ? '#FFFFFF' : '#000000')};
+    border-color: ${({ $isDark }) => ($isDark ? '#000000' : '#FFFFFF')};
+    transform: translateY(-1px);
+  }
 `;
 
 export function FinalCTA() {
+  const { isDark } = useAppTheme();
+
   return (
     <CTAWrapper>
       <Container>
@@ -23,28 +64,24 @@ export function FinalCTA() {
             alignItems="center"
             gap="6px"
             mb="12px"
-            style={{ color: '#A1A1AA', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em' }}
+            style={{
+              color: isDark ? '#000000' : '#A1A1AA',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+            }}
           >
-            <Sparkles size={13} />
+            <Sparkles size={13} color={isDark ? '#000000' : '#A1A1AA'} />
             <span>START YOUR TRAINING TODAY</span>
           </Flex>
 
-          <h2
-            style={{
-              fontSize: '24px',
-              fontWeight: 600,
-              letterSpacing: '-0.025em',
-              color: '#FFFFFF',
-              marginBottom: '10px',
-              lineHeight: 1.25,
-            }}
-          >
+          <CTAHeading $isDark={isDark}>
             Ready to Master Full Stack Development & Digital Marketing?
-          </h2>
+          </CTAHeading>
 
           <Text
             fontSize="13.5px"
-            color="#A1A1AA"
+            color={isDark ? '#000000' : '#FFFFFF'}
             lineHeight="relaxed"
             mb="24px"
             style={{ maxWidth: '520px', margin: '0 auto 24px' }}
@@ -59,33 +96,24 @@ export function FinalCTA() {
             gap="10px"
             flexWrap="wrap"
           >
-            <Button
+            <CTAPrimaryBtn
               as={Link}
               href="/learning-paths"
               size="md"
-              variant="secondary"
-              style={{
-                backgroundColor: '#FFFFFF',
-                color: '#000000',
-                border: 'none',
-              }}
+              $isDark={isDark}
             >
               <span>Explore Learning Paths</span>
               <ArrowRight size={14} />
-            </Button>
+            </CTAPrimaryBtn>
 
-            <Button
+            <CTAOutlineBtn
               as={Link}
               href="/docs"
               size="md"
-              variant="outline"
-              style={{
-                borderColor: '#333333',
-                color: '#FFFFFF',
-              }}
+              $isDark={isDark}
             >
               <span>Explore Documentation</span>
-            </Button>
+            </CTAOutlineBtn>
           </Flex>
         </Box>
       </Container>

@@ -12,8 +12,8 @@ import { Code2, TrendingUp, ArrowRight } from 'lucide-react';
 
 const HeaderBanner = styled.section`
   padding: 44px 0 32px;
-  background-color: #fafafa;
-  border-bottom: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   text-align: center;
 `;
 
@@ -44,13 +44,12 @@ export function LearningPathsClientView() {
                   fontSize: '24px',
                   fontWeight: 600,
                   letterSpacing: '-0.025em',
-                  color: '#000000',
                   marginBottom: '10px',
                 }}
               >
                 Comprehensive Learning Paths
               </h1>
-              <Text fontSize="13.5px" color="#555555" lineHeight="relaxed">
+              <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed">
                 Structured, documentation-driven mastery tracks designed to train
                 interns and students into industry-ready software engineers and
                 growth strategists.
@@ -62,9 +61,9 @@ export function LearningPathsClientView() {
         <Container>
           <TracksGrid>
             {/* FULL STACK TRACK SUMMARY */}
-            <Card p={['18px 16px', '24px']} bg="#FFFFFF" border="1px solid #000000" borderRadius="12px">
+            <Card p={['18px 16px', '24px']} bg="cardBg" border="1px solid" borderColor="border" borderRadius="12px">
               <Flex alignItems="center" justifyContent="space-between" mb="16px">
-                <Box p="10px" bg="#000000" color="#FFFFFF" borderRadius="8px">
+                <Box p="10px" bg="primary" color="textInverse" borderRadius="8px">
                   <Code2 size={20} />
                 </Box>
                 <Badge variant="dark">Track 01 • 7 Levels</Badge>
@@ -75,14 +74,13 @@ export function LearningPathsClientView() {
                   fontSize: '18px',
                   fontWeight: 600,
                   letterSpacing: '-0.02em',
-                  color: '#000000',
                   marginBottom: '8px',
                   wordBreak: 'break-word',
                 }}
               >
                 Full Stack Web Development
               </h2>
-              <Text fontSize="13px" color="#555555" lineHeight="relaxed" mb="20px">
+              <Text fontSize="13px" color="textSecondary" lineHeight="relaxed" mb="20px">
                 Master the full spectrum of modern web architecture from raw HTTP
                 packets and CSS layouts to React 19, TypeScript, Next.js App Router,
                 Node.js microservices, PostgreSQL relational modeling, and Docker.
@@ -92,7 +90,7 @@ export function LearningPathsClientView() {
                 <Text
                   fontSize="11px"
                   fontWeight="700"
-                  color="#888888"
+                  color="textMuted"
                   textTransform="uppercase"
                   letterSpacing="0.06em"
                   mb="10px"
@@ -106,19 +104,19 @@ export function LearningPathsClientView() {
                       alignItems="center"
                       justifyContent="space-between"
                       p="8px 12px"
-                      bg="#F8F8F8"
+                      bg="surface"
                       borderRadius="6px"
                       gap="8px"
                     >
                       <Flex alignItems="center" gap="8px" style={{ minWidth: 0, flex: 1 }}>
-                        <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#888888', flexShrink: 0 }}>
+                        <span style={{ fontSize: '10.5px', fontWeight: 700, opacity: 0.6, flexShrink: 0 }}>
                           L{lvl.levelNumber}
                         </span>
-                        <Text fontSize="12px" fontWeight="600" color="#111111" truncate>
+                        <Text fontSize="12px" fontWeight="600" color="text" truncate>
                           {lvl.title}
                         </Text>
                       </Flex>
-                      <span style={{ fontSize: '11px', color: '#666666', flexShrink: 0 }}>
+                      <span style={{ fontSize: '11px', opacity: 0.7, flexShrink: 0 }}>
                         {FULL_STACK_MODULES.filter((m) => m.levelId === lvl.id).length} Modules
                       </span>
                     </Flex>
@@ -139,9 +137,9 @@ export function LearningPathsClientView() {
             </Card>
 
             {/* DIGITAL MARKETING TRACK SUMMARY */}
-            <Card p={['18px 16px', '24px']} bg="#FFFFFF" border="1px solid #000000" borderRadius="12px">
+            <Card p={['18px 16px', '24px']} bg="cardBg" border="1px solid" borderColor="border" borderRadius="12px">
               <Flex alignItems="center" justifyContent="space-between" mb="16px">
-                <Box p="10px" bg="#000000" color="#FFFFFF" borderRadius="8px">
+                <Box p="10px" bg="primary" color="textInverse" borderRadius="8px">
                   <TrendingUp size={20} />
                 </Box>
                 <Badge variant="dark">Track 02 • 8 Levels</Badge>
@@ -152,14 +150,13 @@ export function LearningPathsClientView() {
                   fontSize: '18px',
                   fontWeight: 600,
                   letterSpacing: '-0.02em',
-                  color: '#000000',
                   marginBottom: '8px',
                   wordBreak: 'break-word',
                 }}
               >
                 Digital Marketing Mastery
               </h2>
-              <Text fontSize="13px" color="#555555" lineHeight="relaxed" mb="20px">
+              <Text fontSize="13px" color="textSecondary" lineHeight="relaxed" mb="20px">
                 Engineered for growth marketing professionals: comprehensive
                 coverage of technical SEO, Google Search & Shopping Ads, Meta Ads
                 Manager, high-converting lead funnels, GA4 analytics attribution,
@@ -170,7 +167,7 @@ export function LearningPathsClientView() {
                 <Text
                   fontSize="11px"
                   fontWeight="700"
-                  color="#888888"
+                  color="textMuted"
                   textTransform="uppercase"
                   letterSpacing="0.06em"
                   mb="10px"
@@ -184,19 +181,19 @@ export function LearningPathsClientView() {
                       alignItems="center"
                       justifyContent="space-between"
                       p="8px 12px"
-                      bg="#F8F8F8"
+                      bg="surface"
                       borderRadius="6px"
                       gap="8px"
                     >
                       <Flex alignItems="center" gap="8px" style={{ minWidth: 0, flex: 1 }}>
-                        <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#888888', flexShrink: 0 }}>
+                        <span style={{ fontSize: '10.5px', fontWeight: 700, opacity: 0.6, flexShrink: 0 }}>
                           L{lvl.levelNumber}
                         </span>
-                        <Text fontSize="12px" fontWeight="600" color="#111111" truncate>
+                        <Text fontSize="12px" fontWeight="600" color="text" truncate>
                           {lvl.title}
                         </Text>
                       </Flex>
-                      <span style={{ fontSize: '11px', color: '#666666', flexShrink: 0 }}>
+                      <span style={{ fontSize: '11px', opacity: 0.7, flexShrink: 0 }}>
                         {DIGITAL_MARKETING_MODULES.filter((m) => m.levelId === lvl.id).length} Modules
                       </span>
                     </Flex>

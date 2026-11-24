@@ -14,8 +14,8 @@ import {
 
 const HubHeader = styled.section`
   padding: 40px 0 28px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const FilterTabs = styled(Flex)`
@@ -23,7 +23,7 @@ const FilterTabs = styled(Flex)`
   overflow-x: auto;
   padding: 12px 0 14px;
   margin-bottom: 24px;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 
@@ -37,23 +37,38 @@ const FilterTabBtn = styled.button<{ $isActive: boolean }>`
   border-radius: 9999px;
   font-size: 12px;
   font-weight: ${({ $isActive }) => ($isActive ? '600' : '450')};
-  background-color: ${({ $isActive }) => ($isActive ? '#000000' : '#F4F4F5')};
-  color: ${({ $isActive }) => ($isActive ? '#FFFFFF' : '#555555')};
+  background-color: ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.primary : theme.colors.surface};
+  color: ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.textInverse : theme.colors.textSecondary};
+  border: 1px solid
+    ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.primary : theme.colors.border};
   white-space: nowrap;
   transition: all 0.15s ease;
   cursor: pointer;
   flex-shrink: 0;
 
   &:hover {
-    background-color: ${({ $isActive }) => ($isActive ? '#222222' : '#EAEAEA')};
-    color: ${({ $isActive }) => ($isActive ? '#FFFFFF' : '#000000')};
+    background-color: ${({ $isActive, theme }) =>
+      $isActive
+        ? (theme.mode === 'dark' ? '#000000' : '#FFFFFF')
+        : theme.colors.surfaceHover};
+    color: ${({ $isActive, theme }) =>
+      $isActive
+        ? (theme.mode === 'dark' ? '#FFFFFF' : '#000000')
+        : theme.colors.text};
+    border-color: ${({ $isActive, theme }) =>
+      $isActive
+        ? (theme.mode === 'dark' ? '#FFFFFF' : '#000000')
+        : theme.colors.borderHover};
   }
 `;
 
 const OverviewCard = styled(Card)`
   padding: 16px 20px;
-  background-color: #faf9f6;
-  border: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 10px;
   width: 100%;
 
@@ -76,6 +91,26 @@ const ModulesGrid = styled.div`
 
   @media (min-width: 1200px) {
     grid-template-columns: repeat(3, 1fr);
+  }
+`;
+
+const SyllabusItemLink = styled(Link)`
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 11.5px;
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.surfaceHover};
+    border-color: ${({ theme }) => theme.colors.borderHover};
   }
 `;
 
@@ -116,13 +151,12 @@ export function DigitalMarketingHubClientView() {
                     fontSize: '24px',
                     fontWeight: 600,
                     letterSpacing: '-0.025em',
-                    color: '#000000',
                     marginBottom: '8px',
                   }}
                 >
                   Digital Marketing Mastery
                 </h1>
-                <Text fontSize="13.5px" color="#555555" lineHeight="relaxed">
+                <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed">
                   Data-driven performance marketing: technical SEO, search engine algorithms,
                   viral short-form content, Google Search & Shopping Ads, Meta Ads Manager,
                   lead gen funnels, and agency operations.
@@ -131,20 +165,20 @@ export function DigitalMarketingHubClientView() {
 
               {/* Curriculum Overview Card */}
               <OverviewCard>
-                <Text fontSize="11px" fontWeight="600" color="#888888" textTransform="uppercase" mb="4px">
+                <Text fontSize="11px" fontWeight="600" color="textMuted" textTransform="uppercase" mb="4px">
                   Curriculum Overview
                 </Text>
                 <Flex alignItems="baseline" gap="8px" mb="4px">
                   <Text
                     fontSize="22px"
                     fontWeight="700"
-                    color="#000000"
+                    color="text"
                     style={{ fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif" }}
                   >
                     20 Modules
                   </Text>
                 </Flex>
-                <Text fontSize="11.5px" color="#666666">
+                <Text fontSize="11.5px" color="textSecondary">
                   180+ Documented Lessons • 8 Levels
                 </Text>
               </OverviewCard>
@@ -180,32 +214,24 @@ export function DigitalMarketingHubClientView() {
                 <Card
                   key={mod.id}
                   p="20px"
-                  bg="#FFFFFF"
-                  border="1px solid #EAEAEA"
+                  bg="cardBg"
+                  border="1px solid"
+                  borderColor="border"
                   borderRadius="10px"
                   display="flex"
                   flexDirection="column"
                   interactive
                 >
                   <Flex alignItems="center" justifyContent="space-between" mb="12px">
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        fontWeight: 700,
-                        backgroundColor: '#000000',
-                        color: '#FFFFFF',
-                        padding: '2.5px 7px',
-                        borderRadius: '4px',
-                      }}
-                    >
+                    <Badge variant="dark">
                       Module {mod.moduleNumber}
-                    </span>
+                    </Badge>
                     <Badge variant="neutral">{mod.duration}</Badge>
                   </Flex>
 
                   <Link
                     href={`/digital-marketing/${mod.id}/${firstTopic?.id || ''}`}
-                    style={{ textDecoration: 'none', color: '#000000' }}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     <h3
                       style={{
@@ -224,7 +250,7 @@ export function DigitalMarketingHubClientView() {
 
                   <Text
                     fontSize="12.5px"
-                    color="#555555"
+                    color="textSecondary"
                     lineHeight="relaxed"
                     mb="16px"
                     style={{
@@ -257,7 +283,7 @@ export function DigitalMarketingHubClientView() {
                           style={{
                             fontSize: '11px',
                             fontWeight: 600,
-                            color: '#000000',
+                            color: 'inherit',
                             background: 'none',
                             border: 'none',
                             cursor: 'pointer',
@@ -272,46 +298,25 @@ export function DigitalMarketingHubClientView() {
 
                     <Box display="flex" flexDirection="column" gap="4px">
                       {(expandedSyllabus[mod.id] ? mod.topics : mod.topics.slice(0, 4)).map((t) => (
-                        <Link
+                        <SyllabusItemLink
                           key={t.id}
                           href={`/digital-marketing/${mod.id}/${t.id}`}
-                          style={{
-                            textDecoration: 'none',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: '6px',
-                            padding: '4px 6px',
-                            borderRadius: '4px',
-                            color: '#222222',
-                            fontSize: '11.5px',
-                            backgroundColor: '#FAFAFA',
-                            transition: 'all 0.15s ease',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#F0F0F0';
-                            e.currentTarget.style.color = '#000000';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#FAFAFA';
-                            e.currentTarget.style.color = '#222222';
-                          }}
                         >
                           <Flex alignItems="center" gap="6px" style={{ minWidth: 0, flex: 1 }}>
-                            <ChevronRight size={12} color="#888888" style={{ flexShrink: 0 }} />
+                            <ChevronRight size={12} color="currentColor" style={{ opacity: 0.6, flexShrink: 0 }} />
                             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {t.title}
                             </span>
                           </Flex>
-                          <span style={{ fontSize: '10.5px', color: '#888888', flexShrink: 0 }}>
+                          <span style={{ fontSize: '10.5px', color: 'inherit', opacity: 0.7, flexShrink: 0 }}>
                             {t.duration}
                           </span>
-                        </Link>
+                        </SyllabusItemLink>
                       ))}
                     </Box>
                   </Box>
 
-                  <Box mt="auto" pt="16px" borderTop="1px solid #F0F0F0" display="flex" flexDirection="column" gap="8px">
+                  <Box mt="auto" pt="16px" borderTop="1px solid" borderColor="border" display="flex" flexDirection="column" gap="8px">
                     <Button
                       as={Link}
                       href={`/digital-marketing/${mod.id}/${firstTopic?.id || ''}`}

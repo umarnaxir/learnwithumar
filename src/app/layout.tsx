@@ -183,6 +183,20 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"
         />
         <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('learnwithumar-theme');
+                  var mode = saved === 'dark' ? 'dark' : 'light';
+                  document.documentElement.setAttribute('data-theme', mode);
+                  document.documentElement.style.colorScheme = mode;
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />

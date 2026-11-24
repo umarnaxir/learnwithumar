@@ -9,7 +9,7 @@ import { ArrowRight, Clock } from 'lucide-react';
 
 const SectionWrapper = styled.section`
   padding: 48px 0;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const ProjectsGrid = styled.div`
@@ -97,13 +97,12 @@ export function ProjectsShowcase() {
                 fontSize: '23px',
                 fontWeight: 600,
                 letterSpacing: '-0.025em',
-                color: '#000000',
                 marginBottom: '8px',
               }}
             >
               Practical Projects, Not Superficial Tutorials.
             </h2>
-            <Text fontSize="13.5px" color="#555555" lineHeight="relaxed">
+            <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed">
               Every concept is tested through comprehensive assignments evaluated
               against strict professional criteria.
             </Text>
@@ -126,8 +125,6 @@ export function ProjectsShowcase() {
               <ProjectCard
                 key={proj.id}
                 p="18px 20px"
-                bg="#FFFFFF"
-                border="1px solid #EAEAEA"
                 display="flex"
                 flexDirection="column"
                 interactive
@@ -136,7 +133,7 @@ export function ProjectsShowcase() {
                   <Badge variant={isFullStack ? 'dark' : 'neutral'}>
                     {isFullStack ? 'Full Stack' : 'Digital Marketing'}
                   </Badge>
-                  <Flex alignItems="center" gap="4px" fontSize="11px" color="#888888">
+                  <Flex alignItems="center" gap="4px" fontSize="11px" color="textMuted">
                     <Clock size={12} />
                     <span style={{ fontFamily: "'Cabinet Grotesk', 'Space Grotesk', sans-serif", fontWeight: 600 }}>
                       {proj.estimatedHours}h
@@ -144,13 +141,13 @@ export function ProjectsShowcase() {
                   </Flex>
                 </Flex>
 
-                <Text fontSize="15px" fontWeight="600" color="#111111" mb="6px">
+                <Text fontSize="15px" fontWeight="600" color="text" mb="6px">
                   {proj.title}
                 </Text>
 
                 <Text
                   fontSize="12.5px"
-                  color="#555555"
+                  color="textSecondary"
                   lineHeight="relaxed"
                   mb="16px"
                   style={{
@@ -163,7 +160,7 @@ export function ProjectsShowcase() {
                   {proj.description}
                 </Text>
 
-                <Box mt="auto" pt="12px" borderTop="1px solid #F0F0F0">
+                <Box mt="auto" pt="12px" borderTop="1px solid" borderColor="border">
                   <Flex alignItems="center" justifyContent="space-between">
                     <Badge variant="neutral">{proj.difficulty}</Badge>
                     <Link
@@ -171,7 +168,7 @@ export function ProjectsShowcase() {
                       style={{
                         fontSize: '11.5px',
                         fontWeight: 600,
-                        color: '#000000',
+                        color: 'inherit',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '4px',

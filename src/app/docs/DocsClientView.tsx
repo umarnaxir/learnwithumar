@@ -18,8 +18,8 @@ import {
 
 const DocHeader = styled.section`
   padding: 44px 0 32px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   text-align: center;
 `;
 
@@ -29,15 +29,15 @@ const SearchInputWrap = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: #fafafa;
-  border: 1px solid #eaeaea;
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 8px;
   padding: 8px 14px;
   transition: all 0.15s ease;
 
   &:focus-within {
-    border-color: #000000;
-    background-color: #ffffff;
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    background-color: ${({ theme }) => theme.colors.cardBg};
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   }
 `;
@@ -48,10 +48,10 @@ const DocInput = styled.input`
   background: transparent;
   font-size: 13px;
   outline: none;
-  color: #000000;
+  color: ${({ theme }) => theme.colors.text};
 
   &::placeholder {
-    color: #888888;
+    color: ${({ theme }) => theme.colors.textMuted};
   }
 `;
 
@@ -67,6 +67,22 @@ const ExternalDocsGrid = styled.div`
 
   @media (min-width: 1024px) {
     grid-template-columns: repeat(4, 1fr);
+  }
+`;
+
+const TopicPillLink = styled(Link)`
+  font-size: 11px;
+  padding: 3px 8px;
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 4px;
+  color: ${({ theme }) => theme.colors.text};
+  text-decoration: none;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.surfaceHover};
+    border-color: ${({ theme }) => theme.colors.borderHover};
   }
 `;
 
@@ -109,21 +125,20 @@ export function DocsClientView() {
               <h1
                 style={{
                   fontSize: '24px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   letterSpacing: '-0.025em',
-                  color: '#000000',
                   marginBottom: '8px',
                 }}
               >
                 Global Documentation Hub
               </h1>
-              <Text fontSize="13.5px" color="#555555" lineHeight="relaxed">
+              <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed">
                 Explore the complete index of 40 structured learning modules and
                 380+ reference documentation topics across both mastery tracks.
               </Text>
 
               <SearchInputWrap>
-                <Search size={15} color="#888888" />
+                <Search size={15} />
                 <DocInput
                   placeholder="Filter documentation topics (e.g. Next.js, SEO, React, SQL)..."
                   value={filterQuery}
@@ -140,7 +155,7 @@ export function DocsClientView() {
             <Text
               fontSize="11px"
               fontWeight="700"
-              color="#888888"
+              color="textMuted"
               textTransform="uppercase"
               letterSpacing="0.06em"
               mb="10px"
@@ -152,9 +167,6 @@ export function DocsClientView() {
                 <Card
                   key={idx}
                   p="14px"
-                  bg="#FFFFFF"
-                  border="1px solid #EAEAEA"
-                  borderRadius="8px"
                   as="a"
                   href={doc.url}
                   target="_blank"
@@ -163,12 +175,12 @@ export function DocsClientView() {
                   style={{ textDecoration: 'none' }}
                 >
                   <Flex alignItems="center" justifyContent="space-between" mb="6px">
-                    <Text fontSize="10.5px" fontWeight="600" color="#888888">
+                    <Text fontSize="10.5px" fontWeight="600" color="textMuted">
                       {doc.tag}
                     </Text>
-                    <ExternalLink size={12} color="#888888" />
+                    <ExternalLink size={12} />
                   </Flex>
-                  <Text fontSize="13px" fontWeight="600" color="#000000" style={{ wordBreak: 'break-word' }}>
+                  <Text fontSize="13px" fontWeight="700" color="text" style={{ wordBreak: 'break-word' }}>
                     {doc.title}
                   </Text>
                 </Card>
@@ -179,47 +191,39 @@ export function DocsClientView() {
           {/* Full Stack Documentation Section */}
           <Box mb="48px">
             <Flex alignItems="center" gap="8px" mb="16px" flexWrap="wrap">
-              <Code2 size={18} color="#000000" style={{ flexShrink: 0 }} />
-              <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#000000', wordBreak: 'break-word' }}>
+              <Code2 size={18} style={{ flexShrink: 0 }} />
+              <h2 style={{ fontSize: '18px', fontWeight: 700, wordBreak: 'break-word' }}>
                 Full Stack Web Development Documentation ({filteredFullStack.length} Modules)
               </h2>
             </Flex>
 
             <Box display="grid" gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap="16px">
               {filteredFullStack.map((mod) => (
-                <Card key={mod.id} p={['14px', '18px']} bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="10px">
+                <Card key={mod.id} p={['14px', '18px']}>
                   <Flex alignItems="center" justifyContent="space-between" mb="6px">
                     <Badge variant="dark">Module {mod.moduleNumber}</Badge>
-                    <span style={{ fontSize: '11px', color: '#888888' }}>
+                    <span style={{ fontSize: '11px', opacity: 0.7 }}>
                       {mod.topics.length} Lessons
                     </span>
                   </Flex>
-                  <Text fontSize="14px" fontWeight="600" color="#000000" mb="4px" style={{ wordBreak: 'break-word' }}>
+                  <Text fontSize="14px" fontWeight="700" color="text" mb="4px" style={{ wordBreak: 'break-word' }}>
                     {mod.title}
                   </Text>
-                  <Text fontSize="12px" color="#555555" mb="12px" style={{ wordBreak: 'break-word' }}>
+                  <Text fontSize="12px" color="textSecondary" mb="12px" style={{ wordBreak: 'break-word' }}>
                     {mod.description}
                   </Text>
 
                   <Flex gap="5px" flexWrap="wrap" mb="12px">
                     {mod.topics.slice(0, 4).map((t) => (
-                      <Link
+                      <TopicPillLink
                         key={t.id}
                         href={`/full-stack/${mod.id}/${t.id}`}
-                        style={{
-                          fontSize: '11px',
-                          padding: '2.5px 7px',
-                          backgroundColor: '#F4F4F5',
-                          borderRadius: '4px',
-                          color: '#333333',
-                          textDecoration: 'none',
-                        }}
                       >
                         {t.title}
-                      </Link>
+                      </TopicPillLink>
                     ))}
                     {mod.topics.length > 4 && (
-                      <span style={{ fontSize: '10.5px', color: '#888888', alignSelf: 'center' }}>
+                      <span style={{ fontSize: '10.5px', opacity: 0.6, alignSelf: 'center' }}>
                         +{mod.topics.length - 4} more
                       </span>
                     )}
@@ -243,47 +247,39 @@ export function DocsClientView() {
           {/* Digital Marketing Documentation Section */}
           <Box>
             <Flex alignItems="center" gap="8px" mb="16px" flexWrap="wrap">
-              <TrendingUp size={18} color="#000000" style={{ flexShrink: 0 }} />
-              <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#000000', wordBreak: 'break-word' }}>
+              <TrendingUp size={18} style={{ flexShrink: 0 }} />
+              <h2 style={{ fontSize: '18px', fontWeight: 700, wordBreak: 'break-word' }}>
                 Digital Marketing Documentation ({filteredMarketing.length} Modules)
               </h2>
             </Flex>
 
             <Box display="grid" gridTemplateColumns={['1fr', '1fr', '1fr 1fr']} gap="16px">
               {filteredMarketing.map((mod) => (
-                <Card key={mod.id} p={['14px', '18px']} bg="#FFFFFF" border="1px solid #EAEAEA" borderRadius="10px">
+                <Card key={mod.id} p={['14px', '18px']}>
                   <Flex alignItems="center" justifyContent="space-between" mb="6px">
                     <Badge variant="dark">Module {mod.moduleNumber}</Badge>
-                    <span style={{ fontSize: '11px', color: '#888888' }}>
+                    <span style={{ fontSize: '11px', opacity: 0.7 }}>
                       {mod.topics.length} Lessons
                     </span>
                   </Flex>
-                  <Text fontSize="14px" fontWeight="600" color="#000000" mb="4px" style={{ wordBreak: 'break-word' }}>
+                  <Text fontSize="14px" fontWeight="700" color="text" mb="4px" style={{ wordBreak: 'break-word' }}>
                     {mod.title}
                   </Text>
-                  <Text fontSize="12px" color="#555555" mb="12px" style={{ wordBreak: 'break-word' }}>
+                  <Text fontSize="12px" color="textSecondary" mb="12px" style={{ wordBreak: 'break-word' }}>
                     {mod.description}
                   </Text>
 
                   <Flex gap="5px" flexWrap="wrap" mb="12px">
                     {mod.topics.slice(0, 4).map((t) => (
-                      <Link
+                      <TopicPillLink
                         key={t.id}
                         href={`/digital-marketing/${mod.id}/${t.id}`}
-                        style={{
-                          fontSize: '11px',
-                          padding: '2.5px 7px',
-                          backgroundColor: '#F4F4F5',
-                          borderRadius: '4px',
-                          color: '#333333',
-                          textDecoration: 'none',
-                        }}
                       >
                         {t.title}
-                      </Link>
+                      </TopicPillLink>
                     ))}
                     {mod.topics.length > 4 && (
-                      <span style={{ fontSize: '10.5px', color: '#888888', alignSelf: 'center' }}>
+                      <span style={{ fontSize: '10.5px', opacity: 0.6, alignSelf: 'center' }}>
                         +{mod.topics.length - 4} more
                       </span>
                     )}

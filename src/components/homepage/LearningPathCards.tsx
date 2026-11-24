@@ -14,7 +14,7 @@ import {
 
 const SectionWrapper = styled.section`
   padding: 48px 0;
-  background-color: #ffffff;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const SectionHeader = styled(Box)`
@@ -60,8 +60,8 @@ const PathsGrid = styled.div`
 `;
 
 const PathCard = styled.div`
-  background: #ffffff;
-  border: 1px solid #eaeaea;
+  background: ${({ theme }) => theme.colors.cardBg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
   padding: 20px 18px;
   display: flex;
@@ -69,7 +69,7 @@ const PathCard = styled.div`
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  box-shadow: ${({ theme }) => theme.shadows.card};
   flex: 0 0 86%;
   min-width: 270px;
   max-width: 360px;
@@ -83,9 +83,9 @@ const PathCard = styled.div`
   }
 
   &:hover {
-    border-color: #000000;
+    border-color: ${({ theme }) => theme.colors.borderHover};
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    box-shadow: ${({ theme }) => theme.shadows.cardHover};
   }
 `;
 
@@ -95,7 +95,7 @@ const MobileScrollHint = styled.div`
   justify-content: center;
   gap: 6px;
   font-size: 11px;
-  color: #888888;
+  color: ${({ theme }) => theme.colors.textMuted};
   margin-bottom: 12px;
 
   @media (min-width: 768px) {
@@ -108,11 +108,20 @@ const SkillBadge = styled.span`
   align-items: center;
   font-size: 11px;
   font-weight: 500;
-  color: #333333;
-  background-color: #f5f5f5;
-  border: 1px solid #eaeaea;
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 2.5px 7px;
   border-radius: 4px;
+`;
+
+const TrackIconBox = styled(Box)`
+  padding: 9px;
+  background-color: ${({ theme }) => (theme.mode === 'dark' ? '#1F1F1F' : '#000000')};
+  border: 1px solid ${({ theme }) => (theme.mode === 'dark' ? '#333333' : 'transparent')};
+  color: #FFFFFF;
+  border-radius: 8px;
+  display: inline-flex;
 `;
 
 export function LearningPathCards() {
@@ -150,15 +159,15 @@ export function LearningPathCards() {
           <h2
             style={{
               fontSize: '23px',
-              fontWeight: 600,
+              fontWeight: 700,
               letterSpacing: '-0.025em',
-              color: '#000000',
+              color: 'inherit',
               marginBottom: '8px',
             }}
           >
             Two Professional Disciplines. Zero Fluff.
           </h2>
-          <Text fontSize="13.5px" color="#555555" lineHeight="relaxed">
+          <Text fontSize="13.5px" color="textSecondary" lineHeight="relaxed">
             Engineered from ground up for interns, career changers, and students.
             Select your professional domain and follow an end-to-end,
             documentation-backed mastery track.
@@ -173,43 +182,37 @@ export function LearningPathCards() {
           {/* TRACK 1: Full Stack Web Development */}
           <PathCard>
             <Flex alignItems="center" justifyContent="space-between" mb="16px">
-              <Box
-                p="9px"
-                bg="#000000"
-                color="#FFFFFF"
-                borderRadius="8px"
-                display="inline-flex"
-              >
+              <TrackIconBox>
                 <Code2 size={18} />
-              </Box>
+              </TrackIconBox>
               <Badge variant="neutral">Track 01 • 7 Levels</Badge>
             </Flex>
 
             <h3
               style={{
                 fontSize: '18px',
-                fontWeight: 600,
+                fontWeight: 700,
                 letterSpacing: '-0.02em',
-                color: '#000000',
+                color: 'inherit',
                 marginBottom: '8px',
               }}
             >
               Full Stack Web Development
             </h3>
 
-            <Text fontSize="13px" color="#555555" lineHeight="relaxed" mb="18px">
+            <Text fontSize="13px" color="textSecondary" lineHeight="relaxed" mb="18px">
               From internet fundamentals, semantic HTML5, and CSS3 layouts, to
               asynchronous JavaScript, React 19, TypeScript, Next.js App Router,
               Node.js, PostgreSQL relational databases, and Docker DevOps.
             </Text>
 
             <Flex alignItems="center" gap="14px" mb="18px" flexWrap="wrap">
-              <Flex alignItems="center" gap="5px" fontSize="12px" color="#444444">
-                <Layers size={13} color="#888888" />
+              <Flex alignItems="center" gap="5px" fontSize="12px" color="textSecondary">
+                <Layers size={13} style={{ opacity: 0.7 }} />
                 <span>20 Modules • 200+ Topics</span>
               </Flex>
-              <Flex alignItems="center" gap="5px" fontSize="12px" color="#444444">
-                <Clock size={13} color="#888888" />
+              <Flex alignItems="center" gap="5px" fontSize="12px" color="textSecondary">
+                <Clock size={13} style={{ opacity: 0.7 }} />
                 <span>6 Months Immersive</span>
               </Flex>
             </Flex>
@@ -218,7 +221,7 @@ export function LearningPathCards() {
               <Text
                 fontSize="11px"
                 fontWeight="700"
-                color="#888888"
+                color="textMuted"
                 textTransform="uppercase"
                 letterSpacing="0.05em"
                 mb="8px"
@@ -249,43 +252,37 @@ export function LearningPathCards() {
           {/* TRACK 2: Digital Marketing */}
           <PathCard>
             <Flex alignItems="center" justifyContent="space-between" mb="16px">
-              <Box
-                p="9px"
-                bg="#000000"
-                color="#FFFFFF"
-                borderRadius="8px"
-                display="inline-flex"
-              >
+              <TrackIconBox>
                 <TrendingUp size={18} />
-              </Box>
+              </TrackIconBox>
               <Badge variant="neutral">Track 02 • 8 Levels</Badge>
             </Flex>
 
             <h3
               style={{
                 fontSize: '18px',
-                fontWeight: 600,
+                fontWeight: 700,
                 letterSpacing: '-0.02em',
-                color: '#000000',
+                color: 'inherit',
                 marginBottom: '8px',
               }}
             >
               Digital Marketing Mastery
             </h3>
 
-            <Text fontSize="13px" color="#555555" lineHeight="relaxed" mb="18px">
+            <Text fontSize="13px" color="textSecondary" lineHeight="relaxed" mb="18px">
               Master sustainable organic discovery with technical SEO, multi-platform
               social algorithms, short-form viral video, high-ROI Google & Meta paid
               ads, lead funnels, GA4 attribution, and marketing agency operations.
             </Text>
 
             <Flex alignItems="center" gap="14px" mb="18px" flexWrap="wrap">
-              <Flex alignItems="center" gap="5px" fontSize="12px" color="#444444">
-                <Layers size={13} color="#888888" />
+              <Flex alignItems="center" gap="5px" fontSize="12px" color="textSecondary">
+                <Layers size={13} style={{ opacity: 0.7 }} />
                 <span>20 Modules • 180+ Topics</span>
               </Flex>
-              <Flex alignItems="center" gap="5px" fontSize="12px" color="#444444">
-                <Clock size={13} color="#888888" />
+              <Flex alignItems="center" gap="5px" fontSize="12px" color="textSecondary">
+                <Clock size={13} style={{ opacity: 0.7 }} />
                 <span>5 Months Immersive</span>
               </Flex>
             </Flex>
@@ -294,7 +291,7 @@ export function LearningPathCards() {
               <Text
                 fontSize="11px"
                 fontWeight="700"
-                color="#888888"
+                color="textMuted"
                 textTransform="uppercase"
                 letterSpacing="0.05em"
                 mb="8px"

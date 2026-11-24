@@ -196,69 +196,176 @@ export const Button = styled.button.withConfig({ shouldForwardProp })<ButtonProp
   }}
 
   ${({ variant = 'primary', theme }) => {
+    const isDark = theme.mode === 'dark';
+
     switch (variant) {
       case 'secondary':
-        return `
-          background-color: ${theme.colors.surface};
-          color: ${theme.colors.text};
-          border: 1px solid ${theme.colors.border};
-          &:hover {
-            background-color: ${theme.colors.surfaceHover};
-            border-color: #CCCCCC;
-          }
-        `;
+        return isDark
+          ? `
+            background-color: #18181B;
+            color: #FFFFFF;
+            border: 1px solid #282828;
+            &:hover {
+              background-color: #27272A;
+              border-color: #71717A;
+              color: #FFFFFF;
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            }
+            &:active {
+              transform: translateY(0);
+              background-color: #18181B;
+            }
+          `
+          : `
+            background-color: #F4F4F5;
+            color: #000000;
+            border: 1px solid #E4E4E7;
+            &:hover {
+              background-color: #E4E4E7;
+              border-color: #A1A1AA;
+              color: #000000;
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+            &:active {
+              transform: translateY(0);
+              background-color: #D4D4D8;
+            }
+          `;
       case 'outline':
-        return `
-          background-color: transparent;
-          color: ${theme.colors.text};
-          border: 1px solid ${theme.colors.border};
-          &:hover {
-            border-color: #000000;
-            background-color: ${theme.colors.surface};
-          }
-        `;
+        return isDark
+          ? `
+            background-color: transparent;
+            color: #FFFFFF;
+            border: 1px solid #52525B;
+            &:hover {
+              background-color: #FFFFFF;
+              border-color: #FFFFFF;
+              color: #000000;
+              transform: translateY(-1px);
+              box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+            }
+            &:active {
+              transform: translateY(0);
+              background-color: #E4E4E7;
+            }
+          `
+          : `
+            background-color: transparent;
+            color: #000000;
+            border: 1px solid #D4D4D8;
+            &:hover {
+              background-color: #000000;
+              border-color: #000000;
+              color: #FFFFFF;
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+            &:active {
+              transform: translateY(0);
+              background-color: #262626;
+            }
+          `;
       case 'ghost':
-        return `
-          background-color: transparent;
-          color: ${theme.colors.textSecondary};
-          border: 1px solid transparent;
-          &:hover {
-            color: ${theme.colors.text};
-            background-color: ${theme.colors.surface};
-          }
-        `;
+        return isDark
+          ? `
+            background-color: transparent;
+            color: #A1A1AA;
+            border: 1px solid transparent;
+            &:hover {
+              color: #FFFFFF;
+              background-color: #1F1F23;
+              border-color: #27272A;
+            }
+            &:active {
+              background-color: #27272A;
+            }
+          `
+          : `
+            background-color: transparent;
+            color: #555555;
+            border: 1px solid transparent;
+            &:hover {
+              color: #000000;
+              background-color: #F4F4F5;
+              border-color: #E4E4E7;
+            }
+            &:active {
+              background-color: #E4E4E7;
+            }
+          `;
       case 'glass':
-        return `
-          background: rgba(255, 255, 255, 0.7);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          color: ${theme.colors.text};
-          border: 1px solid rgba(0, 0, 0, 0.08);
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-          &:hover {
-            background: rgba(255, 255, 255, 0.95);
-            border-color: rgba(0, 0, 0, 0.2);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-          }
-        `;
+        return isDark
+          ? `
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            &:hover {
+              background: rgba(255, 255, 255, 0.18);
+              border-color: rgba(255, 255, 255, 0.4);
+              color: #FFFFFF;
+              box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            }
+          `
+          : `
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #000000;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            &:hover {
+              background: rgba(255, 255, 255, 0.95);
+              border-color: rgba(0, 0, 0, 0.2);
+              color: #000000;
+              box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            }
+          `;
       case 'primary':
       default:
-        return `
-          background-color: ${theme.colors.primary};
-          color: ${theme.colors.textInverse};
-          border: 1px solid ${theme.colors.primary};
-          &:hover {
-            background-color: #222222;
-            border-color: #222222;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-          }
-          &:active {
-            transform: translateY(0);
-          }
-        `;
+        return isDark
+          ? `
+            background-color: #FFFFFF;
+            color: #000000;
+            border: 1px solid #FFFFFF;
+            &:hover {
+              background-color: #000000;
+              border-color: #FFFFFF;
+              color: #FFFFFF;
+              transform: translateY(-1px);
+              box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+            }
+            &:active {
+              transform: translateY(0);
+              background-color: #111111;
+            }
+          `
+          : `
+            background-color: #000000;
+            color: #FFFFFF;
+            border: 1px solid #000000;
+            &:hover {
+              background-color: #FFFFFF;
+              border-color: #000000;
+              color: #000000;
+              transform: translateY(-1px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+            &:active {
+              transform: translateY(0);
+              background-color: #F0F0F0;
+            }
+          `;
     }
   }}
+
+  & > * {
+    color: inherit;
+  }
 
   ${({ fullWidth }) => fullWidth && 'width: 100%;'}
   ${space}
@@ -336,15 +443,15 @@ export const Badge = styled.span.withConfig({ shouldForwardProp })<BadgeProps>`
         `;
       case 'dark':
         return `
-          background-color: #000000;
-          color: #FFFFFF;
-          border: 1px solid #000000;
+          background-color: ${theme.colors.primary};
+          color: ${theme.colors.textInverse};
+          border: 1px solid ${theme.colors.primary};
         `;
       case 'neutral':
       default:
         return `
           background-color: ${theme.colors.surface};
-          color: ${theme.colors.textSecondary};
+          color: ${theme.colors.text};
           border: 1px solid ${theme.colors.border};
         `;
     }
